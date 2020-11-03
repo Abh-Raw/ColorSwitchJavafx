@@ -9,7 +9,6 @@ import java.util.Random;
 
 public class GameObstacles extends Shape {
     public GameObstacles(){
-
     }
 
     public ArrayList<Shape> createCircle(float x, float y){

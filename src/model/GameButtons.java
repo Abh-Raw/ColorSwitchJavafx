@@ -24,7 +24,6 @@ public class GameButtons extends Button {
         setPrefWidth(190);
         setStyle(BUTTON_RELEASED);
         button_actions();
-
     }
 
     private void setButttonFont(){

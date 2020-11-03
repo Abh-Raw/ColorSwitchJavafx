@@ -25,8 +25,8 @@ public class IntroViewManager {
         IntromainScene = new Scene(IntromainPane, INTRO_WIDTH, INTRO_HEIGHT);
         IntromainStage = new Stage();
         IntromainStage.setScene(IntromainScene);
-        makeBackground();
-        runIntroAnimation();
+        makeBackground();               //making background
+        runIntroAnimation();            //Introduction animation
         createPlayButton();
         //ViewManager viewManager = new ViewManager();
         //viewManager.showMainMenu(IntromainStage);
@@ -38,7 +38,7 @@ public class IntroViewManager {
     }
 
     private void runIntroAnimation(){
-        GameAnimations introAnimation = new GameAnimations();
+        GameAnimations introAnimation = new GameAnimations();               //Making Class GameAnimation object
         ImageView logo = new ImageView("model/Resources/logo.png");
         logo.setLayoutX(300);
         logo.setLayoutY(250);
@@ -53,14 +53,14 @@ public class IntroViewManager {
     }
 
     private void createPlayButton(){
-        GameButtons playButton = new GameButtons("PLAY");
+        GameButtons playButton = new GameButtons("PLAY");           //Making GameButtons Object
         playButton.setLayoutX(320);
         playButton.setLayoutY(440);
         IntromainPane.getChildren().add(playButton);
          playButton.setOnAction(new EventHandler<ActionEvent>() {
              @Override
-             public void handle(ActionEvent actionEvent) {
-                 ViewManager viewManager = new ViewManager();
+             public void handle(ActionEvent actionEvent) {                      //Making event handler
+                 ViewManager viewManager = new ViewManager();           //ViewManager contructor called
                  viewManager.showMainMenu(IntromainStage);
              }
          });

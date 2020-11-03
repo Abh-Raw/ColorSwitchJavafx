@@ -58,8 +58,8 @@ public class ViewManager {
         start.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                GameManager manager = new GameManager();
-                manager.createNewGame(mainStage);
+                GameManager manager = new GameManager();            //GameManager constructor called
+                manager.createNewGame(mainStage);                   //creates game with components
             }
         });
 
@@ -72,7 +72,7 @@ public class ViewManager {
         resume.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                currentSubScene(ResumesubScene);
+                currentSubScene(ResumesubScene);                    //Subscene called
             }
         });
 
@@ -85,7 +85,7 @@ public class ViewManager {
         high_scores.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                currentSubScene(ScoresubScene);
+                currentSubScene(ScoresubScene);                 //Subscene callec
             }
         });
 
@@ -98,7 +98,7 @@ public class ViewManager {
         exit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                mainStage.close();
+                mainStage.close();                      //closing the game
             }
         });
     }
@@ -140,7 +140,7 @@ public class ViewManager {
 
     private void createSubscene(){
         ScoresubScene = new GameSubScenes();
-        mainPane.getChildren().add(ScoresubScene);
+        mainPane.getChildren().add(ScoresubScene);                  //creating subscenes
 
         StartsubScene = new GameSubScenes();
         mainPane.getChildren().add(StartsubScene);

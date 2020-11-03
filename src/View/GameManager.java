@@ -57,8 +57,8 @@ public class GameManager {
     }
 
     private void animateObstacle1(AnchorPane gp, float x, float y){
-        GameObstacles obstacles = new GameObstacles();
-        GameAnimations animations = new GameAnimations();
+        GameObstacles obstacles = new GameObstacles();              //calls game Obstacles
+        GameAnimations animations = new GameAnimations();           //calls game animations
         ArrayList<Shape> obstacle1 = obstacles.createCircle(x, y);
         gp.getChildren().add(obstacle1.get(0));
         animations.arc_obstacle_animation(gp1, (Arc)obstacle1.get(0), x, y);
@@ -69,8 +69,8 @@ public class GameManager {
     }
 
     private void animateObstacle2(AnchorPane gp, float x, float y){
-        GameObstacles obstacles = new GameObstacles();
-        GameAnimations animations = new GameAnimations();
+        GameObstacles obstacles = new GameObstacles();                  //calls game Obstacles
+        GameAnimations animations = new GameAnimations();               //calls game animations
         ArrayList<Shape> obstacle1 = obstacles.createTriangle(x, y);
         gp.getChildren().add(obstacle1.get(0));
         animations.line_obstacle_animation(gp1, (Line) obstacle1.get(0), x, y);
@@ -81,8 +81,8 @@ public class GameManager {
     }
 
     private void animateObstacle3(AnchorPane gp, float x, float y){
-        GameObstacles obstacles = new GameObstacles();
-        GameAnimations animations = new GameAnimations();
+        GameObstacles obstacles = new GameObstacles();                      //calls game Obstacles
+        GameAnimations animations = new GameAnimations();                   //calls game animations
         ArrayList<Shape> obstacle1 = obstacles.createParallel(x, y);
         gp.getChildren().add(obstacle1.get(0));
         animations.line_obstacle_animation(gp1, (Line) obstacle1.get(0), x, y);
@@ -111,15 +111,14 @@ public class GameManager {
     }
 
     private void createStartBall(){
-        GameObstacles starting = new GameObstacles();
+        GameObstacles starting = new GameObstacles();           //creates game obstacles object
         start_ball = starting.startBall();
         gamePane.getChildren().add(start_ball);
     }
 
     private void createGameLoop(){
-        gameTimer = new AnimationTimer() {
+        gameTimer = new AnimationTimer() {                  //Create Animation Timer object
             long prev_time = -1;
-            Duration duration = new Duration(1000);
             //@Override
             public void handle(long curTime) {
                 if(prev_time == -1){
@@ -129,8 +128,8 @@ public class GameManager {
 
                 double time_per = (curTime - prev_time) / 1000000.0;
                 //System.out.println((curTime-prev_time) / 40000000.0);
-                System.out.println(duration.toSeconds());
-                duration.add(duration);
+                //System.out.println(duration.toSeconds());
+                //duration.add(duration);
                 prev_time = curTime;
                 time_per/=300.0;
                 jump(time_per);
@@ -144,7 +143,7 @@ public class GameManager {
 
 
     private void jump(double time_per){
-        double dist = start_ball_vel_Y*time_per + 0.5 * gravity * Math.pow(time_per, 2);
+        double dist = start_ball_vel_Y*time_per + 0.5 * gravity * Math.pow(time_per, 2);        //ball falling due to gravity
         start_ball_vel_Y += gravity * time_per;
         start_ball_pos_Y += dist;
 
@@ -162,7 +161,7 @@ public class GameManager {
         createStartBall();
         createGameLoop();
         gameStage.show();
-    }
+}
 
     private void createBackGround(){
         gp1 = new AnchorPane();
@@ -182,8 +181,8 @@ public class GameManager {
         AnchorPane cur_pane = gp1;
         Image background_image = new Image(BACKGROUND_IMAGE, 600, 400, false, true);
         ImageView background_image_gp = new ImageView(background_image);
-        boolean obstacle_flag_gp1;
-        boolean obstacle_flag_gp2;
+        //boolean obstacle_flag_gp1;
+        //boolean obstacle_flag_gp2;
         //System.out.println(start_ball.getTranslateY());
         if(start_ball_pos_Y < 150.0f){
             gp1.setLayoutY(gp1.getLayoutY() + 4);
@@ -199,8 +198,8 @@ public class GameManager {
             gp1.getChildren().add(background_image_gp);
             chooseObstacleRandom(gp1, 300.0f, 150.0f);
             cur_pane = gp2;
-            for(int i=0; i<cur_pane.getChildren().size(); ++i)
-                System.out.println(cur_pane.getChildren().get(i));
+            //for(int i=0; i<cur_pane.getChildren().size(); ++i)
+                //System.out.println(cur_pane.getChildren().get(i));
         }
 
         if(gp2.getLayoutY() >= 400){
@@ -214,7 +213,7 @@ public class GameManager {
         }
     }
 
-    private void chooseObstacleRandom(AnchorPane gp, float x, float y){
+    private void chooseObstacleRandom(AnchorPane gp, float x, float y){     //creates random obstacles
 
         Random chooseObstacle = new Random();
         int obstacle_id = chooseObstacle.nextInt(3);

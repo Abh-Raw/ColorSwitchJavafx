@@ -26,7 +26,7 @@ public class GameSubScenes extends SubScene {
 
     public void moveSubScene(){
         TranslateTransition translateTransition = new TranslateTransition();
-        translateTransition.setDuration(Duration.seconds(0.3));
+        translateTransition.setDuration(Duration.seconds(0.3));                 //animated subscene transition
         translateTransition.setNode(this);
         if(flag==0) {
             translateTransition.setToX(-476);
