@@ -7,87 +7,62 @@ import javafx.scene.shape.*;
 //import sun.jvm.hotspot.debugger.win32.coff.SectionHeader;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
-public class GameObstacles extends Shape {
+public abstract class GameObstacles extends Shape {
 
-    private int component1_flag;
-    private int component2_flag;
-    private int component3_flag;
-    private int component4_flag;
     public ArrayList<Arc> arc_components;
     public ArrayList<Line> line_components;
+    private int obstacle_id;
+
+    public int getObstacle_id(){
+        return obstacle_id;
+    }
+
+
+    public GameObstacles(int obstacle_id){
+        arc_components = new ArrayList<>();
+        line_components = new ArrayList<>();
+        this.obstacle_id = obstacle_id;
+    }
 
     public GameObstacles(){
         arc_components = new ArrayList<>();
         line_components = new ArrayList<>();
     }
 
-    public GameObstacles(ArrayList<Integer> flag_list, ArrayList<Arc> shape_components){
-        component1_flag = flag_list.get(0);
-        component2_flag = flag_list.get(1);
-        component3_flag = flag_list.get(2);
-        component4_flag = flag_list.get(3);
-        arc_components = shape_components;
-    }
-
-    public void setComponent1_flag(int val){
-        component1_flag = val;
-    }
-
-    public int getComponent1_flag(){
-        return component1_flag;
-    }
-
-    public void setComponent2_flag(int val){
-        component2_flag = val;
-    }
-
-    public int getComponent2_flag(){
-        return component2_flag;
-    }
-
-    public void setComponent3_flag(int val){
-        component3_flag = val;
-    }
-
-    public int getComponent3_flag(){
-        return component3_flag;
-    }
-
-    public void setComponent4_flag(int val){
-        component4_flag = val;
-    }
-
-    public int getComponent4_flag(){
-        return component4_flag;
-    }
+    public void createObstacle(float x, float y){};
 
     public void createCircle(float x, float y){
-        Arc arc1 = new Arc(x, y, 60.0f, 60.0f, 0, 90);
-        Arc arc2 = new Arc(x, y, 60.0f, 60.0f, 90, 90);
-        Arc arc3 = new Arc(x, y, 60.0f, 60.0f, 180, 90);
-        Arc arc4 = new Arc(x, y, 60.0f, 60.0f, 270, 90);
+        Arc arc1 = new Arc(x, y, 75.0f, 75.0f, 0, 90);
+        Arc arc2 = new Arc(x, y, 75.0f, 75.0f, 90, 90);
+        Arc arc3 = new Arc(x, y, 75.0f, 75.0f, 180, 90);
+        Arc arc4 = new Arc(x, y, 75.0f, 75.0f, 270, 90);
 
 
-        arc1.setFill(Color.TRANSPARENT);
+        arc1.setFill(Color.BLUE);
         arc1.setStroke(Color.BLUE);
-        arc1.setStrokeWidth(10.0f);
+        arc1.setStrokeWidth(15.0f);
+        arc1.setStrokeType(StrokeType.INSIDE);
         arc1.setType(ArcType.OPEN);
 
-        arc2.setFill(Color.TRANSPARENT);
+        arc2.setFill(Color.RED);
         arc2.setStroke(Color.RED);
-        arc2.setStrokeWidth(10.0f);
+        arc2.setStrokeWidth(15.0f);
+        arc2.setStrokeType(StrokeType.INSIDE);
         arc2.setType(ArcType.OPEN);
 
-        arc3.setFill(Color.TRANSPARENT);
+        arc3.setFill(Color.GREEN);
         arc3.setStroke(Color.GREEN);
-        arc3.setStrokeWidth(10.0f);
+        arc3.setStrokeWidth(15.0f);
+        arc3.setStrokeType(StrokeType.INSIDE);
         arc3.setType(ArcType.OPEN);
 
-        arc4.setFill(Color.TRANSPARENT);
+        arc4.setFill(Color.YELLOW);
         arc4.setStroke(Color.YELLOW);
-        arc4.setStrokeWidth(10.0f);
+        arc4.setStrokeWidth(15.0f);
+        arc4.setStrokeType(StrokeType.INSIDE);
         arc4.setType(ArcType.OPEN);
 
         arc_components.add(arc1);
@@ -96,29 +71,73 @@ public class GameObstacles extends Shape {
         arc_components.add(arc4);
     }
 
-    public ArrayList<Shape> createTriangle(float x, float y){
-        Line line1 = new Line(x - 65.0f, y - (130 * Math.sqrt(3))/6, x + 65, y - (130 * Math.sqrt(3))/6);
-        Line line2 = new Line(x + 65, y - (130 * Math.sqrt(3))/6, x,y + (130 * Math.sqrt(3))/3);
-        Line line3 = new Line(x,y + (130 * Math.sqrt(3))/3, x - 65.0f, y - (130 * Math.sqrt(3))/6);
+    public void createTriangle(float x, float y, Circle start_ball) {
+        Line line1 = new Line(x - 65.0f, y - (130 * Math.sqrt(3)) / 6, x + 65, y - (130 * Math.sqrt(3)) / 6);
+        Line line2 = new Line(x + 65, y - (130 * Math.sqrt(3)) / 6, x, y + (130 * Math.sqrt(3)) / 3);
+        Line line3 = new Line(x, y + (130 * Math.sqrt(3)) / 3, x - 65.0f, y - (130 * Math.sqrt(3)) / 6);
 
-        line1.setStroke(Color.BLUE);
-        line1.setStrokeWidth(10.0f);
+        Random random = new Random();
 
-        line2.setStroke(Color.RED);
-        line2.setStrokeWidth(10.0f);
+        int color_id;
+        if (start_ball.getFill() == Color.BLUE)
+            color_id = 0;
+        else if (start_ball.getFill() == Color.RED)
+            color_id = 1;
+        else if (start_ball.getFill() == Color.GREEN)
+            color_id = 2;
+        else
+            color_id = 3;
 
-        line3.setStroke(Color.GREEN);
-        line3.setStrokeWidth(10.0f);
+        int n1;
+        do {
+            n1 = random.nextInt(4);
+        } while (n1 == color_id);
 
-        ArrayList<Shape> obstacle = new ArrayList<>();
-        obstacle.add(line1);
-        obstacle.add(line2);
-        obstacle.add(line3);
+        int n2;
+        do {
+            n2 = random.nextInt(4);
+        } while (n1 == n2 || n2 == color_id);
 
-        return obstacle;
+        line1.setStroke(start_ball.getFill());
+        line1.setStrokeWidth(12.0f);
+        line2.setStrokeWidth(12.0f);
+        line3.setStrokeWidth(12.0f);
+
+        if(n1 == 0)
+            line2.setStroke(Color.BLUE);
+        else if(n1 == 1)
+            line2.setStroke(Color.RED);
+        else if(n1 == 2)
+            line2.setStroke(Color.GREEN);
+        else
+            line2.setStroke(Color.YELLOW);
+
+        if(n2 == 0)
+            line3.setStroke(Color.BLUE);
+        else if(n2 == 1)
+            line3.setStroke(Color.RED);
+        else if(n2 == 2)
+            line3.setStroke(Color.GREEN);
+        else
+            line3.setStroke(Color.YELLOW);
+
+        ArrayList<Integer> mapping_arr = new ArrayList<>();
+        mapping_arr.add(color_id);
+        mapping_arr.add(n1);
+        mapping_arr.add(n2);
+
+        for(int i=0; i<mapping_arr.size(); i++){
+            if(mapping_arr.get(i) == color_id)
+                line_components.add(line1);
+            else if(mapping_arr.get(i) == n1)
+                line_components.add(line2);
+            else
+                line_components.add(line3);
+        }
+
     }
 
-    public ArrayList<Shape> createParallel(float x, float y){
+    public void createParallel(float x, float y){
         Line line1 = new Line(x - 30.0f, y - 65.0f, x - 30.0f, y + 65.0f);
         Line line2 = new Line(x + 30.0f, y - 65.0f, x + 30.0f, y + 65.0f);
 
@@ -126,7 +145,7 @@ public class GameObstacles extends Shape {
         line2.setStrokeWidth(10.0f);
 
         Random random = new Random();
-        int n1 = random.nextInt(3);
+        int n1 = random.nextInt(4);
         int n2;
 
         do {
@@ -161,23 +180,26 @@ public class GameObstacles extends Shape {
         obstacle.add(line1);
         obstacle.add(line2);
 
-        return obstacle;
+        //return obstacle;
     }
 
-    public Circle startBall(){
+    public Circle makeStartBall(){
 
         Random random = new Random();
-        int n = random.nextInt(3);
-        Circle circle = new Circle();
+        int n = random.nextInt(4);
+        Circle circle;
         if(n==0)
             circle = new Circle(300.0f, 350.0f, 10.0f, Color.RED);
         else if(n==1)
             circle = new Circle(300.0f, 350.0f, 10.0f, Color.BLUE);
-        else
+        else if(n==2)
             circle = new Circle(300.0f, 350.0f, 10.0f, Color.GREEN);
+        else
+            circle = new Circle(300.0f, 350.0f, 10.0f, Color.YELLOW);
 
 
         circle.setStroke(Color.WHITE);
+        System.out.println(circle + "hahahahahahhahhahahahahaha");
         return circle;
     }
 

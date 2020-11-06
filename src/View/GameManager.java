@@ -25,24 +25,18 @@ public class GameManager {
     private AnchorPane gamePane;
     private Scene gameScene;
     private Stage gameStage;
-    private boolean isSpacePressed;
     private AnchorPane gp1;
     private AnchorPane gp2;
     private final static String BACKGROUND_IMAGE = "View/Resources/dark_background.jpg";
     private AnimationTimer gameTimer;
     private Circle start_ball;
-    private float gravity = 80;
+    private float gravity = 95;
     private Stage menuStage;
     private boolean initial_press = false;
     private boolean jumplock = false;
     private double start_ball_pos_Y = 350.0f;
     private double start_ball_pos_X = 300.0f;
     private double start_ball_vel_Y = 0;
-    private double start_ball_vel_X = 0;
-    private double start_ball_radius = 10.0f;
-    private double arc_obstacle_radius = 60.0f;
-    private double color_switch_radius = 10.0f;
-    private double point_radius = 10.0f;
     private GameObstacles temp1;
     private GameObstacles temp2;
     private GameObstacles curObstacle;
@@ -63,7 +57,7 @@ public class GameManager {
     }
 
     private GameObstacles animateObstacle1(AnchorPane gp, float x, float y){
-        GameObstacles obstacles = new GameObstacles();              //calls game Obstacles
+        GameObstacles obstacles = new GameObstacles(1);              //calls game Obstacles
         GameAnimations animations = new GameAnimations();           //calls game animations
         Rotate rotation1 = new Rotate();
         Rotate rotation2 = new Rotate();
@@ -81,34 +75,44 @@ public class GameManager {
 
         gp.getChildren().addAll(obstacles.arc_components);
         //gp.getChildren().add(curObstacle.getComponent1_flag());
-        animations.arc_obstacle_animation(gp1, x, y, obstacles);
+        animations.obstacle1_animation(x, y, obstacles);
         return obstacles;
         //System.out.println(obstacle1.get(0).getTransforms().get(0) + " hahahahaha");
         //System.out.println(obstacle1.get(1).getTransforms().get(0) + " hahahhahaha");
         //System.out.println(obstacle1.get(2).getTransforms().get(0) + " hahahahahaha");
     }
 
-    private void animateObstacle2(AnchorPane gp, float x, float y){
-        GameObstacles obstacles = new GameObstacles();                  //calls game Obstacles
+    private GameObstacles animateObstacle2(AnchorPane gp, float x, float y){
+        GameObstacles obstacles = new GameObstacles(2);                  //calls game Obstacles
         GameAnimations animations = new GameAnimations();               //calls game animations
-        ArrayList<Shape> obstacle1 = obstacles.createTriangle(x, y);
-        gp.getChildren().add(obstacle1.get(0));
-        animations.line_obstacle_animation(gp1, (Line) obstacle1.get(0), x, y);
-        gp.getChildren().add(obstacle1.get(1));
-        animations.line_obstacle_animation(gp1, (Line) obstacle1.get(1), x, y);
-        gp.getChildren().add(obstacle1.get(2));
-        animations.line_obstacle_animation(gp1, (Line) obstacle1.get(2), x, y);
+        Rotate rotation1 = new Rotate();
+        Rotate rotation2 = new Rotate();
+        Rotate rotation3 = new Rotate();
+        System.out.println(start_ball);
+        obstacles.createTriangle(x, y, start_ball);
+        obstacles.setComponent1_flag(0);
+        obstacles.setComponent2_flag(0);
+        obstacles.setComponent3_flag(0);
+        obstacles.line_components.get(0).getTransforms().add(rotation1);
+        obstacles.line_components.get(1).getTransforms().add(rotation2);
+        obstacles.line_components.get(2).getTransforms().add(rotation3);
+        gp.getChildren().addAll(obstacles.line_components);
+
+        animations.obstacle2_animation(x, y, obstacles);
+        return  obstacles;
     }
 
+    /*
     private void animateObstacle3(AnchorPane gp, float x, float y){
         GameObstacles obstacles = new GameObstacles();                      //calls game Obstacles
         GameAnimations animations = new GameAnimations();                   //calls game animations
         ArrayList<Shape> obstacle1 = obstacles.createParallel(x, y);
         gp.getChildren().add(obstacle1.get(0));
-        animations.line_obstacle_animation(gp1, (Line) obstacle1.get(0), x, y);
+        animations.obstacle1_animation(gp1, (Line) obstacle1.get(0), x, y);
         gp.getChildren().add(obstacle1.get(1));
-        animations.line_obstacle_animation(gp1, (Line) obstacle1.get(1), x, y);
+        animations.obstacle1_animation(gp1, (Line) obstacle1.get(1), x, y);
     }
+     */
 
     private void createSpaceListener(){
         gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -132,8 +136,7 @@ public class GameManager {
 
     private void createStartBall(){
         GameObstacles starting = new GameObstacles();           //creates game obstacles object
-        start_ball = starting.startBall();
-        gamePane.getChildren().add(start_ball);
+        start_ball = starting.makeStartBall();
     }
 
     private void createGameLoop(){
@@ -159,8 +162,9 @@ public class GameManager {
                 start_ball.relocate(start_ball_pos_X - 10, start_ball_pos_Y);
                 moveBackground();
                 //System.out.println(curObstacle + " " + queue.peek() + " " + (gp1.getLayoutY() >= -200.0f  && startFlag == 0) + " " + (gp2.getLayoutY() >= -200.0f) + " " + (gp1.getLayoutY() >= 400) + " " + (gp2.getLayoutY() >= 400));
-
-                checkCollisionColorSwitch(curPane);
+                if(prevObstacle != null )
+                System.out.println(curObstacle.arc_components + " " + curObstacle.line_components + " " + prevObstacle.arc_components + " " + prevObstacle.line_components);
+                checkCollisionObstacles();
             }
         };
         gameTimer.start();
@@ -182,8 +186,8 @@ public class GameManager {
     public void createNewGame(Stage menuStage){
         this.menuStage = menuStage;
         this.menuStage.hide();
-        createBackGround();
         createStartBall();
+        createBackGround();
         createGameLoop();
         gameStage.show();
 }
@@ -206,6 +210,7 @@ public class GameManager {
         gp2.setLayoutY(-400);
         createColorSwitch(gp2);
         gamePane.getChildren().addAll(gp1, gp2);
+        gamePane.getChildren().add(start_ball);
     }
 
     private void moveBackground(){
@@ -224,11 +229,13 @@ public class GameManager {
         if(gp1.getLayoutY() == -200.0f  && startFlag == 0){
             prevObstacle = curObstacle;
             curObstacle = queue.poll();
+            curPane = gp1;
         }
 
-        if(gp2.getLayoutY() == -200.0f){
+        if(gp2.getLayoutY()  == -200.0f){
             prevObstacle = curObstacle;
             curObstacle = queue.poll();
+            curPane = gp2;
         }
 
         if(gp1.getLayoutY() >= 400){
@@ -237,14 +244,10 @@ public class GameManager {
             gp1.getChildren().add(background_image_gp);
             gp1_obstacle = chooseObstacleRandom(gp1, 300.0f, 150.0f);
             queue.add(gp1_obstacle);
-            curPane = gp2;
             createColorSwitch(gp1);
             createPoints(gp1);
             if(startFlag == 1)
                 startFlag = 0;
-            for(int i=0; i<curPane.getChildren().size(); ++i)
-                System.out.println(curPane.getChildren().get(i));
-            //System.out.println(cur_pane.getChildren().get(0).getTransforms().get(0));
         }
 
         if(gp2.getLayoutY() >= 400) {
@@ -253,60 +256,120 @@ public class GameManager {
             gp2.getChildren().add(background_image_gp);
             gp2_obstacle = chooseObstacleRandom(gp2, 300.0f, 150.0f);
             queue.add(gp2_obstacle);
-            curPane = gp1;
             createColorSwitch(gp2);
             createPoints(gp2);
-            for (int i = 0; i < curPane.getChildren().size(); ++i)
-                System.out.println(curPane.getChildren().get(i));
         }
 
     }
 
     private GameObstacles chooseObstacleRandom(AnchorPane gp, float x, float y){     //creates random obstacles
-        /*
+
         Random chooseObstacle = new Random();
-        int obstacle_id = chooseObstacle.nextInt(3);
-
+        int obstacle_id = chooseObstacle.nextInt(2);
         if(obstacle_id==0){
-            animateObstacle1(gp, x, y);
+            return animateObstacle1(gp, x, y);
         }
 
-        else if(obstacle_id==1){
-            animateObstacle2(gp, x, y);
+        else {
+           return animateObstacle2(gp, x, y);
         }
-
+        /*
         else{
             animateObstacle3(gp, x, y);
         }
 
          */
-        GameObstacles obstacles = new GameObstacles();
-        obstacles = animateObstacle1(gp, x ,y);
-        return obstacles;
+        //GameObstacles obstacles = animateObstacle2(gp, x ,y);
     }
 
-    private void checkCollisionColorSwitch(AnchorPane curPane){
-        if(curObstacle.getComponent1_flag() == 1){
-            if(start_ball_radius + arc_obstacle_radius > calcDist(start_ball_pos_Y + 10.0f, curObstacle.arc_components.get(0).getCenterY())){
-                System.out.println("Arc 1 collision");
+    private void checkCollisionObstacles() {
+        Shape intersect1_cur, intersect2_cur, intersect3_cur, intersect4_cur, intersect1_prev, intersect2_prev, intersect3_prev, intersect4_prev;
+        if (curObstacle.getObstacle_id() == 1) {
+            intersect1_cur = Shape.intersect(start_ball, curObstacle.arc_components.get(0));
+            intersect2_cur = Shape.intersect(start_ball, curObstacle.arc_components.get(1));
+            intersect3_cur = Shape.intersect(start_ball, curObstacle.arc_components.get(2));
+            intersect4_cur = Shape.intersect(start_ball, curObstacle.arc_components.get(3));
+
+            if (((intersect1_cur.getBoundsInLocal().getWidth() != -1) && start_ball.getFill() != curObstacle.arc_components.get(0).getStroke() && start_ball.getFill() != curObstacle.arc_components.get(0).getFill())) {
+                System.out.println("Game Over");
+                gameStage.close();
+                gameTimer.stop();
+            } else if ((intersect2_cur.getBoundsInLocal().getWidth() != -1) && start_ball.getFill() != curObstacle.arc_components.get(1).getStroke() && start_ball.getFill() != curObstacle.arc_components.get(1).getFill()) {
+                System.out.println("Game Over");
+                gameStage.close();
+                gameTimer.stop();
+            } else if (((intersect3_cur.getBoundsInLocal().getWidth() != -1) && start_ball.getFill() != curObstacle.arc_components.get(2).getStroke() && start_ball.getFill() != curObstacle.arc_components.get(2).getFill())) {
+                System.out.println("Game Over");
+                gameStage.close();
+                gameTimer.stop();
+            } else if ((intersect4_cur.getBoundsInLocal().getWidth() != -1) && start_ball.getFill() != curObstacle.arc_components.get(3).getStroke() && start_ball.getFill() != curObstacle.arc_components.get(3).getFill()) {
+                System.out.println("Game Over");
+                gameStage.close();
+                gameTimer.stop();
+            }
+
+        } else if (curObstacle.getObstacle_id() == 2) {
+            intersect1_cur = Shape.intersect(start_ball, curObstacle.line_components.get(0));
+            intersect2_cur = Shape.intersect(start_ball, curObstacle.line_components.get(1));
+            intersect3_cur = Shape.intersect(start_ball, curObstacle.line_components.get(2));
+
+            if (((intersect1_cur.getBoundsInLocal().getWidth() != -1) && start_ball.getFill() != curObstacle.line_components.get(0).getStroke() && start_ball.getFill() != curObstacle.line_components.get(0).getFill())) {
+                System.out.println("Game Over");
+                gameStage.close();
+                gameTimer.stop();
+            } else if ((intersect2_cur.getBoundsInLocal().getWidth() != -1) && start_ball.getFill() != curObstacle.line_components.get(1).getStroke() && start_ball.getFill() != curObstacle.line_components.get(1).getFill()) {
+                System.out.println("Game Over");
+                gameStage.close();
+                gameTimer.stop();
+            } else if (((intersect3_cur.getBoundsInLocal().getWidth() != -1) && start_ball.getFill() != curObstacle.line_components.get(2).getStroke() && start_ball.getFill() != curObstacle.line_components.get(2).getFill())) {
+                System.out.println("Game Over");
+                gameStage.close();
+                gameTimer.stop();
             }
         }
 
-        else if(curObstacle.getComponent2_flag() == 1){
-            if(start_ball_radius + arc_obstacle_radius > calcDist(start_ball_pos_Y + 10.0f, curObstacle.arc_components.get(1).getCenterY())){
-                System.out.println("Arc 2 collision");
+        if (prevObstacle != null && prevObstacle.getObstacle_id() == 1) {
+            intersect1_prev = Shape.intersect(start_ball, prevObstacle.arc_components.get(0));
+            intersect2_prev = Shape.intersect(start_ball, prevObstacle.arc_components.get(1));
+            intersect3_prev = Shape.intersect(start_ball, prevObstacle.arc_components.get(2));
+            intersect4_prev = Shape.intersect(start_ball, prevObstacle.arc_components.get(3));
+
+            if (((intersect1_prev.getBoundsInLocal().getWidth() != -1) && start_ball.getFill() != curObstacle.arc_components.get(0).getStroke() && start_ball.getFill() != curObstacle.arc_components.get(0).getFill())) {
+                System.out.println("Game Over");
+                gameStage.close();
+                gameTimer.stop();
+            } else if ((intersect2_prev.getBoundsInLocal().getWidth() != -1) && start_ball.getFill() != curObstacle.arc_components.get(1).getStroke() && start_ball.getFill() != curObstacle.arc_components.get(1).getFill()) {
+                System.out.println("Game Over");
+                gameStage.close();
+                gameTimer.stop();
+            } else if (((intersect3_prev.getBoundsInLocal().getWidth() != -1) && start_ball.getFill() != curObstacle.arc_components.get(2).getStroke() && start_ball.getFill() != curObstacle.arc_components.get(2).getFill())) {
+                System.out.println("Game Over");
+                gameStage.close();
+                gameTimer.stop();
+            } else if ((intersect4_prev.getBoundsInLocal().getWidth() != -1) && start_ball.getFill() != curObstacle.arc_components.get(3).getStroke() && start_ball.getFill() != curObstacle.arc_components.get(3).getFill()) {
+                System.out.println("Game Over");
+                gameStage.close();
+                gameTimer.stop();
             }
         }
 
-        else if(curObstacle.getComponent3_flag()==1){
-            if(start_ball_radius + arc_obstacle_radius > calcDist(start_ball_pos_Y + 10.0f, curObstacle.arc_components.get(2).getCenterY())){
-                System.out.println("Arc 3 collision");
-            }
-        }
+        else if (prevObstacle != null && prevObstacle.getObstacle_id() == 2) {
+            intersect1_prev = Shape.intersect(start_ball, prevObstacle.line_components.get(0));
+            intersect2_prev = Shape.intersect(start_ball, prevObstacle.line_components.get(1));
+            intersect3_prev = Shape.intersect(start_ball, prevObstacle.line_components.get(2));
 
-        else if(curObstacle.getComponent4_flag() == 1){
-            if(start_ball_radius + arc_obstacle_radius > calcDist(start_ball_pos_Y + 10.0f, curObstacle.arc_components.get(3).getCenterY())){
-                System.out.println("Arc 4 collision");
+            if (((intersect1_prev.getBoundsInLocal().getWidth() != -1) && start_ball.getFill() != curObstacle.line_components.get(0).getStroke() && start_ball.getFill() != curObstacle.line_components.get(0).getFill())) {
+                System.out.println("Game Over");
+                gameStage.close();
+                gameTimer.stop();
+            } else if ((intersect2_prev.getBoundsInLocal().getWidth() != -1) && start_ball.getFill() != curObstacle.line_components.get(1).getStroke() && start_ball.getFill() != curObstacle.line_components.get(1).getFill()) {
+                System.out.println("Game Over");
+                gameStage.close();
+                gameTimer.stop();
+            } else if (((intersect3_prev.getBoundsInLocal().getWidth() != -1) && start_ball.getFill() != curObstacle.line_components.get(2).getStroke() && start_ball.getFill() != curObstacle.line_components.get(2).getFill())) {
+                System.out.println("Game Over");
+                gameStage.close();
+                gameTimer.stop();
             }
         }
     }
