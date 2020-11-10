@@ -105,9 +105,9 @@ public class ViewManager {
 
     private void currentSubScene(GameSubScenes subScenes){
         if(hiddenSubScene != null){
-            hiddenSubScene.moveSubScene();
+            hiddenSubScene.moveSubScene(476);
         }
-        subScenes.moveSubScene();
+        subScenes.moveSubScene(476);
         hiddenSubScene = subScenes;
     }
 
@@ -140,7 +140,7 @@ public class ViewManager {
 
     private void createSubscene(){
         ScoresubScene = new GameSubScenes();
-        mainPane.getChildren().add(ScoresubScene);                  //creating subscenes
+        mainPane.getChildren().add(ScoresubScene);                  //creating subscenes;
 
         StartsubScene = new GameSubScenes();
         mainPane.getChildren().add(StartsubScene);
