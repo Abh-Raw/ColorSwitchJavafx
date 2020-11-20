@@ -115,9 +115,9 @@ public class Obstacle_2 extends GameObstacles {
         KeyValue line3_val4 = new KeyValue(rotation3.angleProperty(), 360);
 
         KeyFrame frame1 = new KeyFrame(Duration.ZERO, line1_val1, line2_val1, line3_val1);
-        KeyFrame frame2 = new KeyFrame(Duration.seconds(1), line1_val2, line2_val2, line3_val2);
-        KeyFrame frame3 = new KeyFrame(Duration.seconds(2), line1_val3, line2_val3, line3_val3);
-        KeyFrame frame4 = new KeyFrame(Duration.seconds(3), line1_val4, line2_val4, line3_val4);
+        KeyFrame frame2 = new KeyFrame(Duration.seconds(1.9), line1_val2, line2_val2, line3_val2);
+        KeyFrame frame3 = new KeyFrame(Duration.seconds(3.8), line1_val3, line2_val3, line3_val3);
+        KeyFrame frame4 = new KeyFrame(Duration.seconds(5.7), line1_val4, line2_val4, line3_val4);
 
         Timeline timeline = new Timeline();
         timeline.getKeyFrames().addAll(frame1, frame2, frame3, frame4);

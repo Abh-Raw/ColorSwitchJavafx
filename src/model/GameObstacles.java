@@ -1,18 +1,13 @@
 package model;
 
 import javafx.animation.Timeline;
-import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
-//import sun.jvm.hotspot.debugger.win32.coff.SectionHeader;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
 
-public class GameObstacles extends Shape {
+
+public abstract class GameObstacles extends Shape {
 
     protected ArrayList<Arc> arc_components;
     protected ArrayList<Line> line_components;

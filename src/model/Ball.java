@@ -7,11 +7,52 @@ import java.util.Random;
 
 public class Ball {
 
-    private double start_ball_pos_Y = 350.0f;
-    private double start_ball_pos_X = 300.0f;
+    private double start_ball_pos_Y = 390.0f;
+    private double start_ball_pos_X = 200.0f;
     private double start_ball_vel_Y = 0;
     private double start_ball_vel_X = 0;
-    private float gravity = 95;
+    private float gravity = 100;
+    private Circle start_ball;
+    private boolean blue_flag;
+    private boolean red_flag;
+    private boolean green_flag;
+    private boolean yellow_flag;
+
+    public Circle getStart_ball(){
+        return start_ball;
+    }
+
+    public boolean isBlue_flag(){
+        return blue_flag;
+    }
+
+    public void setBlue_flag(boolean blue_flag){
+        this.blue_flag = blue_flag;
+    }
+
+    public boolean isRed_flag(){
+        return red_flag;
+    }
+
+    public void setRed_flag(boolean red_flag){
+        this.red_flag = red_flag;
+    }
+
+    public boolean isGreen_flag(){
+        return green_flag;
+    }
+
+    public void setGreen_flag(boolean green_flag){
+        this.green_flag = green_flag;
+    }
+
+    public boolean isYellow_flag(){
+        return yellow_flag;
+    }
+
+    public void setYellow_flag(boolean yellow_flag){
+        this.yellow_flag = yellow_flag;
+    }
 
     public void setStart_ball_vel_Y(double z){
         start_ball_vel_Y = z;
@@ -25,23 +66,23 @@ public class Ball {
         return start_ball_pos_Y;
     }
 
-    public Circle makeStartBall(){
+    public void makeStartBall(){
 
         Random random = new Random();
         int n = random.nextInt(4);
         Circle circle;
         if(n==0)
-            circle = new Circle(300.0f, 350.0f, 10.0f, Color.RED);
+            circle = new Circle(200.0f, 390.0f, 10.0f, Color.RED);
         else if(n==1)
-            circle = new Circle(300.0f, 350.0f, 10.0f, Color.BLUE);
+            circle = new Circle(200.0f, 390.0f, 10.0f, Color.BLUE);
         else if(n==2)
-            circle = new Circle(300.0f, 350.0f, 10.0f, Color.GREEN);
+            circle = new Circle(200.0f, 390.0f, 10.0f, Color.GREEN);
         else
-            circle = new Circle(300.0f, 350.0f, 10.0f, Color.YELLOW);
+            circle = new Circle(200.0f, 390.0f, 10.0f, Color.YELLOW);
 
 
         circle.setStroke(Color.WHITE);
-        return circle;
+        start_ball = circle;
     }
 
     public void jump(double time_per){
@@ -49,8 +90,8 @@ public class Ball {
         start_ball_vel_Y += gravity * time_per;
         start_ball_pos_Y += dist;
 
-        if (start_ball_pos_Y > 400 - 10){
-            start_ball_pos_Y = 400 - 10;
+        if (start_ball_pos_Y > 450 - 10){
+            start_ball_pos_Y = 450 - 10;
             start_ball_vel_Y = 0;
         }
     }

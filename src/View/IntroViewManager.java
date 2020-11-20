@@ -27,7 +27,7 @@ public class IntroViewManager {
         IntromainStage.setScene(IntromainScene);
         makeBackground();               //making background
         runIntroAnimation();            //Introduction animation
-        createPlayButton();
+        //createPlayButton();
         //ViewManager viewManager = new ViewManager();
         //viewManager.showMainMenu(IntromainStage);
         IntromainStage.show();
@@ -43,7 +43,8 @@ public class IntroViewManager {
         logo.setLayoutX(300);
         logo.setLayoutY(250);
         IntromainPane.getChildren().add(logo);
-        introAnimation.IntroAnimation(logo);
+        ViewManager viewManager = new ViewManager();           //ViewManager contructor called
+        introAnimation.IntroAnimation(logo, viewManager, IntromainStage);
     }
 
     private void makeBackground(){

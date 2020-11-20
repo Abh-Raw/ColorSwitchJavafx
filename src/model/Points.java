@@ -5,11 +5,16 @@ import javafx.scene.shape.Circle;
 
 public class Points{
     private boolean flag;
+    private Circle point;
 
-    public Circle makePoints(float x, float y){
+    public Circle getPoint(){
+        return point;
+    }
+
+    public void makePoints(float x, float y){
         Circle point = new Circle(x, y, 10.0f, Color.GRAY);
         point.setStroke(Color.WHITE);
-        return point;
+        this.point = point;
     }
 
     public void setFlag(boolean flag){

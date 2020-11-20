@@ -49,7 +49,7 @@ public class Obstacle_1 extends GameObstacles {
         arc4.setFill(Color.YELLOW);
         arc4.setStroke(Color.YELLOW);
         arc4.setStrokeWidth(15.0f);
-        arc4.setStrokeType(StrokeType.INSIDE);
+        arc4.setStrokeType( StrokeType.INSIDE);
         arc4.setType(ArcType.OPEN);
 
         arc_components.add(arc1);
