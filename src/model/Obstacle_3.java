@@ -98,10 +98,10 @@ public class Obstacle_3 extends GameObstacles {
         KeyFrame frame3 = new KeyFrame(Duration.seconds(3.8), line1_val3, line2_val3);
         KeyFrame frame4 = new KeyFrame(Duration.seconds(5.7), line1_val4, line2_val4);
 
-        Timeline timeline = new Timeline();
-        timeline.getKeyFrames().addAll(frame1, frame2, frame3, frame4);
+        animation = new Timeline();
+        animation.getKeyFrames().addAll(frame1, frame2, frame3, frame4);
 
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
+        animation.setCycleCount(Animation.INDEFINITE);
+        animation.play();
     };
 }

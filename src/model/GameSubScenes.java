@@ -11,17 +11,17 @@ public class GameSubScenes extends SubScene {
     public final static String FONT_PATH = "src/model/Resources/kenvector_future.ttf";
     public final static String BACKGROUND_IMAGE = "model/Resources/grey_panel.png";
     int flag = 0;
-    public AnchorPane subPane = new AnchorPane();
+    public AnchorPane subPane;
 
-    public GameSubScenes() {
+    public GameSubScenes(float x_layout, float y_layout, float width, float height) {
         super(new AnchorPane(), 300, 400);
-        prefWidth(600);
-        prefHeight(400);
-        BackgroundImage backgroundImage = new BackgroundImage(new Image(BACKGROUND_IMAGE, 600, 400, false, true), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
-        AnchorPane root = (AnchorPane)this.getRoot();
+        prefWidth(width);
+        prefHeight(height);
+        BackgroundImage backgroundImage = new BackgroundImage(new Image(BACKGROUND_IMAGE, width, height, false, true), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
+        subPane = (AnchorPane) getRoot();
         subPane.setBackground(new Background(backgroundImage));
-        setLayoutX(1024);
-        setLayoutY(180);
+        setLayoutX(x_layout);
+        setLayoutY(y_layout);
     }
 
     public void moveSubScene(float x){

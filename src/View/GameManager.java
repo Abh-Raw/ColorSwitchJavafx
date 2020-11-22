@@ -8,16 +8,21 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import model.*;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 public class GameManager {
@@ -29,6 +34,15 @@ public class GameManager {
     private AnchorPane gp1;
     private AnchorPane gp2;
     private final static String BACKGROUND_IMAGE = "View/Resources/dark_background.jpg";
+    private final static String PAUSE_IMAGE = "model/Resources/pause.png";
+    private GameSubScenes pauseScreen;
+    private GameSubScenes defeatScreen;
+    private ImageView pauseButton;
+    private GameButtons resumeButton;
+    private GameButtons SaveAndExitButton;
+    private GameButtons exitToMainMenuButtonPause;
+    private GameButtons exitToMainMenuButtonDefeat;
+    private GameButtons SpendPointsToContinue;
     private AnimationTimer gameTimer;
     private ArrayList<Arc> colorSwitch;
     private Stage menuStage;
@@ -45,10 +59,11 @@ public class GameManager {
     private Queue<GameObstacles> queue_obs;
     private Ball start_ball_obj;
     private ColorSwitch colorSwitch_obj;
-    private boolean firstPointFlag = true;
     private Points points_obj;
     private int startFlag = 1;
     private int score;
+    private boolean isPaused = false;
+    private InfoLabel scoreDisplay;
 
     public GameManager(){
         gamePane = new AnchorPane();
@@ -175,6 +190,30 @@ public class GameManager {
         });
     }
 
+    private void testListener(){
+        pauseButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                isPaused = true;
+                curObstacle.getAnimation().pause();
+                if(prevObstacle != null)
+                    prevObstacle.getAnimation().pause();
+                //System.out.println(start_ball_obj.getStart_ball_pos_Y() + " haha " + start_ball_obj.getStart_ball_vel_Y());
+            }
+        });
+
+        pauseButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                isPaused = false;
+                //System.out.println(start_ball_obj.getStart_ball_pos_Y() + " haha1 " + start_ball_obj.getStart_ball_vel_Y());
+                curObstacle.getAnimation().play();
+                if(prevObstacle != null)
+                    prevObstacle.getAnimation().play();
+            }
+        });
+    }
+
     private void createStartBall(){
         start_ball_obj = new Ball();           //creates game obstacles object
         start_ball_obj.makeStartBall();
@@ -185,40 +224,113 @@ public class GameManager {
             long prev_time = -1;
             //@Override
             public void   handle(long curTime) {
-                if(prev_time == -1){
+
+                    if (prev_time == -1) {
+                        prev_time = curTime;
+                        return;
+                    }
+
+                    double time_per = (curTime - prev_time) / 1000000.0;
+
                     prev_time = curTime;
-                    return;
+                    time_per /= 300.0;
+                if(!isPaused) {
+                    start_ball_obj.getStart_ball().relocate(start_ball_obj.getStart_ball_pos_X() - 10, start_ball_obj.getStart_ball_pos_Y());
+                    start_ball_obj.jump(time_per);
+                    start_ball_obj.getStart_ball().relocate(start_ball_obj.getStart_ball_pos_X() - 10, start_ball_obj.getStart_ball_pos_Y());
+                    moveBackground();
+                    checkCollisionObstacles();
+                    checkCollisionPoints();
+                    checkCollisionColorSwitch();
+                    //System.out.println(start_ball_obj.isBlue_flag() + " " +  start_ball_obj.isRed_flag() + " " + start_ball_obj.isGreen_flag() + " "+ start_ball_obj.isYellow_flag());
+                    //System.out.println(curObstacle + " "+ prevObstacle);
+                    //System.out.println(gp2.getLayoutY());
+                    //System.out.println(start_ball_obj.getStart_ball_pos_Y());
+                    //System.out.println(score + " " + curObstacle.getArc_components().size());
                 }
-
-                double time_per = (curTime - prev_time) / 1000000.0;
-
-                prev_time = curTime;
-                time_per/=300.0;
-                start_ball_obj.jump(time_per);
-                start_ball_obj.getStart_ball().relocate(start_ball_obj.getStart_ball_pos_X() - 10, start_ball_obj.getStart_ball_pos_Y());
-                moveBackground();
-                checkCollisionObstacles();
-                checkCollisionPoints();
-                checkCollisionColorSwitch();
-                //System.out.println(start_ball_obj.isBlue_flag() + " " +  start_ball_obj.isRed_flag() + " " + start_ball_obj.isGreen_flag() + " "+ start_ball_obj.isYellow_flag());
-                //System.out.println(curObstacle + " "+ prevObstacle);
-                //System.out.println(gp2.getLayoutY());
-                System.out.println(gp1.getLayoutY() + " " + gp2.getLayoutY() + " " + start_ball_obj.getStart_ball_pos_Y());
-                //System.out.println(score + " " + curObstacle.getArc_components().size());
             }
         };
+
         gameTimer.start();
     }
 
 
-    public void createNewGame(Stage menuStage){
+    public void createNewGame(Stage menuStage) throws FileNotFoundException {
         this.menuStage = menuStage;
         this.menuStage.hide();
         createStartBall();
         createBackGround();
+        createScoreDisplay();
+        //createSubScenes();
+        createPauseButton();
+        testListener();
         createGameLoop();
         gameStage.show();
 }
+
+    private void createPauseButton(){
+        pauseButton = new ImageView(PAUSE_IMAGE);
+        pauseButton.setLayoutX(GAME_WIDTH - 50);
+        pauseButton.setLayoutY(15);
+
+        gamePane.getChildren().add(pauseButton);
+    }
+
+    private void createSubScenes() throws FileNotFoundException {
+
+
+        defeatScreen = new GameSubScenes(50, 50, GAME_WIDTH - 100, GAME_HEIGHT - 100);
+        gamePane.getChildren().add(defeatScreen);
+
+        pauseScreen = new GameSubScenes(50, 50, GAME_WIDTH - 100, GAME_HEIGHT - 100);
+        gamePane.getChildren().add(pauseScreen);
+
+        Text pauseLabel = new Text("Pause");
+        pauseLabel.setLayoutX(110);
+        pauseLabel.setLayoutY(55);
+        pauseLabel.setFont(Font.loadFont(new FileInputStream("src/model/Resources/AlexBrush-Regular.ttf"), 30));
+        pauseScreen.subPane.getChildren().add(pauseLabel);
+
+        Text gameOverLabel = new Text("Game Over");
+        gameOverLabel.setLayoutX(90);
+        gameOverLabel.setLayoutY(55);
+        gameOverLabel.setFont(Font.loadFont(new FileInputStream("src/model/Resources/AlexBrush-Regular.ttf"), 30));
+        defeatScreen.subPane.getChildren().add(gameOverLabel);
+
+        resumeButton = new GameButtons("RESUME");
+        resumeButton.setLayoutX(55);
+        resumeButton.setLayoutY(80);
+        pauseScreen.subPane.getChildren().add(resumeButton);
+
+        SpendPointsToContinue = new GameButtons("REVIVE");
+        SpendPointsToContinue.setLayoutX(55);
+        SpendPointsToContinue.setLayoutY(80);
+        defeatScreen.subPane.getChildren().add(SpendPointsToContinue);
+
+        exitToMainMenuButtonDefeat = new GameButtons("EXIT");
+        exitToMainMenuButtonDefeat.setLayoutX(55);
+        exitToMainMenuButtonDefeat.setLayoutY(80 + 25 + 49);
+        defeatScreen.subPane.getChildren().add(exitToMainMenuButtonDefeat);
+
+        exitToMainMenuButtonPause = new GameButtons("EXIT");
+        exitToMainMenuButtonPause.setLayoutX(55);
+        exitToMainMenuButtonPause.setLayoutY(80 + 25 + 49);
+        pauseScreen.subPane.getChildren().add(exitToMainMenuButtonPause);
+
+        SaveAndExitButton = new GameButtons("SAVE/EXIT");
+        SaveAndExitButton.setLayoutX(55);
+        SaveAndExitButton.setLayoutY(80 + 50 + 98);
+        pauseScreen.subPane.getChildren().add(SaveAndExitButton);
+
+    }
+
+    private void createScoreDisplay(){
+        scoreDisplay = new InfoLabel(Integer.toString(score));
+        scoreDisplay.setLayoutX(10);
+        scoreDisplay.setLayoutY(7);
+        scoreDisplay.setTextFill(Color.WHITE);
+        gamePane.getChildren().add(scoreDisplay);
+    }
 
     private void createBackGround(){
         gp1 = new AnchorPane();
@@ -246,22 +358,22 @@ public class GameManager {
 
     private void moveBackground(){
         curPane = gp1;
-        Image background_image = new Image(BACKGROUND_IMAGE, 600, 400, false, true);
+        Image background_image = new Image(BACKGROUND_IMAGE, GAME_WIDTH, GAME_HEIGHT + 20, false, true);
         ImageView background_image_gp = new ImageView(background_image);
 
-        if(start_ball_obj.getStart_ball_pos_Y() < 150.0f){
+        if(start_ball_obj.getStart_ball_pos_Y() < GAME_HEIGHT/2){
             gp1.setLayoutY(gp1.getLayoutY() + 4);
             gp2.setLayoutY(gp2.getLayoutY() + 4);
         }
 
-        if(gp1.getLayoutY() == -264.0f  && startFlag == 0){
+        if(gp1.getLayoutY() == -270.0f  && startFlag == 0){
             prevObstacle = curObstacle;
             curObstacle = queue_obs.poll();
             curPoints = nextPoints;
             //curPane = gp1;
         }
 
-        if(gp2.getLayoutY()  == -264.0f){
+        if(gp2.getLayoutY()  == -270.0f){
             prevObstacle = curObstacle;
             curObstacle = queue_obs.poll();
             curPoints = nextPoints;
@@ -372,6 +484,7 @@ public class GameManager {
             //System.out.println((intersect.getBoundsInLocal().getWidth() != -1));
             if(intersect.getBoundsInLocal().getWidth() != -1){
                 ++score;
+                scoreDisplay.setText(Integer.toString(score));
                 curPoints.setFlag(false);
                 curPoints.getPoint().setOpacity(0);
             }

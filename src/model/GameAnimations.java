@@ -9,6 +9,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -18,13 +20,14 @@ import java.util.Random;
 public class GameAnimations{
     public GameAnimations(){
     }
-    public void IntroAnimation(ImageView logo, final ViewManager viewManager, final Stage IntromainStage){
-        FadeTransition fadeIn = new FadeTransition(Duration.seconds(4), logo);
+    public void IntroAnimation(Text text, final ViewManager viewManager, final Stage IntromainStage){
+
+        FadeTransition fadeIn = new FadeTransition(Duration.seconds(2), text);
         fadeIn.setFromValue(0.0);
         fadeIn.setToValue(1.0);
         fadeIn.setCycleCount(1);
 
-        final FadeTransition fadeOut = new FadeTransition(Duration.seconds(4), logo);
+        final FadeTransition fadeOut = new FadeTransition(Duration.seconds(1), text);
         fadeOut.setFromValue(10.0);
         fadeOut.setToValue(0.0);
         fadeOut.setCycleCount(1);

@@ -22,6 +22,7 @@ public class Obstacle_1 extends GameObstacles {
     @Override
 
     public void createObstacle(float x, float y, Circle start_ball){
+
         Arc arc1 = new Arc(x, y, 75.0f, 75.0f, 0, 90);
         Arc arc2 = new Arc(x, y, 75.0f, 75.0f, 90, 90);
         Arc arc3 = new Arc(x, y, 75.0f, 75.0f, 180, 90);
@@ -90,13 +91,11 @@ public class Obstacle_1 extends GameObstacles {
         KeyValue arc1_val4 = new KeyValue(rotation1.angleProperty(), 270);
         KeyValue arc1_val5 = new KeyValue(rotation1.angleProperty(), 360);
 
-
         KeyValue arc2_val1 = new KeyValue(rotation2.angleProperty(), 0);
         KeyValue arc2_val2 = new KeyValue(rotation2.angleProperty(), 90);
         KeyValue arc2_val3 = new KeyValue(rotation2.angleProperty(), 180);
         KeyValue arc2_val4 = new KeyValue(rotation2.angleProperty(), 270);
         KeyValue arc2_val5 = new KeyValue(rotation2.angleProperty(), 360);
-
 
         KeyValue arc3_val1 = new KeyValue(rotation3.angleProperty(), 0);
         KeyValue arc3_val2 = new KeyValue(rotation3.angleProperty(), 90);
@@ -116,11 +115,11 @@ public class Obstacle_1 extends GameObstacles {
         KeyFrame frame4 = new KeyFrame(Duration.seconds(3), arc1_val4, arc2_val4, arc3_val4, arc4_val4);
         KeyFrame frame5 = new KeyFrame(Duration.seconds(4), arc1_val5, arc2_val5, arc3_val5, arc4_val5);
 
-        Timeline timeline = new Timeline();
-        timeline.getKeyFrames().addAll(frame1, frame2, frame3, frame4, frame5);
+        animation = new Timeline();
+        animation.getKeyFrames().addAll(frame1, frame2, frame3, frame4, frame5);
 
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
+        animation.setCycleCount(Animation.INDEFINITE);
+        animation.play();
     };
 
 }

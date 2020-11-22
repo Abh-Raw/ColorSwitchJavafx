@@ -16,19 +16,19 @@ public class ColorSwitch {
         Arc arc4 = new Arc(x, y, 10.0f, 10.0f, 270, 90);
 
         arc1.setFill(Color.BLUE);
-        arc1.setStroke(Color.BLACK);
+        //arc1.setStroke(Color.BLACK);
         arc1.setType(ArcType.ROUND);
 
         arc2.setFill(Color.RED);
-        arc2.setStroke(Color.BLACK);
+        //arc2.setStroke(Color.BLACK);
         arc2.setType(ArcType.ROUND);
 
         arc3.setFill(Color.GREEN);
-        arc3.setStroke(Color.BLACK);
+        //arc3.setStroke(Color.BLACK);
         arc3.setType(ArcType.ROUND);
 
         arc4.setFill(Color.YELLOW);
-        arc4.setStroke(Color.BLACK);
+        //arc4.setStroke(Color.BLACK);
         arc4.setType(ArcType.ROUND);
 
         ArrayList<Arc> colorChange = new ArrayList<>();

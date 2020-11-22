@@ -10,7 +10,6 @@ public class Ball {
     private double start_ball_pos_Y = 390.0f;
     private double start_ball_pos_X = 200.0f;
     private double start_ball_vel_Y = 0;
-    private double start_ball_vel_X = 0;
     private float gravity = 100;
     private Circle start_ball;
     private boolean blue_flag;
@@ -57,6 +56,8 @@ public class Ball {
     public void setStart_ball_vel_Y(double z){
         start_ball_vel_Y = z;
     }
+
+    public double getStart_ball_vel_Y() { return start_ball_vel_Y;}
 
     public double getStart_ball_pos_X(){
         return start_ball_pos_X;

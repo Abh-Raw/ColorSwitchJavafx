@@ -14,9 +14,6 @@ public abstract class GameObstacles extends Shape {
     protected int obstacle_id;
     protected Timeline animation;
 
-    public int getObstacle_id(){
-        return obstacle_id;
-    }
 
     public GameObstacles(){
         arc_components = new ArrayList<>();
@@ -35,4 +32,5 @@ public abstract class GameObstacles extends Shape {
         return line_components;
     }
 
+    public Timeline getAnimation() { return animation;}
 }

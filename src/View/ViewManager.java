@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import model.GameButtons;
 import model.GameSubScenes;
 
+import java.io.FileNotFoundException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +27,7 @@ public class ViewManager {
     private Stage mainStage;
     private List<GameButtons> button_list;
     private GameSubScenes ScoresubScene;
-    private GameSubScenes StartsubScene;
     private GameSubScenes ResumesubScene;
-    private GameSubScenes ExitsubScene;
     private GameSubScenes hiddenSubScene;
     private Stage IntroStage;
     public ViewManager(){
@@ -58,7 +57,11 @@ public class ViewManager {
             @Override
             public void handle(ActionEvent actionEvent) {
                 GameManager manager = new GameManager();            //GameManager constructor called
-                manager.createNewGame(mainStage);                   //creates game with components
+                try {
+                    manager.createNewGame(mainStage);                   //creates game with components
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -84,7 +87,7 @@ public class ViewManager {
         high_scores.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                currentSubScene(ScoresubScene);                 //Subscene callec
+                currentSubScene(ScoresubScene);               //Subscene callec
             }
         });
 
@@ -104,9 +107,9 @@ public class ViewManager {
 
     private void currentSubScene(GameSubScenes subScenes){
         if(hiddenSubScene != null){
-            hiddenSubScene.moveSubScene(476);
+            hiddenSubScene.moveSubScene(426);
         }
-        subScenes.moveSubScene(476);
+        subScenes.moveSubScene(-426);
         hiddenSubScene = subScenes;
     }
 
@@ -138,17 +141,16 @@ public class ViewManager {
     }
 
     private void createSubscene(){
-        ScoresubScene = new GameSubScenes();
+        ScoresubScene = new GameSubScenes(950, 180, 600, 400);
         mainPane.getChildren().add(ScoresubScene);                  //creating subscenes;
 
-        StartsubScene = new GameSubScenes();
-        mainPane.getChildren().add(StartsubScene);
+        GameButtons test = new GameButtons("hello");
+        test.setLayoutX(50);
+        test.setLayoutY(150);
+        ScoresubScene.subPane.getChildren().add(test);
 
-        ResumesubScene = new GameSubScenes();
+        ResumesubScene = new GameSubScenes(950, 180, 600, 400);
         mainPane.getChildren().add(ResumesubScene);
-
-        ExitsubScene = new GameSubScenes();
-        mainPane.getChildren().add(ExitsubScene);
     }
 
     public void showMainMenu(Stage IntroStage){
