@@ -144,13 +144,13 @@ public class ViewManager {
         ScoresubScene = new GameSubScenes(950, 180, 600, 400);
         mainPane.getChildren().add(ScoresubScene);                  //creating subscenes;
 
+        ResumesubScene = new GameSubScenes(950, 180, 600, 400);
+        mainPane.getChildren().add(ResumesubScene);
+
         GameButtons test = new GameButtons("hello");
         test.setLayoutX(50);
         test.setLayoutY(150);
-        ScoresubScene.subPane.getChildren().add(test);
-
-        ResumesubScene = new GameSubScenes(950, 180, 600, 400);
-        mainPane.getChildren().add(ResumesubScene);
+        ResumesubScene.subPane.getChildren().add(test);
     }
 
     public void showMainMenu(Stage IntroStage){

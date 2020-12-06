@@ -1,9 +1,13 @@
 package View;
 
+import data.GameData;
 import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
+import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -19,6 +23,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.*;
 
 import java.io.FileInputStream;
@@ -29,9 +34,12 @@ public class GameManager {
     private static final int GAME_WIDTH = 400;
     private static final int GAME_HEIGHT = 450;
     private AnchorPane gamePane;
+    private AnchorPane pausePane;
+    private AnchorPane mainGamePain;
     private Scene gameScene;
     private Stage gameStage;
     private AnchorPane gp1;
+    private boolean pauseClicked = false;
     private AnchorPane gp2;
     private final static String BACKGROUND_IMAGE = "View/Resources/dark_background.jpg";
     private final static String PAUSE_IMAGE = "model/Resources/pause.png";
@@ -40,6 +48,7 @@ public class GameManager {
     private ImageView pauseButton;
     private GameButtons resumeButton;
     private GameButtons SaveAndExitButton;
+    private GameButtons restartButton;
     private GameButtons exitToMainMenuButtonPause;
     private GameButtons exitToMainMenuButtonDefeat;
     private GameButtons SpendPointsToContinue;
@@ -67,8 +76,13 @@ public class GameManager {
 
     public GameManager(){
         gamePane = new AnchorPane();
+        pausePane = new AnchorPane();
+        mainGamePain = new AnchorPane();
         gameStage = new Stage();
-        gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT);
+        gameScene = new Scene(mainGamePain, GAME_WIDTH, GAME_HEIGHT);
+        pausePane.setLayoutX(gamePane.getLayoutX() + GAME_WIDTH);
+        pausePane.setLayoutY(gamePane.getLayoutY());
+        mainGamePain.getChildren().addAll(pausePane, gamePane);
         gameStage.setScene(gameScene);
         createSpaceListener();
         queue_obs = new LinkedList<>();
@@ -174,7 +188,7 @@ public class GameManager {
         gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
-                if (keyEvent.getCode() == KeyCode.SPACE && !jumplock) {
+                if (keyEvent.getCode() == KeyCode.SPACE && !jumplock && !pauseClicked) {
                     start_ball_obj.setStart_ball_vel_Y(-70.0f);
                     jumplock = true;
                 }
@@ -191,25 +205,41 @@ public class GameManager {
     }
 
     private void testListener(){
-        pauseButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+        pauseButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                isPaused = true;
-                curObstacle.getAnimation().pause();
-                if(prevObstacle != null)
-                    prevObstacle.getAnimation().pause();
-                //System.out.println(start_ball_obj.getStart_ball_pos_Y() + " haha " + start_ball_obj.getStart_ball_vel_Y());
+                if (!pauseClicked) {
+                    isPaused = true;
+                    curObstacle.getAnimation().pause();
+                    if (prevObstacle != null)
+                        prevObstacle.getAnimation().pause();
+                    pauseClicked = true;
+                    BoxBlur bb = new BoxBlur();
+                    bb.setWidth(5);
+                    bb.setHeight(5);
+                    bb.setIterations(3);
+                    gamePane.setEffect(bb);
+                    //pauseScreen.setEffect(null);
+                    // defeatScreen.setEffect(null );
+                    //System.out.println(start_ball_obj.getStart_ball_pos_Y() + " haha " + start_ball_obj.getStart_ball_vel_Y());
+                }
+
+                else{
+                    isPaused = false;
+                    gamePane.setEffect(null);
+                    scoreDisplay.setEffect(null);
+                    curObstacle.getAnimation().play();
+                    if(prevObstacle != null)
+                        prevObstacle.getAnimation().play();
+                    pauseClicked = false;
+                }
             }
         });
 
         pauseButton.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                isPaused = false;
-                //System.out.println(start_ball_obj.getStart_ball_pos_Y() + " haha1 " + start_ball_obj.getStart_ball_vel_Y());
-                curObstacle.getAnimation().play();
-                if(prevObstacle != null)
-                    prevObstacle.getAnimation().play();
+
             }
         });
     }
@@ -242,6 +272,8 @@ public class GameManager {
                     checkCollisionObstacles();
                     checkCollisionPoints();
                     checkCollisionColorSwitch();
+                    //Rotate rotate = (Rotate)curObstacle.getArc_components().get(0).getTransforms().get(0);
+                    //System.out.println(rotate.getAngle());
                     //System.out.println(start_ball_obj.isBlue_flag() + " " +  start_ball_obj.isRed_flag() + " " + start_ball_obj.isGreen_flag() + " "+ start_ball_obj.isYellow_flag());
                     //System.out.println(curObstacle + " "+ prevObstacle);
                     //System.out.println(gp2.getLayoutY());
@@ -261,18 +293,29 @@ public class GameManager {
         createStartBall();
         createBackGround();
         createScoreDisplay();
-        //createSubScenes();
+        createPauseButton();
+        testListener();
+        createSubScenes();
+        createGameLoop();
+        gameStage.show();
+}
+
+    public void resumeGame(Stage menuStage, GameData gameData) throws FileNotFoundException {
+        this.menuStage = menuStage;
+        this.menuStage.hide();
+        start_ball_obj = gameData.getStartBall();
+        createResumeGameBackground(gameData);
+        createResumeGameScoreDisplay(gameData);
         createPauseButton();
         testListener();
         createGameLoop();
         gameStage.show();
-}
+    }
 
     private void createPauseButton(){
         pauseButton = new ImageView(PAUSE_IMAGE);
         pauseButton.setLayoutX(GAME_WIDTH - 50);
         pauseButton.setLayoutY(15);
-
         gamePane.getChildren().add(pauseButton);
     }
 
@@ -280,10 +323,10 @@ public class GameManager {
 
 
         defeatScreen = new GameSubScenes(50, 50, GAME_WIDTH - 100, GAME_HEIGHT - 100);
-        gamePane.getChildren().add(defeatScreen);
+        pausePane.getChildren().add(defeatScreen);
 
         pauseScreen = new GameSubScenes(50, 50, GAME_WIDTH - 100, GAME_HEIGHT - 100);
-        gamePane.getChildren().add(pauseScreen);
+        pausePane.getChildren().add(pauseScreen);
 
         Text pauseLabel = new Text("Pause");
         pauseLabel.setLayoutX(110);
@@ -312,14 +355,19 @@ public class GameManager {
         exitToMainMenuButtonDefeat.setLayoutY(80 + 25 + 49);
         defeatScreen.subPane.getChildren().add(exitToMainMenuButtonDefeat);
 
+        restartButton = new GameButtons("RESTART");
+        restartButton.setLayoutX(55);
+        restartButton.setLayoutY(80 + 15 + 49);
+        pauseScreen.subPane.getChildren().add(restartButton);
+
         exitToMainMenuButtonPause = new GameButtons("EXIT");
         exitToMainMenuButtonPause.setLayoutX(55);
-        exitToMainMenuButtonPause.setLayoutY(80 + 25 + 49);
+        exitToMainMenuButtonPause.setLayoutY(80 + 30 + 98);
         pauseScreen.subPane.getChildren().add(exitToMainMenuButtonPause);
 
         SaveAndExitButton = new GameButtons("SAVE/EXIT");
         SaveAndExitButton.setLayoutX(55);
-        SaveAndExitButton.setLayoutY(80 + 50 + 98);
+        SaveAndExitButton.setLayoutY(80 + 45 + 147);
         pauseScreen.subPane.getChildren().add(SaveAndExitButton);
 
     }
@@ -332,6 +380,43 @@ public class GameManager {
         gamePane.getChildren().add(scoreDisplay);
     }
 
+    private void createResumeGameScoreDisplay(GameData gameData){
+        scoreDisplay = new InfoLabel(Integer.toString(gameData.getScore()));
+        scoreDisplay.setLayoutX(10);
+        scoreDisplay.setLayoutY(7);
+        scoreDisplay.setTextFill(Color.WHITE);
+        gamePane.getChildren().add(scoreDisplay);
+    }
+
+    private void createResumeGameBackground(GameData gamedata){
+        gp1 = new AnchorPane();
+        gp2 = new AnchorPane();
+        Image background_image = new Image(BACKGROUND_IMAGE, GAME_WIDTH, GAME_HEIGHT, false, true);
+        ImageView background_image_gp1 = new ImageView(background_image);
+        ImageView background_image_gp2 = new ImageView(background_image);
+        gp1.getChildren().add(background_image_gp1);
+        gp2.getChildren().add(background_image_gp2);
+        if(gamedata.getGp1_layout() > gamedata.getGp2_layout()){
+            gp1.setLayoutY(gamedata.getGp1_layout());
+            gp2.setLayoutY(gamedata.getGp2_layout());
+        }
+        else{
+            gp1.setLayoutY(gamedata.getGp2_layout());
+            gp2.setLayoutY(gamedata.getGp1_layout());
+        }
+        if(gamedata.isCurPt())
+            curPoints = createPoints(gp1);
+        nextPoints = createPoints(gp2);
+        if(gamedata.iscSwitch_flag())
+            createColorSwitch(gp2);
+        curObstacle = gamedata.getCurObstacle();
+        prevObstacle = gamedata.getPrevObstacle();
+        gamePane.getChildren().addAll(gp1, gp2);
+        gamePane.getChildren().add(start_ball_obj.getStart_ball());
+    }
+
+
+
     private void createBackGround(){
         gp1 = new AnchorPane();
         gp2 = new AnchorPane();
@@ -339,12 +424,7 @@ public class GameManager {
         ImageView background_image_gp1 = new ImageView(background_image);
         ImageView background_image_gp2 = new ImageView(background_image);
         gp1.getChildren().add(background_image_gp1);
-        temp1 = chooseObstacleRandom(gp1, GAME_WIDTH/2, 200.0f);
-        start_ball_obj.setBlue_flag(false);
-        start_ball_obj.setRed_flag(false);
-        start_ball_obj.setGreen_flag(false);
-        start_ball_obj.setYellow_flag(false);
-        curObstacle = temp1;
+        curObstacle = chooseObstacleRandom(gp1, GAME_WIDTH/2, 200.0f);
         curPoints = createPoints(gp1);
         gp2.getChildren().add(background_image_gp2);
         temp2 = chooseObstacleRandom(gp2, GAME_WIDTH/2, 200.0f) ;

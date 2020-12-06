@@ -3,9 +3,10 @@ package model;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public class Ball {
+public class Ball implements Serializable {
 
     private double start_ball_pos_Y = 390.0f;
     private double start_ball_pos_X = 200.0f;

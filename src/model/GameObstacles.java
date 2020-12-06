@@ -4,10 +4,11 @@ import javafx.animation.Timeline;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public abstract class GameObstacles extends Shape {
+public abstract class GameObstacles extends Shape implements Serializable {
 
     protected ArrayList<Arc> arc_components;
     protected ArrayList<Line> line_components;
@@ -19,6 +20,8 @@ public abstract class GameObstacles extends Shape {
         arc_components = new ArrayList<>();
         line_components = new ArrayList<>();
     }
+
+    public int getObstacle_id() {return obstacle_id; }
 
     public void createObstacle(float x, float y, Circle start_ball){};
 
