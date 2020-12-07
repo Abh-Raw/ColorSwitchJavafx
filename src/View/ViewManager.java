@@ -1,6 +1,8 @@
 package View;
 
 
+import data.GameData;
+import data.LoadFile;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -147,10 +149,24 @@ public class ViewManager {
         ResumesubScene = new GameSubScenes(950, 180, 600, 400);
         mainPane.getChildren().add(ResumesubScene);
 
-        GameButtons test = new GameButtons("hello");
+        GameButtons test = new GameButtons("LOAD TEST");
         test.setLayoutX(50);
         test.setLayoutY(150);
         ResumesubScene.subPane.getChildren().add(test);
+
+        test.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                GameManager manager = new GameManager();
+                LoadFile loadFile = new LoadFile();
+                GameData loadGameData = loadFile.loadGameData();
+                try {
+                    manager.resumeGame(mainStage, loadGameData);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void showMainMenu(Stage IntroStage){

@@ -8,8 +8,13 @@ import java.util.ArrayList;
 
 public class GameData implements Serializable {
     private Ball startBall;
-    private GameObstacles curObstacle;
-    private GameObstacles prevObstacle;
+
+    private ArrayList<Integer> curObstacleColors;
+    private ArrayList<Double> curObstacleAngles;
+    private int curObstacleID;
+    private ArrayList<Integer> prevObstacleColors;
+    private ArrayList<Double> prevObstacleAngles;
+    private int prevObstacleID;
     private boolean curPt;
     private boolean nextPt;
     private double gp1_layout;
@@ -17,10 +22,14 @@ public class GameData implements Serializable {
     private boolean cSwitch_flag;
     private int score;
 
-    public GameData(Ball startBall, GameObstacles curObstacle, GameObstacles prevObstacle, boolean curPt, boolean nextPt, double gp1_layout, double gp2_layout, boolean cSwitch_flag, int score) {
+    public GameData(Ball startBall, ArrayList<Integer> curObstacleColors, ArrayList<Double> curObstacleAngles, int curObstacleID, ArrayList<Integer> prevObstacleColors, ArrayList<Double> prevObstacleAngles, int prevObstacleID, boolean curPt, boolean nextPt, double gp1_layout, double gp2_layout, boolean cSwitch_flag, int score) {
         this.startBall = startBall;
-        this.curObstacle = curObstacle;
-        this.prevObstacle = prevObstacle;
+        this.curObstacleColors = curObstacleColors;
+        this.curObstacleAngles = curObstacleAngles;
+        this.curObstacleID = curObstacleID;
+        this.prevObstacleColors = prevObstacleColors;
+        this.prevObstacleAngles = prevObstacleAngles;
+        this.prevObstacleID = prevObstacleID;
         this.curPt = curPt;
         this.nextPt = nextPt;
         this.gp1_layout = gp1_layout;
@@ -37,12 +46,28 @@ public class GameData implements Serializable {
         return startBall;
     }
 
-    public GameObstacles getCurObstacle() {
-        return curObstacle;
+    public ArrayList<Integer> getCurObstacleColors() {
+        return curObstacleColors;
     }
 
-    public GameObstacles getPrevObstacle() {
-        return prevObstacle;
+    public ArrayList<Double> getCurObstacleAngles() {
+        return curObstacleAngles;
+    }
+
+    public int getCurObstacleID() {
+        return curObstacleID;
+    }
+
+    public ArrayList<Integer> getPrevObstacleColors() {
+        return prevObstacleColors;
+    }
+
+    public ArrayList<Double> getPrevObstacleAngles() {
+        return prevObstacleAngles;
+    }
+
+    public int getPrevObstacleID() {
+        return prevObstacleID;
     }
 
     public boolean isCurPt() {

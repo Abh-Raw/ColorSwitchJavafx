@@ -1,5 +1,6 @@
 package model;
 
+import data.GameData;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -58,6 +59,44 @@ public class Obstacle_1 extends GameObstacles {
         arc_components.add(arc3);
         arc_components.add(arc4);
     };
+
+    @Override
+
+    public void reconstructObstacle(float x, float y, GameData gameData){
+        Arc arc1 = new Arc(x, y, 75.0f, 75.0f, gameData.getCurObstacleAngles().get(0), 90);
+        Arc arc2 = new Arc(x, y, 75.0f, 75.0f, 90 + gameData.getCurObstacleAngles().get(1), 90);
+        Arc arc3 = new Arc(x, y, 75.0f, 75.0f, 180 + gameData.getCurObstacleAngles().get(2), 90);
+        Arc arc4 = new Arc(x, y, 75.0f, 75.0f, 270 + gameData.getCurObstacleAngles().get(3), 90);
+
+        arc1.setFill(Color.BLUE);
+        arc1.setStroke(Color.BLUE);
+        arc1.setStrokeWidth(15.0f);
+        arc1.setStrokeType(StrokeType.INSIDE);
+        arc1.setType(ArcType.OPEN);
+
+        arc2.setFill(Color.RED);
+        arc2.setStroke(Color.RED);
+        arc2.setStrokeWidth(15.0f);
+        arc2.setStrokeType(StrokeType.INSIDE);
+        arc2.setType(ArcType.OPEN);
+
+        arc3.setFill(Color.GREEN);
+        arc3.setStroke(Color.GREEN);
+        arc3.setStrokeWidth(15.0f);
+        arc3.setStrokeType(StrokeType.INSIDE);
+        arc3.setType(ArcType.OPEN);
+
+        arc4.setFill(Color.YELLOW);
+        arc4.setStroke(Color.YELLOW);
+        arc4.setStrokeWidth(15.0f);
+        arc4.setStrokeType( StrokeType.INSIDE);
+        arc4.setType(ArcType.OPEN);
+
+        arc_components.add(arc1);
+        arc_components.add(arc2);
+        arc_components.add(arc3);
+        arc_components.add(arc4);
+    }
 
     @Override
 

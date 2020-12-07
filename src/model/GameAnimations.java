@@ -56,7 +56,6 @@ public class GameAnimations{
         do {
             n = random.nextInt(4);
         }while (!((n==0 && start_ball_obj.isBlue_flag() && start_ball_obj.getStart_ball().getFill() != Color.BLUE) || (n==1 && start_ball_obj.isRed_flag() && start_ball_obj.getStart_ball().getFill() != Color.RED) || (n==2 && start_ball_obj.isGreen_flag() && start_ball_obj.getStart_ball().getFill() != Color.GREEN) || (n==3 && start_ball_obj.isYellow_flag() && start_ball_obj.getStart_ball().getFill() != Color.YELLOW)));
-        System.out.println(n);
         if(n==0)
             start_ball_obj.getStart_ball().setFill(Color.BLUE);
         else if(n==1)

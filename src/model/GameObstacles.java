@@ -1,5 +1,6 @@
 package model;
 
+import data.GameData;
 import javafx.animation.Timeline;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.*;
@@ -8,12 +9,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public abstract class GameObstacles extends Shape implements Serializable {
+public abstract class GameObstacles extends Shape {
 
     protected ArrayList<Arc> arc_components;
     protected ArrayList<Line> line_components;
     protected int obstacle_id;
-    protected Timeline animation;
+    protected transient Timeline animation;
 
 
     public GameObstacles(){
@@ -23,9 +24,11 @@ public abstract class GameObstacles extends Shape implements Serializable {
 
     public int getObstacle_id() {return obstacle_id; }
 
-    public void createObstacle(float x, float y, Circle start_ball){};
+    public void createObstacle(float x, float y, Circle start_ball){}
 
-    public void addAnimation(float x, float y, AnchorPane gp){};
+    public void reconstructObstacle(float x, float y, GameData gameData){}
+
+    public void addAnimation(float x, float y, AnchorPane gp){}
 
     public ArrayList<Arc> getArc_components(){
         return arc_components;

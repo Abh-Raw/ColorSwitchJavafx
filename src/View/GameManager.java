@@ -1,10 +1,12 @@
 package View;
 
 import data.GameData;
+import data.SaveFile;
 import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.effect.BoxBlur;
@@ -88,13 +90,80 @@ public class GameManager {
         queue_obs = new LinkedList<>();
     }
 
-    private GameObstacles animateObstacle1(AnchorPane gp, float x, float y){
+    private void createSaveGameListener(){
+        SaveAndExitButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                SaveFile saveFile = new SaveFile();
+                GameData saveSlot = new GameData(start_ball_obj, obstacleColorList(curObstacle), obstacleAnglesList(curObstacle), curObstacle.getObstacle_id(), obstacleColorList(prevObstacle), obstacleAnglesList(prevObstacle), prevObstacle.getObstacle_id(),  curPoints.getFlag(), nextPoints.getFlag(), gp1.getLayoutY(), gp2.getLayoutY(), colorSwitch_obj.getCs_flag(), score);
+                System.out.println(saveSlot.getScore());
+                saveFile.saveGameData(saveSlot);
+            }
+        });
+    }
+
+    private ArrayList<Double> obstacleAnglesList(GameObstacles obstacle){
+        ArrayList<Double> angleList = new ArrayList<>();
+
+        if(obstacle.getArc_components().size()!=0) {
+            for (int i = 0; i < obstacle.getArc_components().size(); ++i) {
+                Rotate curRotate = (Rotate) obstacle.getArc_components().get(i).getTransforms().get(0);
+                angleList.add(curRotate.getAngle());
+            }
+        }
+
+        if(obstacle.getLine_components().size()!=0) {
+            for (int i = 0; i < obstacle.getLine_components().size(); ++i) {
+                Rotate curRotate = (Rotate)obstacle.getLine_components().get(i).getTransforms().get(0);
+                angleList.add(curRotate.getAngle());
+            }
+        }
+
+        return angleList;
+    }
+
+    private ArrayList<Integer> obstacleColorList(GameObstacles obstacle){
+        ArrayList<Integer> colorList = new ArrayList<>();
+
+        if(obstacle.getArc_components().size()!=0) {
+            for (int i = 0; i < obstacle.getArc_components().size(); ++i) {
+                if (obstacle.getArc_components().get(i).getStroke() == Color.BLUE)
+                    colorList.add(0);
+                if (obstacle.getArc_components().get(i).getStroke() == Color.RED)
+                    colorList.add(1);
+                if (obstacle.getArc_components().get(i).getStroke() == Color.GREEN)
+                    colorList.add(2);
+                if (obstacle.getArc_components().get(i).getStroke() == Color.YELLOW)
+                    colorList.add(3);
+            }
+        }
+
+        if(obstacle.getLine_components().size()!=0) {
+            for (int i = 0; i < obstacle.getLine_components().size(); ++i) {
+                if (obstacle.getLine_components().get(i).getStroke() == Color.BLUE)
+                    colorList.add(0);
+                if (obstacle.getLine_components().get(i).getStroke() == Color.RED)
+                    colorList.add(1);
+                if (obstacle.getLine_components().get(i).getStroke() == Color.GREEN)
+                    colorList.add(2);
+                if (obstacle.getLine_components().get(i).getStroke() == Color.YELLOW)
+                    colorList.add(3);
+            }
+        }
+
+        return colorList;
+    }
+
+    private GameObstacles animateObstacle1(AnchorPane gp, float x, float y, GameData gameData){
         GameObstacles obstacles = new Obstacle_1();             //calls game Obstacles
         Rotate rotation1 = new Rotate();
         Rotate rotation2 = new Rotate();
         Rotate rotation3 = new Rotate();
         Rotate rotation4 = new Rotate();
-        obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());
+        if(gameData == null)
+            obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());
+        else
+            obstacles.reconstructObstacle(x, y, gameData);
         obstacles.getArc_components().get(0).getTransforms().add(rotation1);
         obstacles.getArc_components().get(1).getTransforms().add(rotation2);
         obstacles.getArc_components().get(2).getTransforms().add(rotation3);
@@ -245,7 +314,7 @@ public class GameManager {
     }
 
     private void createStartBall(){
-        start_ball_obj = new Ball();           //creates game obstacles object
+        start_ball_obj = new Ball(200.0f, 390.0f);           //creates game obstacles object
         start_ball_obj.makeStartBall();
     }
 
@@ -296,6 +365,7 @@ public class GameManager {
         createPauseButton();
         testListener();
         createSubScenes();
+        createSaveGameListener();
         createGameLoop();
         gameStage.show();
 }
@@ -304,9 +374,12 @@ public class GameManager {
         this.menuStage = menuStage;
         this.menuStage.hide();
         start_ball_obj = gameData.getStartBall();
+        start_ball_obj.reconstructStartBall(gameData);
         createResumeGameBackground(gameData);
         createResumeGameScoreDisplay(gameData);
         createPauseButton();
+        createSubScenes();
+        createSaveGameListener();
         testListener();
         createGameLoop();
         gameStage.show();
@@ -409,8 +482,8 @@ public class GameManager {
         nextPoints = createPoints(gp2);
         if(gamedata.iscSwitch_flag())
             createColorSwitch(gp2);
-        curObstacle = gamedata.getCurObstacle();
-        prevObstacle = gamedata.getPrevObstacle();
+        curObstacle = chooseObstacleUsingLoadData(gp1, GAME_WIDTH/2, 200.0f, gamedata, gamedata.getCurObstacleID());
+        prevObstacle = chooseObstacleUsingLoadData(gp2, GAME_WIDTH/2, 200.0f, gamedata, gamedata.getPrevObstacleID());
         gamePane.getChildren().addAll(gp1, gp2);
         gamePane.getChildren().add(start_ball_obj.getStart_ball());
     }
@@ -483,22 +556,28 @@ public class GameManager {
             createColorSwitch(gp2);
             curPane = gp1;
         }
+    }
 
+    private GameObstacles chooseObstacleUsingLoadData(AnchorPane gp, float x, float y, GameData gameData, int obstacle_id){
+        if(obstacle_id == 1){
+            return animateObstacle1(gp, x, y, gameData);
+        }
+        return null;
     }
 
     private GameObstacles chooseObstacleRandom(AnchorPane gp, float x, float y){     //creates random obstacles
 
         Random chooseObstacle = new Random();
-        int obstacle_id = chooseObstacle.nextInt(3);
-        if(obstacle_id==0){
-            return animateObstacle1(gp, x, y);
+        int obstacle_id = chooseObstacle.nextInt(1)+1;
+        if(obstacle_id==1){
+            return animateObstacle1(gp, x, y, null);
         }
 
-        else if(obstacle_id==1) {
+        else if(obstacle_id==2) {
            return animateObstacle2(gp, x, y);
         }
 
-        else if(obstacle_id==2){
+        else if(obstacle_id==3){
             return animateObstacle3(gp, x, y);
         }
 

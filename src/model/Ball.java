@@ -1,5 +1,6 @@
 package model;
 
+import data.GameData;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -8,11 +9,11 @@ import java.util.Random;
 
 public class Ball implements Serializable {
 
-    private double start_ball_pos_Y = 390.0f;
-    private double start_ball_pos_X = 200.0f;
+    private double start_ball_pos_Y;
+    private double start_ball_pos_X;
     private double start_ball_vel_Y = 0;
     private float gravity = 100;
-    private Circle start_ball;
+    private transient Circle start_ball;
     private boolean blue_flag;
     private boolean red_flag;
     private boolean green_flag;
@@ -68,15 +69,35 @@ public class Ball implements Serializable {
         return start_ball_pos_Y;
     }
 
+    public Ball(float x, float y){
+        start_ball_pos_X = x;
+        start_ball_pos_Y = y;
+    }
+
+    public void reconstructStartBall(GameData gameData){
+        Circle circle;
+        if(gameData.getStartBall().isBlue_flag())
+            circle = new Circle(200.0f, 390.0f, 10.0f, Color.BLUE);
+        else if(gameData.getStartBall().isRed_flag())
+            circle = new Circle(200.0f, 390.0f, 10.0f, Color.RED);
+        else if(gameData.getStartBall().isGreen_flag())
+            circle = new Circle(200.0f, 390.0f, 10.0f, Color.GREEN);
+        else
+            circle = new Circle(200.0f, 390.0f, 10.0f, Color.YELLOW);
+
+        circle.setStroke(Color.WHITE);
+        start_ball = circle;
+    }
+
     public void makeStartBall(){
 
         Random random = new Random();
         int n = random.nextInt(4);
         Circle circle;
         if(n==0)
-            circle = new Circle(200.0f, 390.0f, 10.0f, Color.RED);
-        else if(n==1)
             circle = new Circle(200.0f, 390.0f, 10.0f, Color.BLUE);
+        else if(n==1)
+            circle = new Circle(200.0f, 390.0f, 10.0f, Color.RED);
         else if(n==2)
             circle = new Circle(200.0f, 390.0f, 10.0f, Color.GREEN);
         else
