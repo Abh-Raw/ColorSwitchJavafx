@@ -14,6 +14,8 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+
 public class Obstacle_1 extends GameObstacles {
     public Obstacle_1(){
         super();
@@ -62,11 +64,11 @@ public class Obstacle_1 extends GameObstacles {
 
     @Override
 
-    public void reconstructObstacle(float x, float y, GameData gameData){
-        Arc arc1 = new Arc(x, y, 75.0f, 75.0f, gameData.getCurObstacleAngles().get(0), 90);
-        Arc arc2 = new Arc(x, y, 75.0f, 75.0f, 90 + gameData.getCurObstacleAngles().get(1), 90);
-        Arc arc3 = new Arc(x, y, 75.0f, 75.0f, 180 + gameData.getCurObstacleAngles().get(2), 90);
-        Arc arc4 = new Arc(x, y, 75.0f, 75.0f, 270 + gameData.getCurObstacleAngles().get(3), 90);
+    public void reconstructObstacle(float x, float y, ArrayList<Double> anglesList, ArrayList<Integer> colorList){
+        Arc arc1 = new Arc(x, y, 75.0f, 75.0f, anglesList.get(0), 90);
+        Arc arc2 = new Arc(x, y, 75.0f, 75.0f, 90 + anglesList.get(1), 90);
+        Arc arc3 = new Arc(x, y, 75.0f, 75.0f, 180 + anglesList.get(2), 90);
+        Arc arc4 = new Arc(x, y, 75.0f, 75.0f, 270 + anglesList.get(3), 90);
 
         arc1.setFill(Color.BLUE);
         arc1.setStroke(Color.BLUE);

@@ -56,13 +56,21 @@ public class GameAnimations{
         do {
             n = random.nextInt(4);
         }while (!((n==0 && start_ball_obj.isBlue_flag() && start_ball_obj.getStart_ball().getFill() != Color.BLUE) || (n==1 && start_ball_obj.isRed_flag() && start_ball_obj.getStart_ball().getFill() != Color.RED) || (n==2 && start_ball_obj.isGreen_flag() && start_ball_obj.getStart_ball().getFill() != Color.GREEN) || (n==3 && start_ball_obj.isYellow_flag() && start_ball_obj.getStart_ball().getFill() != Color.YELLOW)));
-        if(n==0)
-            start_ball_obj.getStart_ball().setFill(Color.BLUE);
-        else if(n==1)
-            start_ball_obj.getStart_ball().setFill(Color.RED);
-        else if(n==2)
-            start_ball_obj.getStart_ball().setFill(Color.GREEN);
-        else if(n==3)
-            start_ball_obj.getStart_ball().setFill(Color.YELLOW);
+          if(n==0) {
+              start_ball_obj.getStart_ball().setFill(Color.BLUE);
+              start_ball_obj.setCur_color_ID(0);
+          }
+        else if(n==1) {
+              start_ball_obj.getStart_ball().setFill(Color.RED);
+              start_ball_obj.setCur_color_ID(1);
+          }
+        else if(n==2) {
+              start_ball_obj.getStart_ball().setFill(Color.GREEN);
+              start_ball_obj.setCur_color_ID(2);
+          }
+        else if(n==3) {
+              start_ball_obj.getStart_ball().setFill(Color.YELLOW);
+              start_ball_obj.setCur_color_ID(3);
+          }
     }
 }

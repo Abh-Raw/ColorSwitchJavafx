@@ -18,6 +18,7 @@ public class Ball implements Serializable {
     private boolean red_flag;
     private boolean green_flag;
     private boolean yellow_flag;
+    private int cur_color_ID;
 
     public Circle getStart_ball(){
         return start_ball;
@@ -69,6 +70,10 @@ public class Ball implements Serializable {
         return start_ball_pos_Y;
     }
 
+    public int getCur_color_ID() {return cur_color_ID; }
+
+    public void setCur_color_ID(int cur_color_ID) {this.cur_color_ID = cur_color_ID; }
+
     public Ball(float x, float y){
         start_ball_pos_X = x;
         start_ball_pos_Y = y;
@@ -76,11 +81,11 @@ public class Ball implements Serializable {
 
     public void reconstructStartBall(GameData gameData){
         Circle circle;
-        if(gameData.getStartBall().isBlue_flag())
+        if(gameData.getStartBall().getCur_color_ID() == 0)
             circle = new Circle(200.0f, 390.0f, 10.0f, Color.BLUE);
-        else if(gameData.getStartBall().isRed_flag())
+        else if(gameData.getStartBall().getCur_color_ID() == 1)
             circle = new Circle(200.0f, 390.0f, 10.0f, Color.RED);
-        else if(gameData.getStartBall().isGreen_flag())
+        else if(gameData.getStartBall().getCur_color_ID() == 2)
             circle = new Circle(200.0f, 390.0f, 10.0f, Color.GREEN);
         else
             circle = new Circle(200.0f, 390.0f, 10.0f, Color.YELLOW);
@@ -94,14 +99,22 @@ public class Ball implements Serializable {
         Random random = new Random();
         int n = random.nextInt(4);
         Circle circle;
-        if(n==0)
+        if(n==0) {
             circle = new Circle(200.0f, 390.0f, 10.0f, Color.BLUE);
-        else if(n==1)
+            cur_color_ID = 0;
+        }
+        else if(n==1) {
             circle = new Circle(200.0f, 390.0f, 10.0f, Color.RED);
-        else if(n==2)
+            cur_color_ID = 1;
+        }
+        else if(n==2) {
             circle = new Circle(200.0f, 390.0f, 10.0f, Color.GREEN);
-        else
+            cur_color_ID = 2;
+        }
+        else {
             circle = new Circle(200.0f, 390.0f, 10.0f, Color.YELLOW);
+            cur_color_ID = 3;
+        }
 
 
         circle.setStroke(Color.WHITE);

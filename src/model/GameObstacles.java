@@ -26,7 +26,7 @@ public abstract class GameObstacles extends Shape {
 
     public void createObstacle(float x, float y, Circle start_ball){}
 
-    public void reconstructObstacle(float x, float y, GameData gameData){}
+    public void reconstructObstacle(float x, float y, ArrayList<Double> anglesList, ArrayList<Integer> colorList){}
 
     public void addAnimation(float x, float y, AnchorPane gp){}
 

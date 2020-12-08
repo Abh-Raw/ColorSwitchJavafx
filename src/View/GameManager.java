@@ -69,7 +69,7 @@ public class GameManager {
     private GameObstacles gp2_obstacle;
     private Queue<GameObstacles> queue_obs;
     private Ball start_ball_obj;
-    private ColorSwitch colorSwitch_obj;
+    private ColorSwitch cur_colorSwitch_obj;
     private Points points_obj;
     private int startFlag = 1;
     private int score;
@@ -95,9 +95,44 @@ public class GameManager {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 SaveFile saveFile = new SaveFile();
-                GameData saveSlot = new GameData(start_ball_obj, obstacleColorList(curObstacle), obstacleAnglesList(curObstacle), curObstacle.getObstacle_id(), obstacleColorList(prevObstacle), obstacleAnglesList(prevObstacle), prevObstacle.getObstacle_id(),  curPoints.getFlag(), nextPoints.getFlag(), gp1.getLayoutY(), gp2.getLayoutY(), colorSwitch_obj.getCs_flag(), score);
+                GameData saveSlot = new GameData(start_ball_obj, obstacleColorList(curObstacle), obstacleAnglesList(curObstacle), curObstacle.getObstacle_id(), obstacleColorList(prevObstacle), obstacleAnglesList(prevObstacle), prevObstacle.getObstacle_id(),  curPoints.getFlag(), nextPoints.getFlag(), gp1.getLayoutY(), gp2.getLayoutY(), cur_colorSwitch_obj.getCs_flag(), score);
                 System.out.println(saveSlot.getScore());
                 saveFile.saveGameData(saveSlot);
+                new ViewManager().showMainMenu(gameStage);
+            }
+        });
+
+        exitToMainMenuButtonPause.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                new ViewManager().showMainMenu(gameStage);
+            }
+        });
+
+        resumeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                 if(pauseClicked){
+                    isPaused = false;
+                    gamePane.setEffect(null);
+                    scoreDisplay.setEffect(null);
+                    curObstacle.getAnimation().play();
+                    if(prevObstacle != null)
+                        prevObstacle.getAnimation().play();
+                    pauseClicked = false;
+                }
+                 createSpaceListener();
+            }
+        });
+
+        restartButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                try {
+                    createNewGame(gameStage);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -154,16 +189,16 @@ public class GameManager {
         return colorList;
     }
 
-    private GameObstacles animateObstacle1(AnchorPane gp, float x, float y, GameData gameData){
+    private GameObstacles animateObstacle1(AnchorPane gp, float x, float y, ArrayList<Double> anglesList, ArrayList<Integer> colorList){
         GameObstacles obstacles = new Obstacle_1();             //calls game Obstacles
         Rotate rotation1 = new Rotate();
         Rotate rotation2 = new Rotate();
         Rotate rotation3 = new Rotate();
         Rotate rotation4 = new Rotate();
-        if(gameData == null)
+        if(anglesList == null)
             obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());
         else
-            obstacles.reconstructObstacle(x, y, gameData);
+            obstacles.reconstructObstacle(x, y, anglesList, colorList);
         obstacles.getArc_components().get(0).getTransforms().add(rotation1);
         obstacles.getArc_components().get(1).getTransforms().add(rotation2);
         obstacles.getArc_components().get(2).getTransforms().add(rotation3);
@@ -292,16 +327,6 @@ public class GameManager {
                     // defeatScreen.setEffect(null );
                     //System.out.println(start_ball_obj.getStart_ball_pos_Y() + " haha " + start_ball_obj.getStart_ball_vel_Y());
                 }
-
-                else{
-                    isPaused = false;
-                    gamePane.setEffect(null);
-                    scoreDisplay.setEffect(null);
-                    curObstacle.getAnimation().play();
-                    if(prevObstacle != null)
-                        prevObstacle.getAnimation().play();
-                    pauseClicked = false;
-                }
             }
         });
 
@@ -376,7 +401,8 @@ public class GameManager {
         start_ball_obj = gameData.getStartBall();
         start_ball_obj.reconstructStartBall(gameData);
         createResumeGameBackground(gameData);
-        createResumeGameScoreDisplay(gameData);
+        score = gameData.getScore();
+        createScoreDisplay();
         createPauseButton();
         createSubScenes();
         createSaveGameListener();
@@ -471,19 +497,22 @@ public class GameManager {
         gp2.getChildren().add(background_image_gp2);
         if(gamedata.getGp1_layout() > gamedata.getGp2_layout()){
             gp1.setLayoutY(gamedata.getGp1_layout());
-            gp2.setLayoutY(gamedata.getGp2_layout());
+            gp2.setLayoutY(gamedata.getGp2_layout()+2);
         }
         else{
             gp1.setLayoutY(gamedata.getGp2_layout());
-            gp2.setLayoutY(gamedata.getGp1_layout());
+            gp2.setLayoutY(gamedata.getGp1_layout()+2);
         }
         if(gamedata.isCurPt())
+            curPoints = createPoints(gp2);
+        else
             curPoints = createPoints(gp1);
-        nextPoints = createPoints(gp2);
         if(gamedata.iscSwitch_flag())
-            createColorSwitch(gp2);
-        curObstacle = chooseObstacleUsingLoadData(gp1, GAME_WIDTH/2, 200.0f, gamedata, gamedata.getCurObstacleID());
-        prevObstacle = chooseObstacleUsingLoadData(gp2, GAME_WIDTH/2, 200.0f, gamedata, gamedata.getPrevObstacleID());
+            cur_colorSwitch_obj = createColorSwitch(gp2);
+        else
+            cur_colorSwitch_obj = createColorSwitch(gp1);
+        curObstacle = chooseObstacleUsingLoadData(gp1, GAME_WIDTH/2, 200.0f, gamedata.getCurObstacleAngles(), gamedata.getCurObstacleColors(), gamedata.getCurObstacleID());
+        prevObstacle = chooseObstacleUsingLoadData(gp2, GAME_WIDTH/2, 200.0f, gamedata.getPrevObstacleAngles(), gamedata.getPrevObstacleColors(), gamedata.getPrevObstacleID());
         gamePane.getChildren().addAll(gp1, gp2);
         gamePane.getChildren().add(start_ball_obj.getStart_ball());
     }
@@ -504,7 +533,7 @@ public class GameManager {
         queue_obs.add(temp2);
         nextPoints = createPoints(gp2);
         gp2.setLayoutY(-1 * GAME_HEIGHT);
-        createColorSwitch(gp2);
+        cur_colorSwitch_obj = createColorSwitch(gp2);
         gamePane.getChildren().addAll(gp1, gp2);
         gamePane.getChildren().add(start_ball_obj.getStart_ball());
     }
@@ -540,7 +569,7 @@ public class GameManager {
             gp1_obstacle = chooseObstacleRandom(gp1, GAME_WIDTH/2, 200.0f);
             nextPoints = createPoints(gp1);
             queue_obs.add(gp1_obstacle);
-            createColorSwitch(gp1);
+            cur_colorSwitch_obj = createColorSwitch(gp1);
             if(startFlag == 1)
                 startFlag = 0;
             curPane = gp2;
@@ -553,14 +582,14 @@ public class GameManager {
             gp2_obstacle = chooseObstacleRandom(gp2, GAME_WIDTH/2, 200.0f);
             nextPoints = createPoints(gp2);
             queue_obs.add(gp2_obstacle);
-            createColorSwitch(gp2);
+            cur_colorSwitch_obj = createColorSwitch(gp2);
             curPane = gp1;
         }
     }
 
-    private GameObstacles chooseObstacleUsingLoadData(AnchorPane gp, float x, float y, GameData gameData, int obstacle_id){
+    private GameObstacles chooseObstacleUsingLoadData(AnchorPane gp, float x, float y, ArrayList<Double> anglesList, ArrayList<Integer> colorList, int obstacle_id){
         if(obstacle_id == 1){
-            return animateObstacle1(gp, x, y, gameData);
+            return animateObstacle1(gp, x, y, anglesList, colorList);
         }
         return null;
     }
@@ -570,7 +599,7 @@ public class GameManager {
         Random chooseObstacle = new Random();
         int obstacle_id = chooseObstacle.nextInt(1)+1;
         if(obstacle_id==1){
-            return animateObstacle1(gp, x, y, null);
+            return animateObstacle1(gp, x, y, null, null);
         }
 
         else if(obstacle_id==2) {
@@ -653,13 +682,11 @@ public class GameManager {
     private void checkCollisionColorSwitch(){
         Shape intersect;
         GameAnimations colorAnimation = new GameAnimations();
-        //System.out.println(points_obj.getFlag());
-        if(colorSwitch_obj.getCs_flag() == true){
+        if(cur_colorSwitch_obj.getCs_flag() == true){
             intersect = Shape.intersect(start_ball_obj.getStart_ball(), colorSwitch.get(2));
-            //System.out.println((intersect.getBoundsInLocal().getWidth() != -1));
             if(intersect.getBoundsInLocal().getWidth() != -1){
                 colorAnimation.changeColor(start_ball_obj);
-                colorSwitch_obj.setCs_flag(false);
+                cur_colorSwitch_obj.setCs_flag(false);
                 for(int i=0; i<colorSwitch.size(); ++i){
                     colorSwitch.get(i).setOpacity(0);
                 }
@@ -669,11 +696,12 @@ public class GameManager {
 
 
 
-    private void createColorSwitch(AnchorPane gp){
-        colorSwitch_obj = new ColorSwitch();
+    private ColorSwitch createColorSwitch(AnchorPane gp){
+        ColorSwitch colorSwitch_obj = new ColorSwitch();
         colorSwitch_obj.setCs_flag(true);
         colorSwitch = colorSwitch_obj.makeColorSwitch(GAME_WIDTH/2, GAME_HEIGHT - 20.0f);
         gp.getChildren().addAll(colorSwitch);
+        return colorSwitch_obj;
     }
 
     private Points createPoints(AnchorPane gp){

@@ -31,7 +31,7 @@ public class ViewManager {
     private GameSubScenes ScoresubScene;
     private GameSubScenes ResumesubScene;
     private GameSubScenes hiddenSubScene;
-    private Stage IntroStage;
+    private Stage stage;
     public ViewManager(){
         mainPane = new AnchorPane();
         button_list = new ArrayList<>();
@@ -169,11 +169,10 @@ public class ViewManager {
         });
     }
 
-    public void showMainMenu(Stage IntroStage){
-        this.IntroStage = IntroStage;
-        this.IntroStage.hide();
+    public void showMainMenu(Stage stage){
+        this.stage = stage;
+        this.stage.hide();
         mainStage.show();
     }
-
 }
 
