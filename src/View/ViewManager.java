@@ -1,6 +1,8 @@
 package View;
 
 
+import data.GameData;
+import data.LoadFile;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -29,7 +31,7 @@ public class ViewManager {
     private GameSubScenes ScoresubScene;
     private GameSubScenes ResumesubScene;
     private GameSubScenes hiddenSubScene;
-    private Stage IntroStage;
+    private Stage stage;
     public ViewManager(){
         mainPane = new AnchorPane();
         button_list = new ArrayList<>();
@@ -144,20 +146,33 @@ public class ViewManager {
         ScoresubScene = new GameSubScenes(950, 180, 600, 400);
         mainPane.getChildren().add(ScoresubScene);                  //creating subscenes;
 
-        GameButtons test = new GameButtons("hello");
-        test.setLayoutX(50);
-        test.setLayoutY(150);
-        ScoresubScene.subPane.getChildren().add(test);
-
         ResumesubScene = new GameSubScenes(950, 180, 600, 400);
         mainPane.getChildren().add(ResumesubScene);
+
+        GameButtons test = new GameButtons("LOAD TEST");
+        test.setLayoutX(50);
+        test.setLayoutY(150);
+        ResumesubScene.subPane.getChildren().add(test);
+
+        test.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                GameManager manager = new GameManager();
+                LoadFile loadFile = new LoadFile();
+                GameData loadGameData = loadFile.loadGameData();
+                try {
+                    manager.resumeGame(mainStage, loadGameData);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
-    public void showMainMenu(Stage IntroStage){
-        this.IntroStage = IntroStage;
-        this.IntroStage.hide();
+    public void showMainMenu(Stage stage){
+        this.stage = stage;
+        this.stage.hide();
         mainStage.show();
     }
-
 }
 

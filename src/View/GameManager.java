@@ -1,9 +1,15 @@
 package View;
 
+import data.GameData;
+import data.SaveFile;
 import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
+import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -19,6 +25,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.*;
 
 import java.io.FileInputStream;
@@ -29,9 +36,12 @@ public class GameManager {
     private static final int GAME_WIDTH = 400;
     private static final int GAME_HEIGHT = 450;
     private AnchorPane gamePane;
+    private AnchorPane pausePane;
+    private AnchorPane mainGamePain;
     private Scene gameScene;
     private Stage gameStage;
     private AnchorPane gp1;
+    private boolean pauseClicked = false;
     private AnchorPane gp2;
     private final static String BACKGROUND_IMAGE = "View/Resources/dark_background.jpg";
     private final static String PAUSE_IMAGE = "model/Resources/pause.png";
@@ -40,6 +50,7 @@ public class GameManager {
     private ImageView pauseButton;
     private GameButtons resumeButton;
     private GameButtons SaveAndExitButton;
+    private GameButtons restartButton;
     private GameButtons exitToMainMenuButtonPause;
     private GameButtons exitToMainMenuButtonDefeat;
     private GameButtons SpendPointsToContinue;
@@ -58,7 +69,7 @@ public class GameManager {
     private GameObstacles gp2_obstacle;
     private Queue<GameObstacles> queue_obs;
     private Ball start_ball_obj;
-    private ColorSwitch colorSwitch_obj;
+    private ColorSwitch cur_colorSwitch_obj;
     private Points points_obj;
     private int startFlag = 1;
     private int score;
@@ -67,20 +78,127 @@ public class GameManager {
 
     public GameManager(){
         gamePane = new AnchorPane();
+        pausePane = new AnchorPane();
+        mainGamePain = new AnchorPane();
         gameStage = new Stage();
-        gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT);
+        gameScene = new Scene(mainGamePain, GAME_WIDTH, GAME_HEIGHT);
+        pausePane.setLayoutX(gamePane.getLayoutX() + GAME_WIDTH);
+        pausePane.setLayoutY(gamePane.getLayoutY());
+        mainGamePain.getChildren().addAll(pausePane, gamePane);
         gameStage.setScene(gameScene);
         createSpaceListener();
         queue_obs = new LinkedList<>();
     }
 
-    private GameObstacles animateObstacle1(AnchorPane gp, float x, float y){
+    private void createSaveGameListener(){
+        SaveAndExitButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                SaveFile saveFile = new SaveFile();
+                GameData saveSlot = new GameData(start_ball_obj, obstacleColorList(curObstacle), obstacleAnglesList(curObstacle), curObstacle.getObstacle_id(), obstacleColorList(prevObstacle), obstacleAnglesList(prevObstacle), prevObstacle.getObstacle_id(),  curPoints.getFlag(), nextPoints.getFlag(), gp1.getLayoutY(), gp2.getLayoutY(), cur_colorSwitch_obj.getCs_flag(), score);
+                System.out.println(saveSlot.getScore());
+                saveFile.saveGameData(saveSlot);
+                new ViewManager().showMainMenu(gameStage);
+            }
+        });
+
+        exitToMainMenuButtonPause.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                new ViewManager().showMainMenu(gameStage);
+            }
+        });
+
+        resumeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                 if(pauseClicked){
+                    isPaused = false;
+                    gamePane.setEffect(null);
+                    scoreDisplay.setEffect(null);
+                    curObstacle.getAnimation().play();
+                    if(prevObstacle != null)
+                        prevObstacle.getAnimation().play();
+                    pauseClicked = false;
+                }
+                 createSpaceListener();
+            }
+        });
+
+        restartButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                try {
+                    createNewGame(gameStage);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private ArrayList<Double> obstacleAnglesList(GameObstacles obstacle){
+        ArrayList<Double> angleList = new ArrayList<>();
+
+        if(obstacle.getArc_components().size()!=0) {
+            for (int i = 0; i < obstacle.getArc_components().size(); ++i) {
+                Rotate curRotate = (Rotate) obstacle.getArc_components().get(i).getTransforms().get(0);
+                angleList.add(curRotate.getAngle());
+            }
+        }
+
+        if(obstacle.getLine_components().size()!=0) {
+            for (int i = 0; i < obstacle.getLine_components().size(); ++i) {
+                Rotate curRotate = (Rotate)obstacle.getLine_components().get(i).getTransforms().get(0);
+                angleList.add(curRotate.getAngle());
+            }
+        }
+
+        return angleList;
+    }
+
+    private ArrayList<Integer> obstacleColorList(GameObstacles obstacle){
+        ArrayList<Integer> colorList = new ArrayList<>();
+
+        if(obstacle.getArc_components().size()!=0) {
+            for (int i = 0; i < obstacle.getArc_components().size(); ++i) {
+                if (obstacle.getArc_components().get(i).getStroke() == Color.BLUE)
+                    colorList.add(0);
+                if (obstacle.getArc_components().get(i).getStroke() == Color.RED)
+                    colorList.add(1);
+                if (obstacle.getArc_components().get(i).getStroke() == Color.GREEN)
+                    colorList.add(2);
+                if (obstacle.getArc_components().get(i).getStroke() == Color.YELLOW)
+                    colorList.add(3);
+            }
+        }
+
+        if(obstacle.getLine_components().size()!=0) {
+            for (int i = 0; i < obstacle.getLine_components().size(); ++i) {
+                if (obstacle.getLine_components().get(i).getStroke() == Color.BLUE)
+                    colorList.add(0);
+                if (obstacle.getLine_components().get(i).getStroke() == Color.RED)
+                    colorList.add(1);
+                if (obstacle.getLine_components().get(i).getStroke() == Color.GREEN)
+                    colorList.add(2);
+                if (obstacle.getLine_components().get(i).getStroke() == Color.YELLOW)
+                    colorList.add(3);
+            }
+        }
+
+        return colorList;
+    }
+
+    private GameObstacles animateObstacle1(AnchorPane gp, float x, float y, ArrayList<Double> anglesList, ArrayList<Integer> colorList){
         GameObstacles obstacles = new Obstacle_1();             //calls game Obstacles
         Rotate rotation1 = new Rotate();
         Rotate rotation2 = new Rotate();
         Rotate rotation3 = new Rotate();
         Rotate rotation4 = new Rotate();
-        obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());
+        if(anglesList == null)
+            obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());
+        else
+            obstacles.reconstructObstacle(x, y, anglesList, colorList);
         obstacles.getArc_components().get(0).getTransforms().add(rotation1);
         obstacles.getArc_components().get(1).getTransforms().add(rotation2);
         obstacles.getArc_components().get(2).getTransforms().add(rotation3);
@@ -174,7 +292,7 @@ public class GameManager {
         gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
-                if (keyEvent.getCode() == KeyCode.SPACE && !jumplock) {
+                if (keyEvent.getCode() == KeyCode.SPACE && !jumplock && !pauseClicked) {
                     start_ball_obj.setStart_ball_vel_Y(-70.0f);
                     jumplock = true;
                 }
@@ -191,31 +309,37 @@ public class GameManager {
     }
 
     private void testListener(){
-        pauseButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+        pauseButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                isPaused = true;
-                curObstacle.getAnimation().pause();
-                if(prevObstacle != null)
-                    prevObstacle.getAnimation().pause();
-                //System.out.println(start_ball_obj.getStart_ball_pos_Y() + " haha " + start_ball_obj.getStart_ball_vel_Y());
+                if (!pauseClicked) {
+                    isPaused = true;
+                    curObstacle.getAnimation().pause();
+                    if (prevObstacle != null)
+                        prevObstacle.getAnimation().pause();
+                    pauseClicked = true;
+                    BoxBlur bb = new BoxBlur();
+                    bb.setWidth(5);
+                    bb.setHeight(5);
+                    bb.setIterations(3);
+                    gamePane.setEffect(bb);
+                    //pauseScreen.setEffect(null);
+                    // defeatScreen.setEffect(null );
+                    //System.out.println(start_ball_obj.getStart_ball_pos_Y() + " haha " + start_ball_obj.getStart_ball_vel_Y());
+                }
             }
         });
 
         pauseButton.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                isPaused = false;
-                //System.out.println(start_ball_obj.getStart_ball_pos_Y() + " haha1 " + start_ball_obj.getStart_ball_vel_Y());
-                curObstacle.getAnimation().play();
-                if(prevObstacle != null)
-                    prevObstacle.getAnimation().play();
+
             }
         });
     }
 
     private void createStartBall(){
-        start_ball_obj = new Ball();           //creates game obstacles object
+        start_ball_obj = new Ball(200.0f, 390.0f);           //creates game obstacles object
         start_ball_obj.makeStartBall();
     }
 
@@ -242,6 +366,8 @@ public class GameManager {
                     checkCollisionObstacles();
                     checkCollisionPoints();
                     checkCollisionColorSwitch();
+                    //Rotate rotate = (Rotate)curObstacle.getArc_components().get(0).getTransforms().get(0);
+                    //System.out.println(rotate.getAngle());
                     //System.out.println(start_ball_obj.isBlue_flag() + " " +  start_ball_obj.isRed_flag() + " " + start_ball_obj.isGreen_flag() + " "+ start_ball_obj.isYellow_flag());
                     //System.out.println(curObstacle + " "+ prevObstacle);
                     //System.out.println(gp2.getLayoutY());
@@ -261,18 +387,34 @@ public class GameManager {
         createStartBall();
         createBackGround();
         createScoreDisplay();
-        //createSubScenes();
         createPauseButton();
         testListener();
+        createSubScenes();
+        createSaveGameListener();
         createGameLoop();
         gameStage.show();
 }
+
+    public void resumeGame(Stage menuStage, GameData gameData) throws FileNotFoundException {
+        this.menuStage = menuStage;
+        this.menuStage.hide();
+        start_ball_obj = gameData.getStartBall();
+        start_ball_obj.reconstructStartBall(gameData);
+        createResumeGameBackground(gameData);
+        score = gameData.getScore();
+        createScoreDisplay();
+        createPauseButton();
+        createSubScenes();
+        createSaveGameListener();
+        testListener();
+        createGameLoop();
+        gameStage.show();
+    }
 
     private void createPauseButton(){
         pauseButton = new ImageView(PAUSE_IMAGE);
         pauseButton.setLayoutX(GAME_WIDTH - 50);
         pauseButton.setLayoutY(15);
-
         gamePane.getChildren().add(pauseButton);
     }
 
@@ -280,10 +422,10 @@ public class GameManager {
 
 
         defeatScreen = new GameSubScenes(50, 50, GAME_WIDTH - 100, GAME_HEIGHT - 100);
-        gamePane.getChildren().add(defeatScreen);
+        pausePane.getChildren().add(defeatScreen);
 
         pauseScreen = new GameSubScenes(50, 50, GAME_WIDTH - 100, GAME_HEIGHT - 100);
-        gamePane.getChildren().add(pauseScreen);
+        pausePane.getChildren().add(pauseScreen);
 
         Text pauseLabel = new Text("Pause");
         pauseLabel.setLayoutX(110);
@@ -312,14 +454,19 @@ public class GameManager {
         exitToMainMenuButtonDefeat.setLayoutY(80 + 25 + 49);
         defeatScreen.subPane.getChildren().add(exitToMainMenuButtonDefeat);
 
+        restartButton = new GameButtons("RESTART");
+        restartButton.setLayoutX(55);
+        restartButton.setLayoutY(80 + 15 + 49);
+        pauseScreen.subPane.getChildren().add(restartButton);
+
         exitToMainMenuButtonPause = new GameButtons("EXIT");
         exitToMainMenuButtonPause.setLayoutX(55);
-        exitToMainMenuButtonPause.setLayoutY(80 + 25 + 49);
+        exitToMainMenuButtonPause.setLayoutY(80 + 30 + 98);
         pauseScreen.subPane.getChildren().add(exitToMainMenuButtonPause);
 
         SaveAndExitButton = new GameButtons("SAVE/EXIT");
         SaveAndExitButton.setLayoutX(55);
-        SaveAndExitButton.setLayoutY(80 + 50 + 98);
+        SaveAndExitButton.setLayoutY(80 + 45 + 147);
         pauseScreen.subPane.getChildren().add(SaveAndExitButton);
 
     }
@@ -332,6 +479,46 @@ public class GameManager {
         gamePane.getChildren().add(scoreDisplay);
     }
 
+    private void createResumeGameScoreDisplay(GameData gameData){
+        scoreDisplay = new InfoLabel(Integer.toString(gameData.getScore()));
+        scoreDisplay.setLayoutX(10);
+        scoreDisplay.setLayoutY(7);
+        scoreDisplay.setTextFill(Color.WHITE);
+        gamePane.getChildren().add(scoreDisplay);
+    }
+
+    private void createResumeGameBackground(GameData gamedata){
+        gp1 = new AnchorPane();
+        gp2 = new AnchorPane();
+        Image background_image = new Image(BACKGROUND_IMAGE, GAME_WIDTH, GAME_HEIGHT, false, true);
+        ImageView background_image_gp1 = new ImageView(background_image);
+        ImageView background_image_gp2 = new ImageView(background_image);
+        gp1.getChildren().add(background_image_gp1);
+        gp2.getChildren().add(background_image_gp2);
+        if(gamedata.getGp1_layout() > gamedata.getGp2_layout()){
+            gp1.setLayoutY(gamedata.getGp1_layout());
+            gp2.setLayoutY(gamedata.getGp2_layout()+2);
+        }
+        else{
+            gp1.setLayoutY(gamedata.getGp2_layout());
+            gp2.setLayoutY(gamedata.getGp1_layout()+2);
+        }
+        if(gamedata.isCurPt())
+            curPoints = createPoints(gp2);
+        else
+            curPoints = createPoints(gp1);
+        if(gamedata.iscSwitch_flag())
+            cur_colorSwitch_obj = createColorSwitch(gp2);
+        else
+            cur_colorSwitch_obj = createColorSwitch(gp1);
+        curObstacle = chooseObstacleUsingLoadData(gp1, GAME_WIDTH/2, 200.0f, gamedata.getCurObstacleAngles(), gamedata.getCurObstacleColors(), gamedata.getCurObstacleID());
+        prevObstacle = chooseObstacleUsingLoadData(gp2, GAME_WIDTH/2, 200.0f, gamedata.getPrevObstacleAngles(), gamedata.getPrevObstacleColors(), gamedata.getPrevObstacleID());
+        gamePane.getChildren().addAll(gp1, gp2);
+        gamePane.getChildren().add(start_ball_obj.getStart_ball());
+    }
+
+
+
     private void createBackGround(){
         gp1 = new AnchorPane();
         gp2 = new AnchorPane();
@@ -339,19 +526,14 @@ public class GameManager {
         ImageView background_image_gp1 = new ImageView(background_image);
         ImageView background_image_gp2 = new ImageView(background_image);
         gp1.getChildren().add(background_image_gp1);
-        temp1 = chooseObstacleRandom(gp1, GAME_WIDTH/2, 200.0f);
-        start_ball_obj.setBlue_flag(false);
-        start_ball_obj.setRed_flag(false);
-        start_ball_obj.setGreen_flag(false);
-        start_ball_obj.setYellow_flag(false);
-        curObstacle = temp1;
+        curObstacle = chooseObstacleRandom(gp1, GAME_WIDTH/2, 200.0f);
         curPoints = createPoints(gp1);
         gp2.getChildren().add(background_image_gp2);
         temp2 = chooseObstacleRandom(gp2, GAME_WIDTH/2, 200.0f) ;
         queue_obs.add(temp2);
         nextPoints = createPoints(gp2);
         gp2.setLayoutY(-1 * GAME_HEIGHT);
-        createColorSwitch(gp2);
+        cur_colorSwitch_obj = createColorSwitch(gp2);
         gamePane.getChildren().addAll(gp1, gp2);
         gamePane.getChildren().add(start_ball_obj.getStart_ball());
     }
@@ -387,7 +569,7 @@ public class GameManager {
             gp1_obstacle = chooseObstacleRandom(gp1, GAME_WIDTH/2, 200.0f);
             nextPoints = createPoints(gp1);
             queue_obs.add(gp1_obstacle);
-            createColorSwitch(gp1);
+            cur_colorSwitch_obj = createColorSwitch(gp1);
             if(startFlag == 1)
                 startFlag = 0;
             curPane = gp2;
@@ -400,25 +582,31 @@ public class GameManager {
             gp2_obstacle = chooseObstacleRandom(gp2, GAME_WIDTH/2, 200.0f);
             nextPoints = createPoints(gp2);
             queue_obs.add(gp2_obstacle);
-            createColorSwitch(gp2);
+            cur_colorSwitch_obj = createColorSwitch(gp2);
             curPane = gp1;
         }
+    }
 
+    private GameObstacles chooseObstacleUsingLoadData(AnchorPane gp, float x, float y, ArrayList<Double> anglesList, ArrayList<Integer> colorList, int obstacle_id){
+        if(obstacle_id == 1){
+            return animateObstacle1(gp, x, y, anglesList, colorList);
+        }
+        return null;
     }
 
     private GameObstacles chooseObstacleRandom(AnchorPane gp, float x, float y){     //creates random obstacles
 
         Random chooseObstacle = new Random();
-        int obstacle_id = chooseObstacle.nextInt(3);
-        if(obstacle_id==0){
-            return animateObstacle1(gp, x, y);
+        int obstacle_id = chooseObstacle.nextInt(1)+1;
+        if(obstacle_id==1){
+            return animateObstacle1(gp, x, y, null, null);
         }
 
-        else if(obstacle_id==1) {
+        else if(obstacle_id==2) {
            return animateObstacle2(gp, x, y);
         }
 
-        else if(obstacle_id==2){
+        else if(obstacle_id==3){
             return animateObstacle3(gp, x, y);
         }
 
@@ -494,13 +682,11 @@ public class GameManager {
     private void checkCollisionColorSwitch(){
         Shape intersect;
         GameAnimations colorAnimation = new GameAnimations();
-        //System.out.println(points_obj.getFlag());
-        if(colorSwitch_obj.getCs_flag() == true){
+        if(cur_colorSwitch_obj.getCs_flag() == true){
             intersect = Shape.intersect(start_ball_obj.getStart_ball(), colorSwitch.get(2));
-            //System.out.println((intersect.getBoundsInLocal().getWidth() != -1));
             if(intersect.getBoundsInLocal().getWidth() != -1){
                 colorAnimation.changeColor(start_ball_obj);
-                colorSwitch_obj.setCs_flag(false);
+                cur_colorSwitch_obj.setCs_flag(false);
                 for(int i=0; i<colorSwitch.size(); ++i){
                     colorSwitch.get(i).setOpacity(0);
                 }
@@ -510,11 +696,12 @@ public class GameManager {
 
 
 
-    private void createColorSwitch(AnchorPane gp){
-        colorSwitch_obj = new ColorSwitch();
+    private ColorSwitch createColorSwitch(AnchorPane gp){
+        ColorSwitch colorSwitch_obj = new ColorSwitch();
         colorSwitch_obj.setCs_flag(true);
         colorSwitch = colorSwitch_obj.makeColorSwitch(GAME_WIDTH/2, GAME_HEIGHT - 20.0f);
         gp.getChildren().addAll(colorSwitch);
+        return colorSwitch_obj;
     }
 
     private Points createPoints(AnchorPane gp){

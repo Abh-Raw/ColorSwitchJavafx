@@ -65,18 +65,4 @@ public class IntroViewManager {
         ImageView imageView = new ImageView(backgroundImage);
         IntromainPane.getChildren().add(imageView);
     }
-
-    private void createPlayButton(){
-        GameButtons playButton = new GameButtons("PLAY");           //Making GameButtons Object
-        playButton.setLayoutX(320);
-        playButton.setLayoutY(440);
-        IntromainPane.getChildren().add(playButton);
-         playButton.setOnAction(new EventHandler<ActionEvent>() {
-             @Override
-             public void handle(ActionEvent actionEvent) {                      //Making event handler
-                 ViewManager viewManager = new ViewManager();           //ViewManager contructor called
-                 viewManager.showMainMenu(IntromainStage);
-             }
-         });
-    }
 }
