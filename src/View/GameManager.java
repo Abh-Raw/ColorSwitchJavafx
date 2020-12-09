@@ -633,7 +633,7 @@ public class GameManager {
     private GameObstacles chooseObstacleRandom(AnchorPane gp, float x, float y){     //creates random obstacles
 
         Random chooseObstacle = new Random();
-        int obstacle_id = chooseObstacle.nextInt(5);
+        int obstacle_id = chooseObstacle.nextInt(4)+1;
         if(obstacle_id==1){
             return animateObstacle1(gp, x, y, null, null);
         }
