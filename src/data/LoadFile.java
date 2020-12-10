@@ -26,7 +26,7 @@ public class LoadFile {
            return loadedData;
     }
 
-    public PlayerData loadPlayerData(){
+    public LeaderBoard loadLeaderboard() {
         return null;
     }
 }
