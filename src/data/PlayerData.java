@@ -4,20 +4,16 @@ import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class PlayerData implements Serializable {
-    private ArrayList<String> name_list;
-    private ArrayList<Integer> score_list;
+public class PlayerData implements Serializable{
+    private String name;
+    private int score;
 
-    public PlayerData(ArrayList<String> name_list, ArrayList<Integer> score_list){
-        name_list = this.name_list;
-        score_list = this.score_list;
+    public PlayerData(String name, int score){
+        this.name = name;
+        score = this.score;
     }
 
-    public PlayerData(){
-        name_list = new ArrayList<>();
-        score_list = new ArrayList<>();
-    }
+    public String getName() {return name; }
 
-    public ArrayList<String> getName_list(){return name_list;}
-    public ArrayList<Integer> getScore_list(){return score_list;}
+    public int getScore() {return score; }
 }

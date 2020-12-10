@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 public class SaveFile {
-    public void savePlayerData(PlayerData playerData){
+    public void savePlayerData(LeaderBoard leaderBoard){
 
     }
 

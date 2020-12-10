@@ -1,12 +1,7 @@
 package View;
 
-import data.GameData;
-import data.SaveFile;
-import javafx.animation.Animation;
+import data.*;
 import javafx.animation.AnimationTimer;
-import javafx.animation.FadeTransition;
-import javafx.animation.ParallelTransition;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.effect.BoxBlur;
@@ -18,16 +13,15 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import model.*;
 
+import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -36,8 +30,6 @@ public class GameManager {
     private static final int GAME_WIDTH = 400;
     private static final int GAME_HEIGHT = 450;
     private AnchorPane gamePane;
-    private AnchorPane pausePane;
-    private AnchorPane mainGamePain;
     private Scene gameScene;
     private Stage gameStage;
     private AnchorPane gp1;
@@ -74,23 +66,42 @@ public class GameManager {
     private int startFlag = 1;
     private int score;
     private boolean isPaused = false;
+    private int requiredRevivingScore = 5;
+    private LeaderBoard highScoresdata;
     private InfoLabel scoreDisplay;
+    private HashSet<Integer> leaderBoardScores;
+    private PriorityQueue<PlayerData> updatedLeaderboard;
 
     public GameManager(){
         gamePane = new AnchorPane();
-        pausePane = new AnchorPane();
-        mainGamePain = new AnchorPane();
         gameStage = new Stage();
-        gameScene = new Scene(mainGamePain, GAME_WIDTH, GAME_HEIGHT);
-        pausePane.setLayoutX(gamePane.getLayoutX() + GAME_WIDTH);
-        pausePane.setLayoutY(gamePane.getLayoutY());
-        mainGamePain.getChildren().addAll(pausePane, gamePane);
+        gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT);
         gameStage.setScene(gameScene);
         createSpaceListener();
         queue_obs = new LinkedList<>();
     }
 
     private void createSaveGameListener(){
+        pauseButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                isPaused = true;
+                curObstacle.getAnimation().pause();
+                if (prevObstacle != null)
+                    prevObstacle.getAnimation().pause();
+                BoxBlur bb = new BoxBlur();
+                bb.setWidth(5);
+                bb.setHeight(5);
+                bb.setIterations(3);
+                gp1.setEffect(bb);
+                gp2.setEffect(bb);
+                scoreDisplay.setEffect(bb);
+                pauseButton.setEffect(bb);
+                start_ball_obj.getStart_ball().setEffect(bb);
+                pauseScreen.moveSubScene(-1*GAME_WIDTH);
+            }
+        });
+
         SaveAndExitButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -112,16 +123,64 @@ public class GameManager {
         resumeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                 if(pauseClicked){
+                isPaused = false;
+                start_ball_obj.getStart_ball().setEffect(null);
+                gp1.setEffect(null);
+                gp2.setEffect(null);
+                scoreDisplay.setEffect(null);
+                pauseButton.setEffect(null );
+                curObstacle.getAnimation().play();
+                if(prevObstacle != null)
+                    prevObstacle.getAnimation().play();
+                gamePane.requestFocus();
+                pauseScreen.moveSubScene(GAME_WIDTH);
+                //createSpaceListener();
+            }
+        });
+
+        SpendPointsToContinue.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if(score >= requiredRevivingScore){
                     isPaused = false;
-                    gamePane.setEffect(null);
+                    score -= requiredRevivingScore;
+                    requiredRevivingScore += 5;
+                    scoreDisplay.setText(Integer.toString(score));
+                    start_ball_obj.getStart_ball().setEffect(null);
+                    gp1.setEffect(null);
+                    gp2.setEffect(null);
                     scoreDisplay.setEffect(null);
+                    pauseButton.setEffect(null );
                     curObstacle.getAnimation().play();
                     if(prevObstacle != null)
                         prevObstacle.getAnimation().play();
-                    pauseClicked = false;
+                    gamePane.requestFocus();
+                    defeatScreen.moveSubScene(GAME_WIDTH);
                 }
-                 createSpaceListener();
+                else {
+                    Text error = new Text("Required points to revive - " + Integer.toString(requiredRevivingScore));
+                    error.setLayoutY(80+25+49+110 );
+                    error.setLayoutX(52);
+                    try{
+                        error.setFont(Font.loadFont(new FileInputStream("src/model/Resources/kenvector_future.ttf"),10));
+                    } catch (FileNotFoundException e) {
+                        error.setFont(Font.font("Verdana",10));
+                    }
+                    defeatScreen.subPane.getChildren().add(error);
+                }
+            }
+        });
+
+        exitToMainMenuButtonDefeat.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                updatedLeaderboard = highScoresdata.getLeaderboard();
+                if(highScoresdata.getLeaderboard().size()==0){
+                    TextField playerNameField = new TextField("Enter name");
+                    playerNameField.
+                    playerName.
+                    updatedLeaderboard.add(new PlayerData(someName, score));
+                }
             }
         });
 
@@ -129,6 +188,19 @@ public class GameManager {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 try {
+                    isPaused = false;
+                    gamePane.requestFocus();
+                    score = 0;
+                    startFlag = 1;
+                    start_ball_obj = null;
+                    curObstacle = null;
+                    prevObstacle = null;
+                    curPoints = null;
+                    nextPoints = null;
+                    cur_colorSwitch_obj = null;
+                    gp1 = null;
+                    gp2 = null;
+                    gamePane = null;
                     createNewGame(gameStage);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -328,7 +400,7 @@ public class GameManager {
         gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
-                if (keyEvent.getCode() == KeyCode.SPACE && !jumplock && !pauseClicked) {
+                if (keyEvent.getCode() == KeyCode.SPACE && !jumplock && !isPaused ) {
                     start_ball_obj.setStart_ball_vel_Y(-70.0f);
                     jumplock = true;
                 }
@@ -340,36 +412,6 @@ public class GameManager {
             public void handle(KeyEvent keyEvent) {
                 if(keyEvent.getCode() == KeyCode.SPACE)
                     jumplock = false;
-            }
-        });
-    }
-
-    private void testListener(){
-        pauseButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (!pauseClicked) {
-                    isPaused = true;
-                    curObstacle.getAnimation().pause();
-                    if (prevObstacle != null)
-                        prevObstacle.getAnimation().pause();
-                    pauseClicked = true;
-                    BoxBlur bb = new BoxBlur();
-                    bb.setWidth(5);
-                    bb.setHeight(5);
-                    bb.setIterations(3);
-                    gamePane.setEffect(bb);
-                    //pauseScreen.setEffect(null);
-                    // defeatScreen.setEffect(null );
-                    //System.out.println(start_ball_obj.getStart_ball_pos_Y() + " haha " + start_ball_obj.getStart_ball_vel_Y());
-                }
-            }
-        });
-
-        pauseButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-
             }
         });
     }
@@ -402,13 +444,7 @@ public class GameManager {
                     checkCollisionObstacles();
                     checkCollisionPoints();
                     checkCollisionColorSwitch();
-                    //Rotate rotate = (Rotate)curObstacle.getArc_components().get(0).getTransforms().get(0);
-                    //System.out.println(rotate.getAngle());
-                    //System.out.println(start_ball_obj.isBlue_flag() + " " +  start_ball_obj.isRed_flag() + " " + start_ball_obj.isGreen_flag() + " "+ start_ball_obj.isYellow_flag());
-                    //System.out.println(curObstacle + " "+ prevObstacle);
-                    //System.out.println(gp2.getLayoutY());
-                    //System.out.println(start_ball_obj.getStart_ball_pos_Y());
-                    //System.out.println(score + " " + curObstacle.getArc_components().size());
+                    System.out.println(start_ball_obj.getStart_ball_pos_Y() + " " + start_ball_obj.getStart_ball_vel_Y() + " " + time_per);
                 }
             }
         };
@@ -418,13 +454,23 @@ public class GameManager {
 
 
     public void createNewGame(Stage menuStage) throws FileNotFoundException {
+        LoadFile loadFile = new LoadFile();
+        if(loadFile.loadLeaderboard() != null)
+            highScoresdata = loadFile.loadLeaderboard();
+        else
+            highScoresdata = new LeaderBoard();
+        leaderBoardScores = new HashSet<>();
+        Iterator<PlayerData> itr = highScoresdata.getLeaderboard().iterator();
+        while(itr.hasNext()){
+            PlayerData temp = itr.next();
+            leaderBoardScores.add(temp.getScore());
+        }
         this.menuStage = menuStage;
-        this.menuStage.hide();
+        this.menuStage.close();
         createStartBall();
         createBackGround();
         createScoreDisplay();
         createPauseButton();
-        testListener();
         createSubScenes();
         createSaveGameListener();
         createGameLoop();
@@ -442,7 +488,6 @@ public class GameManager {
         createPauseButton();
         createSubScenes();
         createSaveGameListener();
-        testListener();
         createGameLoop();
         gameStage.show();
     }
@@ -457,11 +502,11 @@ public class GameManager {
     private void createSubScenes() throws FileNotFoundException {
 
 
-        defeatScreen = new GameSubScenes(50, 50, GAME_WIDTH - 100, GAME_HEIGHT - 100);
-        pausePane.getChildren().add(defeatScreen);
+        defeatScreen = new GameSubScenes(50 + GAME_WIDTH, 50, GAME_WIDTH - 100, GAME_HEIGHT - 100);
+        gamePane.getChildren().add(defeatScreen);
 
-        pauseScreen = new GameSubScenes(50, 50, GAME_WIDTH - 100, GAME_HEIGHT - 100);
-        pausePane.getChildren().add(pauseScreen);
+        pauseScreen = new GameSubScenes(50 + GAME_WIDTH, 50, GAME_WIDTH - 100, GAME_HEIGHT - 100);
+        gamePane.getChildren().add(pauseScreen);
 
         Text pauseLabel = new Text("Pause");
         pauseLabel.setLayoutX(110);
@@ -505,6 +550,15 @@ public class GameManager {
         SaveAndExitButton.setLayoutY(80 + 45 + 147);
         pauseScreen.subPane.getChildren().add(SaveAndExitButton);
 
+        Text finalScore = new Text("Score - " + Integer.toString(score));
+        finalScore.setLayoutY(80+25+49+90);
+        finalScore.setLayoutX(120);
+        try{
+            finalScore.setFont(Font.loadFont(new FileInputStream("src/model/Resources/kenvector_future.ttf"), 10));
+        } catch (FileNotFoundException e) {
+            finalScore.setFont(Font.font("Verdana",23));
+        }
+        defeatScreen.subPane.getChildren().add(finalScore);
     }
 
     private void createScoreDisplay(){
@@ -660,7 +714,20 @@ public class GameManager {
             for (int i = 0; i < curObstacle.getArc_components().size(); ++i) {
                 intersect = Shape.intersect(start_ball_obj.getStart_ball(), curObstacle.getArc_components().get(i));
                 if ((intersect.getBoundsInLocal().getWidth() != -1) && start_ball_obj.getStart_ball().getFill() != curObstacle.getArc_components().get(i).getStroke() && start_ball_obj.getStart_ball().getFill() != curObstacle.getArc_components().get(i).getFill()) {
-                    System.out.println("Game Over");
+                    isPaused = true;
+                    curObstacle.getAnimation().pause();
+                    if (prevObstacle != null)
+                        prevObstacle.getAnimation().pause();
+                    BoxBlur bb = new BoxBlur();
+                    bb.setWidth(5);
+                    bb.setHeight(5);
+                    bb.setIterations(3);
+                    gp1.setEffect(bb);
+                    gp2.setEffect(bb);
+                    scoreDisplay.setEffect(bb);
+                    pauseButton.setEffect(bb);
+                    start_ball_obj.getStart_ball().setEffect(bb);
+                    defeatScreen.moveSubScene(-1*GAME_WIDTH);
                     //gameStage.close();
                     //gameTimer.stop();
                 }
@@ -671,7 +738,20 @@ public class GameManager {
             for (int i = 0; i < curObstacle.getLine_components().size(); ++i) {
                 intersect = Shape.intersect(start_ball_obj.getStart_ball(), curObstacle.getLine_components().get(i));
                 if ((intersect.getBoundsInLocal().getWidth() != -1) && start_ball_obj.getStart_ball().getFill() != curObstacle.getLine_components().get(i).getStroke() && start_ball_obj.getStart_ball().getFill() != curObstacle.getLine_components().get(i).getFill()) {
-                    System.out.println("Game Over");
+                    isPaused = true;
+                    curObstacle.getAnimation().pause();
+                    if (prevObstacle != null)
+                        prevObstacle.getAnimation().pause();
+                    BoxBlur bb = new BoxBlur();
+                    bb.setWidth(5);
+                    bb.setHeight(5);
+                    bb.setIterations(3);
+                    gp1.setEffect(bb);
+                    gp2.setEffect(bb);
+                    scoreDisplay.setEffect(bb);
+                    pauseButton.setEffect(bb);
+                    start_ball_obj.getStart_ball().setEffect(bb);
+                    defeatScreen.moveSubScene(-1*GAME_WIDTH);
                     //gameStage.close();
                     //gameTimer.stop();
                 }
@@ -683,7 +763,20 @@ public class GameManager {
                 for (int i = 0; i < prevObstacle.getArc_components().size(); ++i) {
                     intersect = Shape.intersect(start_ball_obj.getStart_ball(), prevObstacle.getArc_components().get(i));
                     if ((intersect.getBoundsInLocal().getWidth() != -1) && start_ball_obj.getStart_ball().getFill() != prevObstacle.getArc_components().get(i).getStroke() && start_ball_obj.getStart_ball().getFill() != prevObstacle.getArc_components().get(i).getFill()) {
-                        System.out.println("Game Over");
+                        isPaused = true;
+                        curObstacle.getAnimation().pause();
+                        if (prevObstacle != null)
+                            prevObstacle.getAnimation().pause();
+                        BoxBlur bb = new BoxBlur();
+                        bb.setWidth(5);
+                        bb.setHeight(5);
+                        bb.setIterations(3);
+                        gp1.setEffect(bb);
+                        gp2.setEffect(bb);
+                        scoreDisplay.setEffect(bb);
+                        pauseButton.setEffect(bb);
+                        start_ball_obj.getStart_ball().setEffect(bb);
+                        defeatScreen.moveSubScene(-1*GAME_WIDTH);
                         //gameStage.close();
                         //gameTimer.stop();
                     }
@@ -694,7 +787,20 @@ public class GameManager {
                 for (int i = 0; i < prevObstacle.getArc_components().size(); ++i) {
                     intersect = Shape.intersect(start_ball_obj.getStart_ball(), prevObstacle.getLine_components().get(i));
                     if ((intersect.getBoundsInLocal().getWidth() != -1) && start_ball_obj.getStart_ball().getFill() != prevObstacle.getLine_components().get(i).getStroke() && start_ball_obj.getStart_ball().getFill() != prevObstacle.getLine_components().get(i).getFill()) {
-                        System.out.println("Game Over");
+                        isPaused = true;
+                        curObstacle.getAnimation().pause();
+                        if (prevObstacle != null)
+                            prevObstacle.getAnimation().pause();
+                        BoxBlur bb = new BoxBlur();
+                        bb.setWidth(5);
+                        bb.setHeight(5);
+                        bb.setIterations(3);
+                        gp1.setEffect(bb);
+                        gp2.setEffect(bb);
+                        scoreDisplay.setEffect(bb);
+                        pauseButton.setEffect(bb);
+                        start_ball_obj.getStart_ball().setEffect(bb);
+                        defeatScreen.moveSubScene(-1*GAME_WIDTH);
                       //gameStage.close();
                       //gameTimer.stop();
                     }
