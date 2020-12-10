@@ -615,7 +615,6 @@ public class GameManager {
         } catch (FileNotFoundException e) {
             finalScore.setFont(Font.font("Verdana",23));
         }
-        defeatScreen.subPane.getChildren().add(finalScore);
     }
 
     private void createScoreDisplay(){
@@ -788,6 +787,15 @@ public class GameManager {
                     scoreDisplay.setEffect(bb);
                     pauseButton.setEffect(bb);
                     start_ball_obj.getStart_ball().setEffect(bb);
+                    Text finalScore = new Text("Score - " + Integer.toString(score));
+                    finalScore.setLayoutY(80+25+49+90);
+                    finalScore.setLayoutX(120);
+                    try{
+                        finalScore.setFont(Font.loadFont(new FileInputStream("src/model/Resources/kenvector_future.ttf"), 10));
+                    } catch (FileNotFoundException e) {
+                        finalScore.setFont(Font.font("Verdana",23));
+                    }
+                    defeatScreen.subPane.getChildren().add(finalScore);
                     defeatScreen.moveSubScene(-1*GAME_WIDTH);
                     //gameStage.close();
                     //gameTimer.stop();
@@ -812,6 +820,15 @@ public class GameManager {
                     scoreDisplay.setEffect(bb);
                     pauseButton.setEffect(bb);
                     start_ball_obj.getStart_ball().setEffect(bb);
+                    Text finalScore = new Text("Score - " + Integer.toString(score));
+                    finalScore.setLayoutY(80+25+49+90);
+                    finalScore.setLayoutX(120);
+                    try{
+                        finalScore.setFont(Font.loadFont(new FileInputStream("src/model/Resources/kenvector_future.ttf"), 10));
+                    } catch (FileNotFoundException e) {
+                        finalScore.setFont(Font.font("Verdana",23));
+                    }
+                    defeatScreen.subPane.getChildren().add(finalScore);
                     defeatScreen.moveSubScene(-1*GAME_WIDTH);
                     //gameStage.close();
                     //gameTimer.stop();
@@ -837,6 +854,15 @@ public class GameManager {
                         scoreDisplay.setEffect(bb);
                         pauseButton.setEffect(bb);
                         start_ball_obj.getStart_ball().setEffect(bb);
+                        Text finalScore = new Text("Score - " + Integer.toString(score));
+                        finalScore.setLayoutY(80+25+49+90);
+                        finalScore.setLayoutX(120);
+                        try{
+                            finalScore.setFont(Font.loadFont(new FileInputStream("src/model/Resources/kenvector_future.ttf"), 10));
+                        } catch (FileNotFoundException e) {
+                            finalScore.setFont(Font.font("Verdana",23));
+                        }
+                        defeatScreen.subPane.getChildren().add(finalScore);
                         defeatScreen.moveSubScene(-1*GAME_WIDTH);
                         //gameStage.close();
                         //gameTimer.stop();
@@ -861,6 +887,15 @@ public class GameManager {
                         scoreDisplay.setEffect(bb);
                         pauseButton.setEffect(bb);
                         start_ball_obj.getStart_ball().setEffect(bb);
+                        Text finalScore = new Text("Score - " + Integer.toString(score));
+                        finalScore.setLayoutY(80+25+49+90);
+                        finalScore.setLayoutX(120);
+                        try{
+                            finalScore.setFont(Font.loadFont(new FileInputStream("src/model/Resources/kenvector_future.ttf"), 10));
+                        } catch (FileNotFoundException e) {
+                            finalScore.setFont(Font.font("Verdana",23));
+                        }
+                        defeatScreen.subPane.getChildren().add(finalScore);
                         defeatScreen.moveSubScene(-1*GAME_WIDTH);
                       //gameStage.close();
                       //gameTimer.stop();
