@@ -21,10 +21,10 @@ public class Obstacle_4 extends GameObstacles{    //x shaped obstacle
 
     @Override
     public void createObstacle(float x, float y, Circle start_ball){
-        Line line1 = new Line(x - 65.0f, y - 0f, x - 0f, y + 0f);
-        Line line2 = new Line(x + 0f, y - 0f, x + 65.0f, y + 0f);
-        Line line3 = new Line(x - 0f, y - 0f, x - 0f, y + 65.0f);
-        Line line4 = new Line(x + 0f, y - 65.0f, x + 0f, y + 0f);
+        Line line1 = new Line(x+32.5f - 65.0f, y+32.5f - 0f, x +32.5f- 0f, y+32.5f + 0f);
+        Line line2 = new Line(x+32.5f + 0f, y+32.5f - 0f, x +32.5f+ 65.0f, y +32.5f+ 0f);
+        Line line3 = new Line(x+32.5f - 0f, y+32.5f - 0f, x +32.5f- 0f, y +32.5f+ 65.0f);
+        Line line4 = new Line(x+32.5f + 0f, y+32.5f - 65.0f, x +32.5f+ 0f, y+32.5f + 0f);
 
         Random random = new Random();
 

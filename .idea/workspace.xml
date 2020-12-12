@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bfb429d6-e762-42b2-a2f8-4c03a1330976" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/model/Obstacle_5.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/model/Obstacle_6.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/View/GameManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/View/GameManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Obstacle_4.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Obstacle_4.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Points.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Points.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,5 +69,6 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>
