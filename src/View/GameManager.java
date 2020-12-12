@@ -452,6 +452,52 @@ public class GameManager {
         return obstacles;
     }
 
+    private GameObstacles animateObstacle6(AnchorPane gp, float x, float y) {
+        GameObstacles obstacles = new Obstacle_6();
+
+        Rotate rotation1 = new Rotate();       //1 rotation obj for every component
+        Rotate rotation2 = new Rotate();
+        Rotate rotation3 = new Rotate();
+        Rotate rotation4 = new Rotate();
+        Rotate rotation5 = new Rotate();       //1 rotation obj for every component
+        Rotate rotation6 = new Rotate();
+        Rotate rotation7 = new Rotate();
+        Rotate rotation8 = new Rotate();
+
+        obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());  //create obj
+
+        obstacles.getArc_components().get(0).getTransforms().add(rotation1);   //rotation obj added to every component
+        obstacles.getArc_components().get(1).getTransforms().add(rotation2);
+        obstacles.getArc_components().get(2).getTransforms().add(rotation3);
+        obstacles.getArc_components().get(3).getTransforms().add(rotation4);
+        obstacles.getArc_components().get(4).getTransforms().add(rotation5);   //rotation obj added to every component
+        obstacles.getArc_components().get(5).getTransforms().add(rotation6);
+        obstacles.getArc_components().get(6).getTransforms().add(rotation7);
+        obstacles.getArc_components().get(7).getTransforms().add(rotation8);
+
+        gp.getChildren().addAll(obstacles.getArc_components());
+
+        start_ball_obj.setBlue_flag(false);     //when we collide with colorswitch, we check next obstacle has which colors and out of those we choose a color for ball
+        start_ball_obj.setRed_flag(false);      //to avoid deadlock
+        start_ball_obj.setGreen_flag(false);
+        start_ball_obj.setYellow_flag(false);
+
+        for(int i = 0; i<obstacles.getArc_components().size(); ++i){  //color components in the next obstacle are set true to avoid deadlock
+            if(obstacles.getArc_components().get(i).getStroke() == Color.BLUE)
+                start_ball_obj.setBlue_flag(true);
+            if(obstacles.getArc_components().get(i).getStroke() == Color.RED)
+                start_ball_obj.setRed_flag(true);
+            if(obstacles.getArc_components().get(i).getStroke() == Color.GREEN)
+                start_ball_obj.setGreen_flag(true);
+            if(obstacles.getArc_components().get(i).getStroke() == Color.YELLOW)
+                start_ball_obj.setYellow_flag(true);
+        }
+
+        obstacles.addAnimation(x, y, gp);
+
+        return obstacles;
+    }
+
 
     private void createSpaceListener(){
         gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -743,7 +789,7 @@ public class GameManager {
     private GameObstacles chooseObstacleRandom(AnchorPane gp, float x, float y){     //creates random obstacles
 
         Random chooseObstacle = new Random();
-        int obstacle_id = chooseObstacle.nextInt(5)+1;
+        int obstacle_id = chooseObstacle.nextInt(1)+4;
         if(obstacle_id==1){
             return animateObstacle1(gp, x, y, null, null);
         }
@@ -762,6 +808,10 @@ public class GameManager {
 
         else if(obstacle_id == 5){
             return animateObstacle5(gp, x, y);
+        }
+
+        else if(obstacle_id == 6){
+            return animateObstacle6(gp, x, y);
         }
 
          return null;
