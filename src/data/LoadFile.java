@@ -16,7 +16,6 @@ public class LoadFile {
                     ObjectInputStream inputStream = new ObjectInputStream(fileIn);
 
                     loadedData = (GameData) inputStream.readObject();
-                    System.out.println(loadedData.getScore());
                     inputStream.close();
                     fileIn.close();
 
@@ -27,6 +26,20 @@ public class LoadFile {
     }
 
     public LeaderBoard loadLeaderboard() {
-        return null;
+        LeaderBoard leaderBoard;
+
+        try {
+
+            FileInputStream fileIn = new FileInputStream("leaderboard.ser");
+            ObjectInputStream inputStream = new ObjectInputStream(fileIn);
+
+            leaderBoard = (LeaderBoard) inputStream.readObject();
+            inputStream.close();
+            fileIn.close();
+
+        } catch (IOException | ClassNotFoundException e) {
+            leaderBoard = null;
+        }
+        return leaderBoard;
     }
 }

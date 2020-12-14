@@ -2,7 +2,9 @@ package View;
 
 
 import data.GameData;
+import data.LeaderBoard;
 import data.LoadFile;
+import data.PlayerData;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -11,15 +13,28 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.GameButtons;
 import model.GameSubScenes;
 
 import java.io.FileNotFoundException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
+import java.util.*;
 
+class ScoreComparator implements Comparator<PlayerData>, Serializable {
+    public int compare(PlayerData p1, PlayerData p2){
+        if(p1.getScore() > p2.getScore()){
+            return 1;
+        }
+        else if(p1.getScore() < p2.getScore()){
+            return -1;
+        }
+        else
+            return 0;
+    }
+}
 
 public class ViewManager {
     private static final int WIDTH = 800;
@@ -31,6 +46,7 @@ public class ViewManager {
     private GameSubScenes ScoresubScene;
     private GameSubScenes ResumesubScene;
     private GameSubScenes hiddenSubScene;
+    private LeaderBoard leaderBoard;
     private Stage stage;
     public ViewManager(){
         mainPane = new AnchorPane();
@@ -42,10 +58,36 @@ public class ViewManager {
         mainStage.setScene(mainScene);
         createButton();
         createSubscene();
+        LoadFile loadFile = new LoadFile();
+        if(loadFile.loadLeaderboard() != null)
+            leaderBoard = loadFile.loadLeaderboard();
+        else
+            leaderBoard = new LeaderBoard();
+        setCurrentLeaderboard();
     }
 
     public Stage getMainStage(){
         return mainStage;
+    }
+
+    private void setCurrentLeaderboard(){
+        ArrayList<Text> highScoreAchievers = new ArrayList<>();
+        int scoreIndex = 1;
+        int scoreLayout = 60;
+        List<PlayerData> tempList = new ArrayList<PlayerData>(leaderBoard.getLeaderboard());
+        Collections.sort(tempList, new ScoreComparator());
+        Collections.reverse(tempList);
+        Iterator<PlayerData> itr = tempList.listIterator();
+        while(itr.hasNext()){
+            PlayerData temp = itr.next();
+            Text addScore = new Text(scoreIndex + "\t \t" + temp.getName() + "\t \t" + temp.getScore());
+            highScoreAchievers.add(addScore);
+            addScore.setLayoutX(60);
+            addScore.setLayoutY(scoreLayout);
+            scoreLayout += 20;
+            scoreIndex++;
+            ScoresubScene.subPane.getChildren().add(addScore);
+        }
     }
 
     private void createButton(){
@@ -60,7 +102,7 @@ public class ViewManager {
             public void handle(ActionEvent actionEvent) {
                 GameManager manager = new GameManager();            //GameManager constructor called
                 try {
-                    manager.createNewGame(mainStage);                   //creates game with components
+                    manager.createNewGame(mainStage, leaderBoard);                   //creates game with components
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -89,6 +131,11 @@ public class ViewManager {
         high_scores.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                Iterator<PlayerData> itr = leaderBoard.getLeaderboard().iterator();
+                while(itr.hasNext()){
+                    PlayerData temp = itr.next();
+                    System.out.println(temp.getName() + " " + temp.getScore());
+                }
                 currentSubScene(ScoresubScene);               //Subscene callec
             }
         });

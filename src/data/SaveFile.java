@@ -8,8 +8,32 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 public class SaveFile {
-    public void savePlayerData(LeaderBoard leaderBoard){
+    public void savePlayerData(final LeaderBoard leaderBoard){
+        Task<Void> task = new Task<Void>() {
+            @Override
+            public Void call() throws Exception {
 
+                try {
+
+                    FileOutputStream fileOut = new FileOutputStream("leaderboard.ser");
+                    BufferedOutputStream bufferedStream = new BufferedOutputStream(fileOut);
+                    ObjectOutputStream outputStream = new ObjectOutputStream(bufferedStream);
+
+                    outputStream.writeObject(leaderBoard);
+                    outputStream.close();
+                    fileOut.close();
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
+
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
     }
 
     public void saveGameData(final GameData gameData){

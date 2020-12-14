@@ -4,6 +4,9 @@ import data.*;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -21,7 +24,6 @@ import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import model.*;
 
-import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -45,11 +47,14 @@ public class GameManager {
     private GameButtons restartButton;
     private GameButtons exitToMainMenuButtonPause;
     private GameButtons exitToMainMenuButtonDefeat;
+    private Button submitNameForHighScore = new Button("SUBMIT");
     private GameButtons SpendPointsToContinue;
     private AnimationTimer gameTimer;
     private ArrayList<Arc> colorSwitch;
     private Stage menuStage;
+    private boolean spaceFirstPressed = false;
     private boolean jumplock = false;
+    private TextField playerNameField;
     private GameObstacles temp1;
     private GameObstacles temp2;
     private GameObstacles curObstacle;
@@ -65,6 +70,7 @@ public class GameManager {
     private Points points_obj;
     private int startFlag = 1;
     private int score;
+    private Label nameLabel;
     private boolean isPaused = false;
     private int requiredRevivingScore = 5;
     private LeaderBoard highScoresdata;
@@ -107,7 +113,7 @@ public class GameManager {
             public void handle(MouseEvent mouseEvent) {
                 SaveFile saveFile = new SaveFile();
                 GameData saveSlot = new GameData(start_ball_obj, obstacleColorList(curObstacle), obstacleAnglesList(curObstacle), curObstacle.getObstacle_id(), obstacleColorList(prevObstacle), obstacleAnglesList(prevObstacle), prevObstacle.getObstacle_id(),  curPoints.getFlag(), nextPoints.getFlag(), gp1.getLayoutY(), gp2.getLayoutY(), cur_colorSwitch_obj.getCs_flag(), score);
-                System.out.println(saveSlot.getScore());
+                //System.out.println(saveSlot.getScore());
                 saveFile.saveGameData(saveSlot);
                 new ViewManager().showMainMenu(gameStage);
             }
@@ -171,15 +177,40 @@ public class GameManager {
             }
         });
 
+        submitNameForHighScore.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if(updatedLeaderboard.peek() != null) {
+                    if (score > updatedLeaderboard.peek().getScore() && updatedLeaderboard.size() > 8)
+                        updatedLeaderboard.poll();
+                }
+                updatedLeaderboard.add(new PlayerData(playerNameField.getText(), score));
+                highScoresdata.setLeaderboard(updatedLeaderboard);
+                SaveFile saveFile = new SaveFile();
+                saveFile.savePlayerData(highScoresdata);
+                new ViewManager().showMainMenu(gameStage);
+            }
+        });
+
         exitToMainMenuButtonDefeat.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                updatedLeaderboard = highScoresdata.getLeaderboard();
-                if(highScoresdata.getLeaderboard().size()==0){
-                    TextField playerNameField = new TextField("Enter name");
-                    //playerNameField.
-                    //playerName.
-                    //updatedLeaderboard.add(new PlayerData(someName, score));
+                if(updatedLeaderboard.peek()==null || (score > updatedLeaderboard.peek().getScore()) || (updatedLeaderboard.size() <= 8)){
+                    nameLabel = new Label("Name: ");
+                    playerNameField = new TextField("Enter name");
+                    playerNameField.setPrefColumnCount(10);
+                    playerNameField.setLayoutX(60);
+                    playerNameField.setLayoutY(280);
+                    nameLabel.setLayoutX(20);
+                    nameLabel.setLayoutY(285);
+                    defeatScreen.subPane.getChildren().add(nameLabel);
+                    defeatScreen.subPane.getChildren().add(playerNameField);
+                    submitNameForHighScore.setLayoutX(200);
+                    submitNameForHighScore.setLayoutY(280);
+                    defeatScreen.subPane.getChildren().add(submitNameForHighScore);
+                }
+                else if(score < updatedLeaderboard.peek().getScore() && updatedLeaderboard.peek()!=null){
+                    new ViewManager().showMainMenu(gameStage);
                 }
             }
         });
@@ -201,7 +232,7 @@ public class GameManager {
                     gp1 = null;
                     gp2 = null;
                     gamePane = null;
-                    createNewGame(gameStage);
+                    createNewGame(gameStage, highScoresdata);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -558,6 +589,7 @@ public class GameManager {
             @Override
             public void handle(KeyEvent keyEvent) {
                 if (keyEvent.getCode() == KeyCode.SPACE && !jumplock && !isPaused ) {
+                    spaceFirstPressed = true;
                     start_ball_obj.setStart_ball_vel_Y(-70.0f);
                     jumplock = true;
                 }
@@ -593,8 +625,8 @@ public class GameManager {
 
                     prev_time = curTime;
                     time_per /= 300.0;
-                if(!isPaused) {
                     start_ball_obj.getStart_ball().relocate(start_ball_obj.getStart_ball_pos_X() - 10, start_ball_obj.getStart_ball_pos_Y());
+                if(!isPaused && spaceFirstPressed) {
                     start_ball_obj.jump(time_per);
                     start_ball_obj.getStart_ball().relocate(start_ball_obj.getStart_ball_pos_X() - 10, start_ball_obj.getStart_ball_pos_Y());
                     moveBackground();
@@ -610,12 +642,9 @@ public class GameManager {
     }
 
 
-    public void createNewGame(Stage menuStage) throws FileNotFoundException {
-        LoadFile loadFile = new LoadFile();
-        if(loadFile.loadLeaderboard() != null)
-            highScoresdata = loadFile.loadLeaderboard();
-        else
-            highScoresdata = new LeaderBoard();
+    public void createNewGame(Stage menuStage, LeaderBoard leaderBoard) throws FileNotFoundException {
+        highScoresdata = leaderBoard;
+        updatedLeaderboard = highScoresdata.getLeaderboard();
         leaderBoardScores = new HashSet<>();
         Iterator<PlayerData> itr = highScoresdata.getLeaderboard().iterator();
         while(itr.hasNext()){
@@ -792,6 +821,7 @@ public class GameManager {
         if(start_ball_obj.getStart_ball_pos_Y() < GAME_HEIGHT/2){
             gp1.setLayoutY(gp1.getLayoutY() + 4);
             gp2.setLayoutY(gp2.getLayoutY() + 4);
+            //start_ball_obj.setStart_ball_vel_Y(7);
         }
 
         if(gp1.getLayoutY() == -270.0f  && startFlag == 0){
@@ -843,7 +873,7 @@ public class GameManager {
     private GameObstacles chooseObstacleRandom(AnchorPane gp, float x, float y){     //creates random obstacles
 
         Random chooseObstacle = new Random();
-        int obstacle_id = chooseObstacle.nextInt(1)+7;
+        int obstacle_id = chooseObstacle.nextInt(7)+1;
         if(obstacle_id==1){
             return animateObstacle1(gp, x, y, null, null);
         }

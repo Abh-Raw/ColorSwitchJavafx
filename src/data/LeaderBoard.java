@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
-class ScoreComparator implements Comparator<PlayerData> {
+ class ScoreComparator implements Comparator<PlayerData>, Serializable{
     public int compare(PlayerData p1, PlayerData p2){
         if(p1.getScore() > p2.getScore()){
             return 1;
@@ -28,6 +28,7 @@ public class LeaderBoard implements Serializable {
         leaderboard = new PriorityQueue<>(8, new ScoreComparator());
     }
 
-
     public PriorityQueue<PlayerData> getLeaderboard() {return leaderboard; }
+
+    public void setLeaderboard(PriorityQueue<PlayerData> leaderboard) {this.leaderboard = leaderboard; }
 }
