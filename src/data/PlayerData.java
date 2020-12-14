@@ -10,7 +10,7 @@ public class PlayerData implements Serializable{
 
     public PlayerData(String name, int score){
         this.name = name;
-        score = this.score;
+        this.score = score;
     }
 
     public String getName() {return name; }
