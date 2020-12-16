@@ -16,7 +16,7 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 
-public class Obstacle_1 extends GameObstacles {
+public class Obstacle_1 extends GameObstacles {   //single ring
     public Obstacle_1(){
         super();
         this.obstacle_id = 1;

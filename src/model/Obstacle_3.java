@@ -15,7 +15,7 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Obstacle_3 extends GameObstacles {
+public class Obstacle_3 extends GameObstacles {   //parallel lines
     public Obstacle_3(){
         super();
         this.obstacle_id = 3;
