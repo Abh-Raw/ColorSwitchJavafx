@@ -360,7 +360,6 @@ public class GameManager {
         return  obstacles;
     }
 
-
     private GameObstacles animateObstacle3(AnchorPane gp, float x, float y){
         GameObstacles obstacles = new Obstacle_3();                  //calls game Obstacles
         Rotate rotation1 = new Rotate();
@@ -643,8 +642,46 @@ public class GameManager {
 
     }
 
+    private GameObstacles animateObstacle9(AnchorPane gp, float x, float y) {
+        GameObstacles obstacles = new Obstacle_9();             //calls game Obstacles
 
-    private void createSpaceListener(){
+        Rotate rotation1 = new Rotate();       //1 rotation obj for every component
+        Rotate rotation2 = new Rotate();
+        Rotate rotation3 = new Rotate();
+        Rotate rotation4 = new Rotate();
+
+
+        obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());
+
+        obstacles.getLine_components().get(0).getTransforms().add(rotation1);
+        obstacles.getLine_components().get(1).getTransforms().add(rotation2);
+        obstacles.getLine_components().get(2).getTransforms().add(rotation3);
+        obstacles.getLine_components().get(3).getTransforms().add(rotation4);
+
+        gp.getChildren().addAll(obstacles.getLine_components());
+
+        start_ball_obj.setBlue_flag(false);
+        start_ball_obj.setRed_flag(false);
+        start_ball_obj.setGreen_flag(false);
+        start_ball_obj.setYellow_flag(false);
+
+        for(int i = 0; i<obstacles.getLine_components().size(); ++i){
+            if(obstacles.getLine_components().get(i).getStroke() == Color.BLUE)
+                start_ball_obj.setBlue_flag(true);
+            else if(obstacles.getLine_components().get(i).getStroke() == Color.RED)
+                start_ball_obj.setRed_flag(true);
+            else if(obstacles.getLine_components().get(i).getStroke() == Color.GREEN)
+                start_ball_obj.setGreen_flag(true);
+            else if(obstacles.getLine_components().get(i).getStroke() == Color.YELLOW)
+                start_ball_obj.setYellow_flag(true);
+        }
+
+        obstacles.addAnimation(x, y, gp);
+        return  obstacles;
+    }
+
+
+        private void createSpaceListener(){
         gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
@@ -933,7 +970,7 @@ public class GameManager {
     private GameObstacles chooseObstacleRandom(AnchorPane gp, float x, float y){     //creates random obstacles
 
         Random chooseObstacle = new Random();
-        int obstacle_id = chooseObstacle.nextInt(8)+1;
+        int obstacle_id = chooseObstacle.nextInt(9)+1;
         if(obstacle_id==1){
             return animateObstacle1(gp, x, y, null, null);
         }
@@ -963,6 +1000,10 @@ public class GameManager {
 
         else if(obstacle_id == 8){
             return animateObstacle8(gp, x, y);
+        }
+
+        else if(obstacle_id == 9){
+            return animateObstacle9(gp, x, y);
         }
 
          return null;
