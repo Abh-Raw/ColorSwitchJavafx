@@ -14,6 +14,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.Shape;
@@ -24,8 +27,10 @@ import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import model.*;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.net.URL;
 import java.util.*;
 
 public class GameManager {
@@ -39,6 +44,16 @@ public class GameManager {
     private AnchorPane gp2;
     private final static String BACKGROUND_IMAGE = "View/Resources/dark_background.jpg";
     private final static String PAUSE_IMAGE = "model/Resources/pause.png";
+    private final static String JUMP_AUDIO = "src/View/Resources/jump.wav";
+    private final static String COLOR_SWITCH_AUDIO = "src/View/Resources/colorswitch.wav";
+    private final static String STAR_AUDIO = "src/View/Resources/star.wav";
+    private final static String BUTTON_CLICKED_AUDIO = "src/View/Resources/button.wav";
+    private final static String OBSTACLE_AUDIO = "src/View/Resources/dead.wav";
+    private AudioClip jump_aud_player;
+    private AudioClip color_switch_aud_player;
+    private AudioClip star_aud_player;
+    private AudioClip button_aud_player;
+    private AudioClip obstacle_aud_player;
     private GameSubScenes pauseScreen;
     private GameSubScenes defeatScreen;
     private ImageView pauseButton;
@@ -87,6 +102,11 @@ public class GameManager {
         gameStage = new Stage();
         gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT);
         gameStage.setScene(gameScene);
+        jump_aud_player = new AudioClip(new File(JUMP_AUDIO).toURI().toString());
+        star_aud_player = new AudioClip(new File(STAR_AUDIO).toURI().toString());
+        color_switch_aud_player = new AudioClip(new File(COLOR_SWITCH_AUDIO).toURI().toString());
+        button_aud_player = new AudioClip(new File(BUTTON_CLICKED_AUDIO).toURI().toString());
+        obstacle_aud_player = new AudioClip(new File(OBSTACLE_AUDIO).toURI().toString());
         createSpaceListener();
         queue_obs = new LinkedList<>();
         collisionAnimations = new GameAnimations();
@@ -96,6 +116,7 @@ public class GameManager {
         pauseButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                button_aud_player.play();
                 isPaused = true;
                 curObstacle.getAnimation().pause();
                 if (prevObstacle != null)
@@ -127,6 +148,7 @@ public class GameManager {
         exitToMainMenuButtonPause.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                button_aud_player.play();
                 new ViewManager().showMainMenu(gameStage);
             }
         });
@@ -134,6 +156,7 @@ public class GameManager {
         resumeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                button_aud_player.play();
                 isPaused = false;
                 start_ball_obj.getStart_ball().setEffect(null);
                 gp1.setEffect(null);
@@ -152,6 +175,7 @@ public class GameManager {
         SpendPointsToContinue.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                button_aud_player.play();
                 if(score >= requiredRevivingScore){
                     isPaused = false;
                     score -= requiredRevivingScore;
@@ -185,6 +209,7 @@ public class GameManager {
         submitNameForHighScore.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                button_aud_player.play();
                 if(updatedLeaderboard.peek() != null) {
                     if (score > updatedLeaderboard.peek().getScore() && updatedLeaderboard.size() > 8)
                         updatedLeaderboard.poll();
@@ -200,6 +225,7 @@ public class GameManager {
         exitToMainMenuButtonDefeat.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                button_aud_player.play();
                 if(updatedLeaderboard.peek()==null || (score > updatedLeaderboard.peek().getScore()) || (updatedLeaderboard.size() <= 8)){
                     nameLabel = new Label("Name: ");
                     playerNameField = new TextField("Enter name");
@@ -223,21 +249,10 @@ public class GameManager {
         restartButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                button_aud_player.play();
                 try {
-                    isPaused = false;
-                    gamePane.requestFocus();
-                    score = 0;
-                    startFlag = 1;
-                    start_ball_obj = null;
-                    curObstacle = null;
-                    prevObstacle = null;
-                    curPoints = null;
-                    nextPoints = null;
-                    cur_colorSwitch_obj = null;
-                    gp1 = null;
-                    gp2 = null;
-                    gamePane = null;
-                    createNewGame(gameStage, highScoresdata);
+                    GameManager manager = new GameManager();
+                    manager.createNewGame(gameStage, highScoresdata);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -756,6 +771,7 @@ public class GameManager {
             public void handle(KeyEvent keyEvent) {
                 if (keyEvent.getCode() == KeyCode.SPACE && !jumplock && !isPaused ) {
                     spaceFirstPressed = true;
+                    jump_aud_player.play();
                     start_ball_obj.setStart_ball_vel_Y(-70.0f);
                     jumplock = true;
                 }
@@ -1091,8 +1107,9 @@ public class GameManager {
                 intersect = Shape.intersect(start_ball_obj.getStart_ball(), curObstacle.getArc_components().get(i));
                 if ((intersect.getBoundsInLocal().getWidth() != -1) && start_ball_obj.getStart_ball().getFill() != curObstacle.getArc_components().get(i).getStroke() && start_ball_obj.getStart_ball().getFill() != curObstacle.getArc_components().get(i).getFill()) {
                     if(!obstacleCollision) {
+                        obstacle_aud_player.play();
                         start_ball_obj.getStart_ball().setOpacity(0);
-                        collisionAnimations.collisionAnimation(gamePane, start_ball_obj);
+                        collisionAnimations.collisionAnimationObstacle(gamePane, start_ball_obj);
                         obstacleCollision = true;
                         temp = j;
                     }
@@ -1105,8 +1122,9 @@ public class GameManager {
                 intersect = Shape.intersect(start_ball_obj.getStart_ball(), curObstacle.getLine_components().get(i));
                 if ((intersect.getBoundsInLocal().getWidth() != -1) && start_ball_obj.getStart_ball().getFill() != curObstacle.getLine_components().get(i).getStroke() && start_ball_obj.getStart_ball().getFill() != curObstacle.getLine_components().get(i).getFill()) {
                     if(!obstacleCollision) {
+                        obstacle_aud_player.play();
                         start_ball_obj.getStart_ball().setOpacity(0);
-                        collisionAnimations.collisionAnimation(gamePane, start_ball_obj);
+                        collisionAnimations.collisionAnimationObstacle(gamePane, start_ball_obj);
                         obstacleCollision = true;
                         temp = j;
                     }
@@ -1120,8 +1138,9 @@ public class GameManager {
                     intersect = Shape.intersect(start_ball_obj.getStart_ball(), prevObstacle.getArc_components().get(i));
                     if ((intersect.getBoundsInLocal().getWidth() != -1) && start_ball_obj.getStart_ball().getFill() != prevObstacle.getArc_components().get(i).getStroke() && start_ball_obj.getStart_ball().getFill() != prevObstacle.getArc_components().get(i).getFill()) {
                         if(!obstacleCollision) {
+                            obstacle_aud_player.play();
                             start_ball_obj.getStart_ball().setOpacity(0);
-                            collisionAnimations.collisionAnimation(gamePane, start_ball_obj);
+                            collisionAnimations.collisionAnimationObstacle(gamePane, start_ball_obj);
                             obstacleCollision = true;
                             temp = j;
                         }
@@ -1134,8 +1153,9 @@ public class GameManager {
                     intersect = Shape.intersect(start_ball_obj.getStart_ball(), prevObstacle.getLine_components().get(i));
                     if ((intersect.getBoundsInLocal().getWidth() != -1) && start_ball_obj.getStart_ball().getFill() != prevObstacle.getLine_components().get(i).getStroke() && start_ball_obj.getStart_ball().getFill() != prevObstacle.getLine_components().get(i).getFill()) {
                         if(!obstacleCollision) {
+                            obstacle_aud_player.play();
                             start_ball_obj.getStart_ball().setOpacity(0);
-                            collisionAnimations.collisionAnimation(gamePane, start_ball_obj);
+                            collisionAnimations.collisionAnimationObstacle(gamePane, start_ball_obj);
                             obstacleCollision = true;
                             temp = j;
                         }
@@ -1180,7 +1200,10 @@ public class GameManager {
                 ++score;
                 scoreDisplay.setText(Integer.toString(score));
                 curPoints.setFlag(false);
+                //jump_aud_player.stop();
+                star_aud_player.play();
                 curPoints.getPoint().setOpacity(0);
+                new GameAnimations().collisionAnimationPoint(gamePane);
             }
         }
     }
@@ -1193,6 +1216,8 @@ public class GameManager {
             if(intersect.getBoundsInLocal().getWidth() != -1){
                 colorAnimation.changeColor(start_ball_obj);
                 cur_colorSwitch_obj.setCs_flag(false);
+                //jump_aud_player.stop();
+                color_switch_aud_player.play();
                 for(int i=0; i<colorSwitch.size(); ++i){
                     colorSwitch.get(i).setOpacity(0);
                 }

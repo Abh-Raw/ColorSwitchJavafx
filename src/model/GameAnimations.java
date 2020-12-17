@@ -13,6 +13,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -51,7 +52,77 @@ public class GameAnimations{
 
     }
 
-    public void collisionAnimation(final AnchorPane gp, Ball start_ball_obj){
+    public void collisionAnimationPoint(final AnchorPane gp){
+        final Points[] collisionStars = new Points[5];
+        for(int i=0; i<5; ++i){
+            collisionStars[i] = new Points();
+        }
+        collisionStars[0].makePoints(200.0f, 200.0f - 15.0f);
+        collisionStars[1].makePoints(200.0f + 15.0f, 200.0f);
+        collisionStars[2].makePoints(200.0f + 10.608f, 200.0f + 10.608f);
+        collisionStars[3].makePoints(200.0f - 10.608f, 200.0f + 10.608f);
+        collisionStars[4].makePoints(200.0f - 15.0f, 200.0f);
+
+        for(int i=0; i<5; ++i){
+            collisionStars[i].getPoint().setScaleX(0.5);
+            collisionStars[i].getPoint().setScaleY(0.5);
+            collisionStars[i].getPoint().setFill(Color.YELLOW);
+            gp.getChildren().addAll(collisionStars[i].getPoint());
+        }
+
+       Duration time = Duration.millis(700);
+
+        TranslateTransition star_1_translate = new TranslateTransition(time, collisionStars[0].getPoint());
+        star_1_translate.setByY(-15.0f);
+
+        FadeTransition star_1_fade = new FadeTransition(time, collisionStars[0].getPoint());
+        star_1_fade.setFromValue(0);
+        star_1_fade.setToValue(1);
+
+        TranslateTransition star_2_translate = new TranslateTransition(time, collisionStars[1].getPoint());
+        star_2_translate.setByX(15.0f);
+
+        FadeTransition star_2_fade = new FadeTransition(time, collisionStars[1].getPoint());
+        star_1_fade.setFromValue(0);
+        star_1_fade.setToValue(1);
+
+        TranslateTransition star_3_translate = new TranslateTransition(time, collisionStars[2].getPoint());
+        star_3_translate.setByX(10.608f);
+        star_3_translate.setByY(15.0f);
+
+        FadeTransition star_3_fade = new FadeTransition(time, collisionStars[2].getPoint());
+        star_1_fade.setFromValue(0);
+        star_1_fade.setToValue(1);
+
+        TranslateTransition star_4_translate = new TranslateTransition(time, collisionStars[3].getPoint());
+        star_4_translate.setByX(-10.608f);
+        star_4_translate.setByY(15.0f);
+
+        FadeTransition star_4_fade = new FadeTransition(time, collisionStars[3].getPoint());
+        star_1_fade.setFromValue(0);
+        star_1_fade.setToValue(1);
+
+        TranslateTransition star_5_translate = new TranslateTransition(time, collisionStars[4].getPoint());
+        star_5_translate.setByX(-15.0f);
+
+        FadeTransition star_5_fade = new FadeTransition(time, collisionStars[4].getPoint());
+        star_1_fade.setFromValue(0);
+        star_1_fade.setToValue(1);
+
+        ParallelTransition parallelTransition = new ParallelTransition(star_1_translate, star_2_translate, star_3_translate, star_4_translate, star_5_translate, star_1_fade, star_2_fade, star_3_fade, star_4_fade, star_5_fade);
+        parallelTransition.play();
+
+        parallelTransition.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                for(int i=0; i<5; ++i){
+                    collisionStars[i].getPoint().setOpacity(0);
+                }
+            }
+        });
+    }
+
+    public void collisionAnimationObstacle(final AnchorPane gp, Ball start_ball_obj){
         final Ball[] collisionBalls = new Ball[9];
         Random random = new Random();
         for(int i=0; i<9; ++i){
@@ -84,7 +155,6 @@ public class GameAnimations{
                     collisionBalls[i].getStart_ball().relocate( collisionBalls[i].getStart_ball_pos_X() - 10,  collisionBalls[i].getStart_ball_pos_Y());
                     collisionBalls[i].getStart_ball().setOpacity(collisionBalls[i].getStart_ball().getOpacity() - 0.06);
                 }
-                //System.out.println(curTime%1000000000);
             }
         };
         gameTimer.start();
