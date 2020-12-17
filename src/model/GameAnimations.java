@@ -1,19 +1,12 @@
 package model;
 
 import View.ViewManager;
-//import java.time.Duration;
 import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Translate;
+
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -22,28 +15,98 @@ import java.util.Random;
 public class GameAnimations{
     public GameAnimations(){
     }
-    public void IntroAnimation(Text text, final ViewManager viewManager, final Stage IntromainStage){
+    public void IntroAnimation(Logo_Obstacle obstacle1, Logo_Obstacle obstacle2, Logo_Obstacle obstacle3, final ViewManager viewManager, final Stage IntromainStage){
 
-        FadeTransition fadeIn = new FadeTransition(Duration.seconds(2), text);
-        fadeIn.setFromValue(0.0);
-        fadeIn.setToValue(1.0);
-        fadeIn.setCycleCount(1);
+        for(int i=0; i<obstacle2.getArc_components().size(); ++i){
+            obstacle2.getArc_components().get(i).setOpacity(0);
+            obstacle3.getArc_components().get(i).setOpacity(0);
+        }
 
-        final FadeTransition fadeOut = new FadeTransition(Duration.seconds(1), text);
-        fadeOut.setFromValue(10.0);
-        fadeOut.setToValue(0.0);
-        fadeOut.setCycleCount(1);
+        FadeTransition fadeIn1 = new FadeTransition(Duration.seconds(2), obstacle1.getArc_components().get(0));
+        fadeIn1.setFromValue(0.0);
+        fadeIn1.setToValue(1.0);
+        fadeIn1.setCycleCount(1);
 
-        fadeIn.play();
+        FadeTransition fadeIn2 = new FadeTransition(Duration.seconds(2), obstacle1.getArc_components().get(1));
+        fadeIn2.setFromValue(0.0);
+        fadeIn2.setToValue(1.0);
+        fadeIn2.setCycleCount(1);
 
-        fadeIn.setOnFinished(new EventHandler<ActionEvent>() {
+        FadeTransition fadeIn3 = new FadeTransition(Duration.seconds(2), obstacle1.getArc_components().get(2));
+        fadeIn3.setFromValue(0.0);
+        fadeIn3.setToValue(1.0);
+        fadeIn3.setCycleCount(1);
+
+        FadeTransition fadeIn4 = new FadeTransition(Duration.seconds(2), obstacle1.getArc_components().get(3));
+        fadeIn4.setFromValue(0.0);
+        fadeIn4.setToValue(1.0);
+        fadeIn4.setCycleCount(1);
+
+        FadeTransition fadeIn5 = new FadeTransition(Duration.seconds(2), obstacle2.getArc_components().get(0));
+        fadeIn5.setFromValue(0.0);
+        fadeIn5.setToValue(1.0);
+        fadeIn5.setCycleCount(1);
+
+        FadeTransition fadeIn6 = new FadeTransition(Duration.seconds(2), obstacle2.getArc_components().get(1));
+        fadeIn6.setFromValue(0.0);
+        fadeIn6.setToValue(1.0);
+        fadeIn6.setCycleCount(1);
+
+        FadeTransition fadeIn7 = new FadeTransition(Duration.seconds(2), obstacle2.getArc_components().get(2));
+        fadeIn7.setFromValue(0.0);
+        fadeIn7.setToValue(1.0);
+        fadeIn7.setCycleCount(1);
+
+        FadeTransition fadeIn8 = new FadeTransition(Duration.seconds(2), obstacle2.getArc_components().get(3));
+        fadeIn8.setFromValue(0.0);
+        fadeIn8.setToValue(1.0);
+        fadeIn8.setCycleCount(1);
+
+        FadeTransition fadeIn9 = new FadeTransition(Duration.seconds(2), obstacle3.getArc_components().get(0));
+        fadeIn9.setFromValue(0.0);
+        fadeIn9.setToValue(1.0);
+        fadeIn9.setCycleCount(1);
+
+        FadeTransition fadeIn10 = new FadeTransition(Duration.seconds(2), obstacle3.getArc_components().get(1));
+        fadeIn10.setFromValue(0.0);
+        fadeIn10.setToValue(1.0);
+        fadeIn10.setCycleCount(1);
+
+        FadeTransition fadeIn11 = new FadeTransition(Duration.seconds(2), obstacle3.getArc_components().get(2));
+        fadeIn11.setFromValue(0.0);
+        fadeIn11.setToValue(1.0);
+        fadeIn11.setCycleCount(1);
+
+        FadeTransition fadeIn12 = new FadeTransition(Duration.seconds(2), obstacle3.getArc_components().get(3));
+        fadeIn12.setFromValue(0.0);
+        fadeIn12.setToValue(1.0);
+        fadeIn12.setCycleCount(1);
+
+        final ParallelTransition parallelTransition1 = new ParallelTransition();
+        final ParallelTransition parallelTransition2 = new ParallelTransition();
+        final ParallelTransition parallelTransition3 = new ParallelTransition();
+
+        parallelTransition1.getChildren().addAll(fadeIn1, fadeIn2, fadeIn3, fadeIn4);
+        parallelTransition2.getChildren().addAll(fadeIn5, fadeIn6, fadeIn7, fadeIn8);
+        parallelTransition3.getChildren().addAll(fadeIn9, fadeIn10, fadeIn11, fadeIn12);
+
+        parallelTransition1.play();
+
+        parallelTransition1.setOnFinished(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                fadeOut.play();
+                parallelTransition2.play();
             }
         });
 
-        fadeOut.setOnFinished(new EventHandler<ActionEvent>() {
+        parallelTransition2.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                parallelTransition3.play();
+            }
+        });
+
+        parallelTransition3.setOnFinished(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 viewManager.showMainMenu(IntromainStage);

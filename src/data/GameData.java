@@ -21,8 +21,9 @@ public class GameData implements Serializable {
     private double gp2_layout;
     private boolean cSwitch_flag;
     private int score;
+    private int req_score;
 
-    public GameData(Ball startBall, ArrayList<Integer> curObstacleColors, ArrayList<Double> curObstacleAngles, int curObstacleID, ArrayList<Integer> prevObstacleColors, ArrayList<Double> prevObstacleAngles, int prevObstacleID, boolean curPt, boolean nextPt, double gp1_layout, double gp2_layout, boolean cSwitch_flag, int score) {
+    public GameData(Ball startBall, ArrayList<Integer> curObstacleColors, ArrayList<Double> curObstacleAngles, int curObstacleID, ArrayList<Integer> prevObstacleColors, ArrayList<Double> prevObstacleAngles, int prevObstacleID, boolean curPt, boolean nextPt, double gp1_layout, double gp2_layout, boolean cSwitch_flag, int score, int req_score) {
         this.startBall = startBall;
         this.curObstacleColors = curObstacleColors;
         this.curObstacleAngles = curObstacleAngles;
@@ -36,7 +37,10 @@ public class GameData implements Serializable {
         this.gp2_layout = gp2_layout;
         this.cSwitch_flag = cSwitch_flag;
         this.score = score;
+        this.req_score = req_score;
     }
+
+    public int getReq_score(){ return  req_score;}
 
     public int getScore() {
         return score;

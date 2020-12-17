@@ -175,7 +175,7 @@ public class GameManager {
                     @Override
                     public void handle(MouseEvent mouseEvent) {
                         SaveFile saveFile = new SaveFile();
-                        GameData saveSlot = new GameData(start_ball_obj, obstacleColorList(curObstacle), obstacleAnglesList(curObstacle), curObstacle.getObstacle_id(), obstacleColorList(prevObstacle), obstacleAnglesList(prevObstacle), prevObstacle.getObstacle_id(),  curPoints.getFlag(), nextPoints.getFlag(), gp1.getLayoutY(), gp2.getLayoutY(), cur_colorSwitch_obj.getCs_flag(), score);
+                        GameData saveSlot = new GameData(start_ball_obj, obstacleColorList(curObstacle), obstacleAnglesList(curObstacle), curObstacle.getObstacle_id(), obstacleColorList(prevObstacle), obstacleAnglesList(prevObstacle), prevObstacle.getObstacle_id(),  curPoints.getFlag(), nextPoints.getFlag(), gp1.getLayoutY(), gp2.getLayoutY(), cur_colorSwitch_obj.getCs_flag(), score, requiredRevivingScore);
                         if(r1.isSelected()){
                             saveFile.saveGameData(saveSlot, "file1.ser");
                         }
@@ -962,6 +962,7 @@ public class GameManager {
         start_ball_obj.reconstructStartBall(gameData);
         createResumeGameBackground(gameData);
         score = gameData.getScore();
+        requiredRevivingScore = gameData.getReq_score();
         createScoreDisplay();
         createPauseButton();
         createSubScenes();
@@ -1166,7 +1167,7 @@ public class GameManager {
     }
 
     private GameObstacles chooseObstacleRandom(AnchorPane gp, float x, float y){     //creates random obstacles
-        if(score>5) {
+        if(score>10) {
             Random chooseObstacle = new Random();
             int obstacle_id = chooseObstacle.nextInt(10) + 1;
             if (obstacle_id == 1) {
