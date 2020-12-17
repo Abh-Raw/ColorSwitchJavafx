@@ -67,7 +67,7 @@ public class GameButtons extends Button {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 DropShadow dropShadow = new DropShadow();
-                dropShadow.setColor(Color.GRAY);
+                dropShadow.setColor(Color.BLUEVIOLET);
                 setEffect(dropShadow);
 
             }
