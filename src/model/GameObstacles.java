@@ -28,7 +28,7 @@ public abstract class GameObstacles extends Shape {
 
     public void reconstructObstacle(float x, float y, ArrayList<Double> anglesList, ArrayList<Integer> colorList){}
 
-    public void addAnimation(float x, float y, AnchorPane gp){}
+    public void addAnimation(float x, float y, AnchorPane gp, int scores){}
 
     public ArrayList<Arc> getArc_components(){
         return arc_components;

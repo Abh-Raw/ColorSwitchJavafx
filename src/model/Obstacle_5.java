@@ -22,10 +22,10 @@ public class Obstacle_5 extends GameObstacles{   //concentric rings
 
     @Override
     public void createObstacle(float x, float y, Circle start_ball){
-        Arc arc1 = new Arc(x, y, 90.0f, 90.0f, 0-45, 90);  //arc(center_x, center_y, radius_x, radius_y, start_angle, set_length)
-        Arc arc2 = new Arc(x, y, 90.0f, 90.0f, 90-45, 90);
-        Arc arc3 = new Arc(x, y, 90.0f, 90.0f, 180-45, 90);
-        Arc arc4 = new Arc(x, y, 90.0f, 90.0f, 270-45, 90);
+        Arc arc1 = new Arc(x, y, 100.0f, 100.0f, 0-45, 90);  //arc(center_x, center_y, radius_x, radius_y, start_angle, set_length)
+        Arc arc2 = new Arc(x, y, 100.0f, 100.0f, 90-45, 90);
+        Arc arc3 = new Arc(x, y, 100.0f, 100.0f, 180-45, 90);
+        Arc arc4 = new Arc(x, y, 100.0f, 100.0f, 270-45, 90);
 
         Arc arc5 = new Arc(x, y, 145.0f, 145.0f, 0-45, 90);
         Arc arc6 = new Arc(x, y, 145.0f, 145.0f, 90-45, 90);
@@ -206,8 +206,13 @@ public class Obstacle_5 extends GameObstacles{   //concentric rings
 
     }
 
+    double time1 = 1;
+    double time2 = 2;
+    double time3 = 3;
+    double time4 = 4;
+
     @Override
-    public void addAnimation(float x, float y, AnchorPane gp){
+    public void addAnimation(float x, float y, AnchorPane gp, int scores){
         Rotate rotation1 = (Rotate) arc_components.get(0).getTransforms().get(0);
         Rotate rotation2 = (Rotate) arc_components.get(1).getTransforms().get(0);
         Rotate rotation3 = (Rotate) arc_components.get(2).getTransforms().get(0);
@@ -302,11 +307,18 @@ public class Obstacle_5 extends GameObstacles{   //concentric rings
         KeyValue arc8_val4 = new KeyValue(rotation8.angleProperty(), 90);
         KeyValue arc8_val5 = new KeyValue(rotation8.angleProperty(), 0);
 
+        if(scores/5 == 0){   //increase the speed of the obstacle every 5 points
+            time1 -= 0.05;
+            time2 -= 0.05;
+            time3 -= 0.05;
+            time4 -= 0.05;
+        }
+
         KeyFrame frame1 = new KeyFrame(Duration.ZERO, arc1_val1, arc2_val1, arc3_val1, arc4_val1, arc5_val1, arc6_val1, arc7_val1, arc8_val1);
-        KeyFrame frame2 = new KeyFrame(Duration.seconds(1), arc1_val2, arc2_val2, arc3_val2, arc4_val2, arc5_val2, arc6_val2, arc7_val2, arc8_val2);
-        KeyFrame frame3 = new KeyFrame(Duration.seconds(2), arc1_val3, arc2_val3, arc3_val3, arc4_val3, arc5_val3, arc6_val3, arc7_val3, arc8_val3);
-        KeyFrame frame4 = new KeyFrame(Duration.seconds(3), arc1_val4, arc2_val4, arc3_val4, arc4_val4, arc5_val4, arc6_val4, arc7_val4, arc8_val4);
-        KeyFrame frame5 = new KeyFrame(Duration.seconds(4), arc1_val5, arc2_val5, arc3_val5, arc4_val5, arc5_val5, arc6_val5, arc7_val5, arc8_val5);
+        KeyFrame frame2 = new KeyFrame(Duration.seconds(time1), arc1_val2, arc2_val2, arc3_val2, arc4_val2, arc5_val2, arc6_val2, arc7_val2, arc8_val2);
+        KeyFrame frame3 = new KeyFrame(Duration.seconds(time2), arc1_val3, arc2_val3, arc3_val3, arc4_val3, arc5_val3, arc6_val3, arc7_val3, arc8_val3);
+        KeyFrame frame4 = new KeyFrame(Duration.seconds(time3), arc1_val4, arc2_val4, arc3_val4, arc4_val4, arc5_val4, arc6_val4, arc7_val4, arc8_val4);
+        KeyFrame frame5 = new KeyFrame(Duration.seconds(time4), arc1_val5, arc2_val5, arc3_val5, arc4_val5, arc5_val5, arc6_val5, arc7_val5, arc8_val5);
 
         animation = new Timeline();
         animation.getKeyFrames().addAll(frame1, frame2, frame3, frame4, frame5);

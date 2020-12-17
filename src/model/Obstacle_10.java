@@ -174,11 +174,16 @@ public class Obstacle_10 extends GameObstacles{
                 line_components.add(line1);
             }
         }
-
     }
 
+    double time1 = 1;
+    double time2 = 2;
+    double time3 = 3;
+    double time4 = 4;
+
+
     @Override
-    public void addAnimation(float x, float y, AnchorPane gp){
+    public void addAnimation(float x, float y, AnchorPane gp, int scores){
         Rotate rotation1 = (Rotate) line_components.get(0).getTransforms().get(0);
         Rotate rotation2 = (Rotate) line_components.get(1).getTransforms().get(0);
         Rotate rotation3 = (Rotate) line_components.get(2).getTransforms().get(0);
@@ -256,17 +261,24 @@ public class Obstacle_10 extends GameObstacles{
         KeyValue arc4_val4 = new KeyValue(rotation8.angleProperty(), 270);
         KeyValue arc4_val5 = new KeyValue(rotation8.angleProperty(), 360);
 
+        if(scores/5 == 0){   //increase the speed of the obstacle every 5 points
+            time1 -= 0.05;
+            time2 -= 0.05;
+            time3 -= 0.05;
+            time4 -= 0.05;
+        }
+
         KeyFrame frame1 = new KeyFrame(Duration.ZERO, line1_val1, line2_val1, line3_val1, line4_val1);
-        KeyFrame frame2 = new KeyFrame(Duration.seconds(1), line1_val2, line2_val2, line3_val2, line4_val2);
-        KeyFrame frame3 = new KeyFrame(Duration.seconds(2), line1_val3, line2_val3, line3_val3, line4_val3);
-        KeyFrame frame4 = new KeyFrame(Duration.seconds(3), line1_val4, line2_val4, line3_val4, line4_val4);
-        KeyFrame frame5 = new KeyFrame(Duration.seconds(4), line1_val5, line2_val5, line3_val5, line4_val5);
+        KeyFrame frame2 = new KeyFrame(Duration.seconds(time1), line1_val2, line2_val2, line3_val2, line4_val2);
+        KeyFrame frame3 = new KeyFrame(Duration.seconds(time2), line1_val3, line2_val3, line3_val3, line4_val3);
+        KeyFrame frame4 = new KeyFrame(Duration.seconds(time3), line1_val4, line2_val4, line3_val4, line4_val4);
+        KeyFrame frame5 = new KeyFrame(Duration.seconds(time4), line1_val5, line2_val5, line3_val5, line4_val5);
 
         KeyFrame frame6 = new KeyFrame(Duration.ZERO, arc1_val1, arc2_val1, arc3_val1, arc4_val1);
-        KeyFrame frame7 = new KeyFrame(Duration.seconds(1), arc1_val2, arc2_val2, arc3_val2, arc4_val2);
-        KeyFrame frame8 = new KeyFrame(Duration.seconds(2), arc1_val3, arc2_val3, arc3_val3, arc4_val3);
-        KeyFrame frame9 = new KeyFrame(Duration.seconds(3), arc1_val4, arc2_val4, arc3_val4, arc4_val4);
-        KeyFrame frame10 = new KeyFrame(Duration.seconds(4), arc1_val5, arc2_val5, arc3_val5, arc4_val5);
+        KeyFrame frame7 = new KeyFrame(Duration.seconds(time1), arc1_val2, arc2_val2, arc3_val2, arc4_val2);
+        KeyFrame frame8 = new KeyFrame(Duration.seconds(time2), arc1_val3, arc2_val3, arc3_val3, arc4_val3);
+        KeyFrame frame9 = new KeyFrame(Duration.seconds(time3), arc1_val4, arc2_val4, arc3_val4, arc4_val4);
+        KeyFrame frame10 = new KeyFrame(Duration.seconds(time4), arc1_val5, arc2_val5, arc3_val5, arc4_val5);
 
         animation = new Timeline();
         animation.getKeyFrames().addAll(frame1, frame2, frame3, frame4, frame5, frame6, frame7, frame8, frame9, frame10);

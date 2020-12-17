@@ -23,9 +23,9 @@ public class Obstacle_2 extends GameObstacles {   //triangle
     @Override
 
     public void createObstacle(float x, float y, Circle start_ball){
-        Line line1 = new Line(x - 85.0f, y - (170 * Math.sqrt(3)) / 6, x + 85, y - (170 * Math.sqrt(3)) / 6);
-        Line line2 = new Line(x + 85.0f, y - (170 * Math.sqrt(3)) / 6, x, y + (170 * Math.sqrt(3)) / 3);
-        Line line3 = new Line(x, y + (170 * Math.sqrt(3)) / 3, x - 85.0f, y - (170 * Math.sqrt(3)) / 6);
+        Line line1 = new Line(x - 95.0f, y - (190 * Math.sqrt(3)) / 6, x + 95, y - (190 * Math.sqrt(3)) / 6);
+        Line line2 = new Line(x + 95.0f, y - (190 * Math.sqrt(3)) / 6, x, y + (190 * Math.sqrt(3)) / 3);
+        Line line3 = new Line(x, y + (190 * Math.sqrt(3)) / 3, x - 95.0f, y - (190 * Math.sqrt(3)) / 6);
 
         Random random = new Random();
 
@@ -87,7 +87,12 @@ public class Obstacle_2 extends GameObstacles {   //triangle
         }
     }
 
-    public void addAnimation(float x, float y, AnchorPane gp){
+    double time1 = 1.9;
+    double time2 = 3.8;
+    double time3 = 5.7;
+
+    @Override
+    public void addAnimation(float x, float y, AnchorPane gp, int scores){
         Rotate rotation1 = (Rotate) line_components.get(0).getTransforms().get(0);
         Rotate rotation2 = (Rotate) line_components.get(1).getTransforms().get(0);
         Rotate rotation3 = (Rotate) line_components.get(2).getTransforms().get(0);
@@ -114,10 +119,16 @@ public class Obstacle_2 extends GameObstacles {   //triangle
         KeyValue line3_val3 = new KeyValue(rotation3.angleProperty(), 240);
         KeyValue line3_val4 = new KeyValue(rotation3.angleProperty(), 360);
 
+        if(scores/5 == 0){   //increase the speed of the obstacle every 5 points
+            time1 -= 0.05;
+            time2 -= 0.05;
+            time3 -= 0.05;
+        }
+
         KeyFrame frame1 = new KeyFrame(Duration.ZERO, line1_val1, line2_val1, line3_val1);
-        KeyFrame frame2 = new KeyFrame(Duration.seconds(1.9), line1_val2, line2_val2, line3_val2);
-        KeyFrame frame3 = new KeyFrame(Duration.seconds(3.8), line1_val3, line2_val3, line3_val3);
-        KeyFrame frame4 = new KeyFrame(Duration.seconds(5.7), line1_val4, line2_val4, line3_val4);
+        KeyFrame frame2 = new KeyFrame(Duration.seconds(time1), line1_val2, line2_val2, line3_val2);
+        KeyFrame frame3 = new KeyFrame(Duration.seconds(time2), line1_val3, line2_val3, line3_val3);
+        KeyFrame frame4 = new KeyFrame(Duration.seconds(time3), line1_val4, line2_val4, line3_val4);
 
         animation = new Timeline();
         animation.getKeyFrames().addAll(frame1, frame2, frame3, frame4);
