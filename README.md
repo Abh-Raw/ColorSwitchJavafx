@@ -13,7 +13,7 @@ CSE 201 - Advanced Programming Course Final Project at IIIT Delhi, Semester 3, M
 Color Switch is a single-player game where you just have to tap and pass through obstacles.
 
 ## How to Play
-- Install JavaFx on device in order to play this game and set lib link in Project Structure
+- Install JavaFx on your device in order to play this game and set lib link in Project Structure
 - Set VM options too (if using on Linux) : --module-path \path\javafx-sdk-15.0.1\lib --add-modules javafx.controls,javafx.fxml,javafx.media
 - Clone this repository and run the main.java file
 - Use the space bar to make the ball jump

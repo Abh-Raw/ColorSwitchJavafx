@@ -22,11 +22,11 @@ public class Logo_Obstacle {
         arc_components = new ArrayList<>();
     }
 
-    public void createLogoObstacle(float x, float y){
-        Arc arc1 = new Arc(x, y, 10.0f, 10.0f, 0, 90);  //arc(center_x, center_y, radius_x, radius_y, start_angle, set_length)
-        Arc arc2 = new Arc(x, y, 10.0f, 10.0f, 90, 90);
-        Arc arc3 = new Arc(x, y, 10.0f, 10.0f, 180, 90);
-        Arc arc4 = new Arc(x, y, 10.0f, 10.0f, 270, 90);
+    public void createLogoObstacle(float x, float y, float rad_X, float rad_Y){
+        Arc arc1 = new Arc(x, y, rad_X, rad_Y, 0, 90);  //arc(center_x, center_y, radius_x, radius_y, start_angle, set_length)
+        Arc arc2 = new Arc(x, y, rad_X, rad_Y, 90, 90);
+        Arc arc3 = new Arc(x, y, rad_X, rad_Y, 180, 90);
+        Arc arc4 = new Arc(x, y, rad_X, rad_Y, 270, 90);
 
         arc1.setFill(Color.TURQUOISE);
         arc1.setStroke(Color.TURQUOISE);
