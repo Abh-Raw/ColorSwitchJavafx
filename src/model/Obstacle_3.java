@@ -29,11 +29,11 @@ public class Obstacle_3 extends GameObstacles {   //parallel lines
         Random random = new Random();
 
         int color_id;
-        if (start_ball.getFill() == Color.BLUE)
+        if (start_ball.getFill() == Color.TURQUOISE)
             color_id = 0;
-        else if (start_ball.getFill() == Color.RED)
+        else if (start_ball.getFill() == Color.DEEPPINK)
             color_id = 1;
-        else if (start_ball.getFill() == Color.GREEN)
+        else if (start_ball.getFill() == Color.DARKVIOLET)
             color_id = 2;
         else
             color_id = 3;
@@ -48,11 +48,11 @@ public class Obstacle_3 extends GameObstacles {   //parallel lines
         line2.setStrokeWidth(12.0f);
 
         if(n1 == 0)
-            line2.setStroke(Color.BLUE);
+            line2.setStroke(Color.TURQUOISE);
         else if(n1 == 1)
-            line2.setStroke(Color.RED);
+            line2.setStroke(Color.DEEPPINK);
         else if(n1 == 2)
-            line2.setStroke(Color.GREEN);
+            line2.setStroke(Color.DARKVIOLET);
         else
             line2.setStroke(Color.YELLOW);
 

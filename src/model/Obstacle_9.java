@@ -33,9 +33,9 @@ public class Obstacle_9 extends GameObstacles{    //square
         line3.setStrokeWidth(12.0f);
         line4.setStrokeWidth(12.0f);
 
-        line1.setStroke(Color.BLUE);
-        line2.setStroke(Color.RED);
-        line3.setStroke(Color.GREEN);
+        line1.setStroke(Color.TURQUOISE);
+        line2.setStroke(Color.DEEPPINK);
+        line3.setStroke(Color.DARKVIOLET);
         line4.setStroke(Color.YELLOW);
 
         line_components.add(line1);

@@ -15,15 +15,15 @@ public class ColorSwitch {
         Arc arc3 = new Arc(x, y, 10.0f, 10.0f, 180, 90);
         Arc arc4 = new Arc(x, y, 10.0f, 10.0f, 270, 90);
 
-        arc1.setFill(Color.BLUE);
+        arc1.setFill(Color.TURQUOISE);
         //arc1.setStroke(Color.BLACK);
         arc1.setType(ArcType.ROUND);
 
-        arc2.setFill(Color.RED);
+        arc2.setFill(Color.DEEPPINK);
         //arc2.setStroke(Color.BLACK);
         arc2.setType(ArcType.ROUND);
 
-        arc3.setFill(Color.GREEN);
+        arc3.setFill(Color.DARKVIOLET);
         //arc3.setStroke(Color.BLACK);
         arc3.setType(ArcType.ROUND);
 

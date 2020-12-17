@@ -77,6 +77,10 @@ public class GameManager {
     private InfoLabel scoreDisplay;
     private HashSet<Integer> leaderBoardScores;
     private PriorityQueue<PlayerData> updatedLeaderboard;
+    private GameAnimations collisionAnimations;
+    private boolean obstacleCollision = false;
+    private int j = 0;
+    private int temp = 0;
 
     public GameManager(){
         gamePane = new AnchorPane();
@@ -85,6 +89,7 @@ public class GameManager {
         gameStage.setScene(gameScene);
         createSpaceListener();
         queue_obs = new LinkedList<>();
+        collisionAnimations = new GameAnimations();
     }
 
     private void createSaveGameListener(){
@@ -265,11 +270,11 @@ public class GameManager {
 
         if(obstacle.getArc_components().size()!=0) {
             for (int i = 0; i < obstacle.getArc_components().size(); ++i) {
-                if (obstacle.getArc_components().get(i).getStroke() == Color.BLUE)
+                if (obstacle.getArc_components().get(i).getStroke() == Color.TURQUOISE)
                     colorList.add(0);
-                if (obstacle.getArc_components().get(i).getStroke() == Color.RED)
+                if (obstacle.getArc_components().get(i).getStroke() == Color.DEEPPINK)
                     colorList.add(1);
-                if (obstacle.getArc_components().get(i).getStroke() == Color.GREEN)
+                if (obstacle.getArc_components().get(i).getStroke() == Color.DARKVIOLET)
                     colorList.add(2);
                 if (obstacle.getArc_components().get(i).getStroke() == Color.YELLOW)
                     colorList.add(3);
@@ -278,11 +283,11 @@ public class GameManager {
 
         if(obstacle.getLine_components().size()!=0) {
             for (int i = 0; i < obstacle.getLine_components().size(); ++i) {
-                if (obstacle.getLine_components().get(i).getStroke() == Color.BLUE)
+                if (obstacle.getLine_components().get(i).getStroke() == Color.TURQUOISE)
                     colorList.add(0);
-                if (obstacle.getLine_components().get(i).getStroke() == Color.RED)
+                if (obstacle.getLine_components().get(i).getStroke() == Color.DEEPPINK)
                     colorList.add(1);
-                if (obstacle.getLine_components().get(i).getStroke() == Color.GREEN)
+                if (obstacle.getLine_components().get(i).getStroke() == Color.DARKVIOLET)
                     colorList.add(2);
                 if (obstacle.getLine_components().get(i).getStroke() == Color.YELLOW)
                     colorList.add(3);
@@ -314,11 +319,11 @@ public class GameManager {
         start_ball_obj.setYellow_flag(false);
 
         for(int i = 0; i<obstacles.getArc_components().size(); ++i){  //color components in the next obstacle are set true to avoid deadlock
-            if(obstacles.getArc_components().get(i).getStroke() == Color.BLUE)
+            if(obstacles.getArc_components().get(i).getStroke() == Color.TURQUOISE)
                 start_ball_obj.setBlue_flag(true);
-            if(obstacles.getArc_components().get(i).getStroke() == Color.RED)
+            if(obstacles.getArc_components().get(i).getStroke() == Color.DEEPPINK)
                 start_ball_obj.setRed_flag(true);
-            if(obstacles.getArc_components().get(i).getStroke() == Color.GREEN)
+            if(obstacles.getArc_components().get(i).getStroke() == Color.DARKVIOLET)
                 start_ball_obj.setGreen_flag(true);
             if(obstacles.getArc_components().get(i).getStroke() == Color.YELLOW)
                 start_ball_obj.setYellow_flag(true);
@@ -346,11 +351,11 @@ public class GameManager {
         start_ball_obj.setYellow_flag(false);
 
         for(int i = 0; i<obstacles.getLine_components().size(); ++i){
-            if(obstacles.getLine_components().get(i).getStroke() == Color.BLUE)
+            if(obstacles.getLine_components().get(i).getStroke() == Color.TURQUOISE)
                 start_ball_obj.setBlue_flag(true);
-            else if(obstacles.getLine_components().get(i).getStroke() == Color.RED)
+            else if(obstacles.getLine_components().get(i).getStroke() == Color.DEEPPINK)
                 start_ball_obj.setRed_flag(true);
-            else if(obstacles.getLine_components().get(i).getStroke() == Color.GREEN)
+            else if(obstacles.getLine_components().get(i).getStroke() == Color.DARKVIOLET)
                 start_ball_obj.setGreen_flag(true);
             else if(obstacles.getLine_components().get(i).getStroke() == Color.YELLOW)
                 start_ball_obj.setYellow_flag(true);
@@ -375,11 +380,11 @@ public class GameManager {
         start_ball_obj.setYellow_flag(false);
 
         for(int i = 0; i<obstacles.getLine_components().size(); ++i){
-            if(obstacles.getLine_components().get(i).getStroke() == Color.BLUE)
+            if(obstacles.getLine_components().get(i).getStroke() == Color.TURQUOISE)
                 start_ball_obj.setBlue_flag(true);
-            else if(obstacles.getLine_components().get(i).getStroke() == Color.RED)
+            else if(obstacles.getLine_components().get(i).getStroke() == Color.DEEPPINK)
                 start_ball_obj.setRed_flag(true);
-            else if(obstacles.getLine_components().get(i).getStroke() == Color.GREEN)
+            else if(obstacles.getLine_components().get(i).getStroke() == Color.DARKVIOLET)
                 start_ball_obj.setGreen_flag(true);
             else if(obstacles.getLine_components().get(i).getStroke() == Color.YELLOW)
                 start_ball_obj.setYellow_flag(true);
@@ -411,11 +416,11 @@ public class GameManager {
         start_ball_obj.setYellow_flag(false);
 
         for(int i = 0; i<obstacles.getLine_components().size(); ++i){     //color components in the next obstacle are set true to avoid deadlock
-            if(obstacles.getLine_components().get(i).getStroke() == Color.BLUE)
+            if(obstacles.getLine_components().get(i).getStroke() == Color.TURQUOISE)
                 start_ball_obj.setBlue_flag(true);
-            if(obstacles.getLine_components().get(i).getStroke() == Color.RED)
+            if(obstacles.getLine_components().get(i).getStroke() == Color.DEEPPINK)
                 start_ball_obj.setRed_flag(true);
-            if(obstacles.getLine_components().get(i).getStroke() == Color.GREEN)
+            if(obstacles.getLine_components().get(i).getStroke() == Color.DARKVIOLET)
                 start_ball_obj.setGreen_flag(true);
             if(obstacles.getLine_components().get(i).getStroke() == Color.YELLOW)
                 start_ball_obj.setYellow_flag(true);
@@ -460,20 +465,20 @@ public class GameManager {
 
         //color components in the next obstacle are set true to avoid deadlock --> one of the arc pairs meeting at the bottom must be the colour of the ball
         // otherwise results in a deadlock
-        if(obstacles.getArc_components().get(0).getStroke() == Color.BLUE)  //arc 2 is the same color of the ball and so set flag = true --> arc 2&6 will meet at the bottom and will have the same colour
+        if(obstacles.getArc_components().get(0).getStroke() == Color.TURQUOISE)  //arc 2 is the same color of the ball and so set flag = true --> arc 2&6 will meet at the bottom and will have the same colour
             start_ball_obj.setBlue_flag(true);
-        else if(obstacles.getArc_components().get(0).getStroke() == Color.RED)
+        else if(obstacles.getArc_components().get(0).getStroke() == Color.DEEPPINK)
             start_ball_obj.setRed_flag(true);
-        else if(obstacles.getArc_components().get(0).getStroke() == Color.GREEN)
+        else if(obstacles.getArc_components().get(0).getStroke() == Color.DARKVIOLET)
             start_ball_obj.setGreen_flag(true);
         else if(obstacles.getArc_components().get(0).getStroke() == Color.YELLOW)
             start_ball_obj.setYellow_flag(true);
 
-        if(obstacles.getArc_components().get(obstacles.getArc_components().size() - 1).getStroke() == Color.BLUE)  //arc 4&8 will also meet at the bottom and will have the same colour so their flag is also set to be true
+        if(obstacles.getArc_components().get(obstacles.getArc_components().size() - 1).getStroke() == Color.TURQUOISE)  //arc 4&8 will also meet at the bottom and will have the same colour so their flag is also set to be true
             start_ball_obj.setBlue_flag(true);
-        else if(obstacles.getArc_components().get(obstacles.getArc_components().size() - 1).getStroke() == Color.RED)
+        else if(obstacles.getArc_components().get(obstacles.getArc_components().size() - 1).getStroke() == Color.DEEPPINK)
             start_ball_obj.setRed_flag(true);
-        else if(obstacles.getArc_components().get(obstacles.getArc_components().size() - 1).getStroke() == Color.GREEN)
+        else if(obstacles.getArc_components().get(obstacles.getArc_components().size() - 1).getStroke() == Color.DARKVIOLET)
             start_ball_obj.setGreen_flag(true);
         else if(obstacles.getArc_components().get(obstacles.getArc_components().size() - 1).getStroke() == Color.YELLOW)
             start_ball_obj.setYellow_flag(true);
@@ -513,11 +518,11 @@ public class GameManager {
         start_ball_obj.setYellow_flag(false);
 
         for(int i = 0; i<obstacles.getArc_components().size(); ++i){  //color components in the next obstacle are set true to avoid deadlock
-            if(obstacles.getArc_components().get(i).getStroke() == Color.BLUE)
+            if(obstacles.getArc_components().get(i).getStroke() == Color.TURQUOISE)
                 start_ball_obj.setBlue_flag(true);
-            if(obstacles.getArc_components().get(i).getStroke() == Color.RED)
+            if(obstacles.getArc_components().get(i).getStroke() == Color.DEEPPINK)
                 start_ball_obj.setRed_flag(true);
-            if(obstacles.getArc_components().get(i).getStroke() == Color.GREEN)
+            if(obstacles.getArc_components().get(i).getStroke() == Color.DARKVIOLET)
                 start_ball_obj.setGreen_flag(true);
             if(obstacles.getArc_components().get(i).getStroke() == Color.YELLOW)
                 start_ball_obj.setYellow_flag(true);
@@ -567,11 +572,11 @@ public class GameManager {
         start_ball_obj.setYellow_flag(false);
 
         for(int i = 0; i<obstacles.getArc_components().size(); ++i){  //color components in the next obstacle are set true to avoid deadlock
-            if(obstacles.getArc_components().get(i).getStroke() == Color.BLUE)
+            if(obstacles.getArc_components().get(i).getStroke() == Color.TURQUOISE)
                 start_ball_obj.setBlue_flag(true);
-            if(obstacles.getArc_components().get(i).getStroke() == Color.RED)
+            if(obstacles.getArc_components().get(i).getStroke() == Color.DEEPPINK)
                 start_ball_obj.setRed_flag(true);
-            if(obstacles.getArc_components().get(i).getStroke() == Color.GREEN)
+            if(obstacles.getArc_components().get(i).getStroke() == Color.DARKVIOLET)
                 start_ball_obj.setGreen_flag(true);
             if(obstacles.getArc_components().get(i).getStroke() == Color.YELLOW)
                 start_ball_obj.setYellow_flag(true);
@@ -616,22 +621,22 @@ public class GameManager {
         start_ball_obj.setYellow_flag(false);
 
         for(int i = 0; i<obstacles.getLine_components().size(); ++i){
-            if(obstacles.getLine_components().get(i).getStroke() == Color.BLUE)
+            if(obstacles.getLine_components().get(i).getStroke() == Color.TURQUOISE)
                 start_ball_obj.setBlue_flag(true);
-            else if(obstacles.getLine_components().get(i).getStroke() == Color.RED)
+            else if(obstacles.getLine_components().get(i).getStroke() == Color.DEEPPINK)
                 start_ball_obj.setRed_flag(true);
-            else if(obstacles.getLine_components().get(i).getStroke() == Color.GREEN)
+            else if(obstacles.getLine_components().get(i).getStroke() == Color.DARKVIOLET)
                 start_ball_obj.setGreen_flag(true);
             else if(obstacles.getLine_components().get(i).getStroke() == Color.YELLOW)
                 start_ball_obj.setYellow_flag(true);
         }
 
         for(int i = 0; i<obstacles.getArc_components().size(); ++i){  //color components in the next obstacle are set true to avoid deadlock
-            if(obstacles.getArc_components().get(i).getStroke() == Color.BLUE)
+            if(obstacles.getArc_components().get(i).getStroke() == Color.TURQUOISE)
                 start_ball_obj.setBlue_flag(true);
-            if(obstacles.getArc_components().get(i).getStroke() == Color.RED)
+            if(obstacles.getArc_components().get(i).getStroke() == Color.DEEPPINK)
                 start_ball_obj.setRed_flag(true);
-            if(obstacles.getArc_components().get(i).getStroke() == Color.GREEN)
+            if(obstacles.getArc_components().get(i).getStroke() == Color.DARKVIOLET)
                 start_ball_obj.setGreen_flag(true);
             if(obstacles.getArc_components().get(i).getStroke() == Color.YELLOW)
                 start_ball_obj.setYellow_flag(true);
@@ -666,11 +671,11 @@ public class GameManager {
         start_ball_obj.setYellow_flag(false);
 
         for(int i = 0; i<obstacles.getLine_components().size(); ++i){
-            if(obstacles.getLine_components().get(i).getStroke() == Color.BLUE)
+            if(obstacles.getLine_components().get(i).getStroke() == Color.TURQUOISE)
                 start_ball_obj.setBlue_flag(true);
-            else if(obstacles.getLine_components().get(i).getStroke() == Color.RED)
+            else if(obstacles.getLine_components().get(i).getStroke() == Color.DEEPPINK)
                 start_ball_obj.setRed_flag(true);
-            else if(obstacles.getLine_components().get(i).getStroke() == Color.GREEN)
+            else if(obstacles.getLine_components().get(i).getStroke() == Color.DARKVIOLET)
                 start_ball_obj.setGreen_flag(true);
             else if(obstacles.getLine_components().get(i).getStroke() == Color.YELLOW)
                 start_ball_obj.setYellow_flag(true);
@@ -718,11 +723,11 @@ public class GameManager {
         start_ball_obj.setYellow_flag(false);
 
         for(int i = 0; i<obstacles.getLine_components().size(); ++i){
-            if(obstacles.getLine_components().get(i).getStroke() == Color.BLUE)
+            if(obstacles.getLine_components().get(i).getStroke() == Color.TURQUOISE)
                 start_ball_obj.setBlue_flag(true);
-            else if(obstacles.getLine_components().get(i).getStroke() == Color.RED)
+            else if(obstacles.getLine_components().get(i).getStroke() == Color.DEEPPINK)
                 start_ball_obj.setRed_flag(true);
-            else if(obstacles.getLine_components().get(i).getStroke() == Color.GREEN)
+            else if(obstacles.getLine_components().get(i).getStroke() == Color.DARKVIOLET)
                 start_ball_obj.setGreen_flag(true);
             else if(obstacles.getLine_components().get(i).getStroke() == Color.YELLOW)
                 start_ball_obj.setYellow_flag(true);
@@ -730,11 +735,11 @@ public class GameManager {
 
 
         for(int i = 0; i<obstacles.getArc_components().size(); ++i){  //color components in the next obstacle are set true to avoid deadlock
-            if(obstacles.getArc_components().get(i).getStroke() == Color.BLUE)
+            if(obstacles.getArc_components().get(i).getStroke() == Color.TURQUOISE)
                 start_ball_obj.setBlue_flag(true);
-            if(obstacles.getArc_components().get(i).getStroke() == Color.RED)
+            if(obstacles.getArc_components().get(i).getStroke() == Color.DEEPPINK)
                 start_ball_obj.setRed_flag(true);
-            if(obstacles.getArc_components().get(i).getStroke() == Color.GREEN)
+            if(obstacles.getArc_components().get(i).getStroke() == Color.DARKVIOLET)
                 start_ball_obj.setGreen_flag(true);
             if(obstacles.getArc_components().get(i).getStroke() == Color.YELLOW)
                 start_ball_obj.setYellow_flag(true);
@@ -768,7 +773,7 @@ public class GameManager {
 
     private void createStartBall(){
         start_ball_obj = new Ball(200.0f, 390.0f);           //creates game obstacles object
-        start_ball_obj.makeStartBall();
+        start_ball_obj.makeStartBall(200.0f, 390.0f, 10.0f);
     }
 
     private void createGameLoop(){
@@ -794,11 +799,11 @@ public class GameManager {
                     checkCollisionObstacles();
                     checkCollisionPoints();
                     checkCollisionColorSwitch();
-                    System.out.println(start_ball_obj.getStart_ball_pos_Y() + " " + start_ball_obj.getStart_ball_vel_Y() + " " + time_per);
+                    System.out.println(j + " " + temp);
+                    //System.out.println(start_ball_obj.getStart_ball_pos_Y() + " " + start_ball_obj.getStart_ball_vel_Y() + " " + time_per);
                 }
             }
         };
-
         gameTimer.start();
     }
 
@@ -1079,34 +1084,18 @@ public class GameManager {
     }
 
     private void checkCollisionObstacles() {
-        Shape intersect = null;
+        Shape intersect;
+        j++;
         if(curObstacle.getArc_components().size() != 0) {
             for (int i = 0; i < curObstacle.getArc_components().size(); ++i) {
                 intersect = Shape.intersect(start_ball_obj.getStart_ball(), curObstacle.getArc_components().get(i));
                 if ((intersect.getBoundsInLocal().getWidth() != -1) && start_ball_obj.getStart_ball().getFill() != curObstacle.getArc_components().get(i).getStroke() && start_ball_obj.getStart_ball().getFill() != curObstacle.getArc_components().get(i).getFill()) {
-                    isPaused = true;
-                    curObstacle.getAnimation().pause();
-                    if (prevObstacle != null)
-                        prevObstacle.getAnimation().pause();
-                    BoxBlur bb = new BoxBlur();
-                    bb.setWidth(5);
-                    bb.setHeight(5);
-                    bb.setIterations(3);
-                    gp1.setEffect(bb);
-                    gp2.setEffect(bb);
-                    scoreDisplay.setEffect(bb);
-                    pauseButton.setEffect(bb);
-                    start_ball_obj.getStart_ball().setEffect(bb);
-                    Text finalScore = new Text("Score - " + Integer.toString(score));
-                    finalScore.setLayoutY(80+25+49+90);
-                    finalScore.setLayoutX(120);
-                    try{
-                        finalScore.setFont(Font.loadFont(new FileInputStream("src/model/Resources/kenvector_future.ttf"), 10));
-                    } catch (FileNotFoundException e) {
-                        finalScore.setFont(Font.font("Verdana",23));
+                    if(!obstacleCollision) {
+                        start_ball_obj.getStart_ball().setOpacity(0);
+                        collisionAnimations.collisionAnimation(gamePane, start_ball_obj);
+                        obstacleCollision = true;
+                        temp = j;
                     }
-                    defeatScreen.subPane.getChildren().add(finalScore);
-                    defeatScreen.moveSubScene(-1*GAME_WIDTH);
                 }
             }
         }
@@ -1115,31 +1104,12 @@ public class GameManager {
             for (int i = 0; i < curObstacle.getLine_components().size(); ++i) {
                 intersect = Shape.intersect(start_ball_obj.getStart_ball(), curObstacle.getLine_components().get(i));
                 if ((intersect.getBoundsInLocal().getWidth() != -1) && start_ball_obj.getStart_ball().getFill() != curObstacle.getLine_components().get(i).getStroke() && start_ball_obj.getStart_ball().getFill() != curObstacle.getLine_components().get(i).getFill()) {
-                    isPaused = true;
-                    curObstacle.getAnimation().pause();
-                    if (prevObstacle != null)
-                        prevObstacle.getAnimation().pause();
-                    BoxBlur bb = new BoxBlur();
-                    bb.setWidth(5);
-                    bb.setHeight(5);
-                    bb.setIterations(3);
-                    gp1.setEffect(bb);
-                    gp2.setEffect(bb);
-                    scoreDisplay.setEffect(bb);
-                    pauseButton.setEffect(bb);
-                    start_ball_obj.getStart_ball().setEffect(bb);
-                    Text finalScore = new Text("Score - " + Integer.toString(score));
-                    finalScore.setLayoutY(80+25+49+90);
-                    finalScore.setLayoutX(120);
-                    try{
-                        finalScore.setFont(Font.loadFont(new FileInputStream("src/model/Resources/kenvector_future.ttf"), 10));
-                    } catch (FileNotFoundException e) {
-                        finalScore.setFont(Font.font("Verdana",23));
+                    if(!obstacleCollision) {
+                        start_ball_obj.getStart_ball().setOpacity(0);
+                        collisionAnimations.collisionAnimation(gamePane, start_ball_obj);
+                        obstacleCollision = true;
+                        temp = j;
                     }
-                    defeatScreen.subPane.getChildren().add(finalScore);
-                    defeatScreen.moveSubScene(-1*GAME_WIDTH);
-                    //gameStage.close();
-                    //gameTimer.stop();
                 }
             }
         }
@@ -1149,31 +1119,12 @@ public class GameManager {
                 for (int i = 0; i < prevObstacle.getArc_components().size(); ++i) {
                     intersect = Shape.intersect(start_ball_obj.getStart_ball(), prevObstacle.getArc_components().get(i));
                     if ((intersect.getBoundsInLocal().getWidth() != -1) && start_ball_obj.getStart_ball().getFill() != prevObstacle.getArc_components().get(i).getStroke() && start_ball_obj.getStart_ball().getFill() != prevObstacle.getArc_components().get(i).getFill()) {
-                        isPaused = true;
-                        curObstacle.getAnimation().pause();
-                        if (prevObstacle != null)
-                            prevObstacle.getAnimation().pause();
-                        BoxBlur bb = new BoxBlur();
-                        bb.setWidth(5);
-                        bb.setHeight(5);
-                        bb.setIterations(3);
-                        gp1.setEffect(bb);
-                        gp2.setEffect(bb);
-                        scoreDisplay.setEffect(bb);
-                        pauseButton.setEffect(bb);
-                        start_ball_obj.getStart_ball().setEffect(bb);
-                        Text finalScore = new Text("Score - " + Integer.toString(score));
-                        finalScore.setLayoutY(80+25+49+90);
-                        finalScore.setLayoutX(120);
-                        try{
-                            finalScore.setFont(Font.loadFont(new FileInputStream("src/model/Resources/kenvector_future.ttf"), 10));
-                        } catch (FileNotFoundException e) {
-                            finalScore.setFont(Font.font("Verdana",23));
+                        if(!obstacleCollision) {
+                            start_ball_obj.getStart_ball().setOpacity(0);
+                            collisionAnimations.collisionAnimation(gamePane, start_ball_obj);
+                            obstacleCollision = true;
+                            temp = j;
                         }
-                        defeatScreen.subPane.getChildren().add(finalScore);
-                        defeatScreen.moveSubScene(-1*GAME_WIDTH);
-                        //gameStage.close();
-                        //gameTimer.stop();
                     }
                 }
             }
@@ -1182,36 +1133,41 @@ public class GameManager {
                 for (int i = 0; i < prevObstacle.getArc_components().size(); ++i) {
                     intersect = Shape.intersect(start_ball_obj.getStart_ball(), prevObstacle.getLine_components().get(i));
                     if ((intersect.getBoundsInLocal().getWidth() != -1) && start_ball_obj.getStart_ball().getFill() != prevObstacle.getLine_components().get(i).getStroke() && start_ball_obj.getStart_ball().getFill() != prevObstacle.getLine_components().get(i).getFill()) {
-                        isPaused = true;
-                        curObstacle.getAnimation().pause();
-                        if (prevObstacle != null)
-                            prevObstacle.getAnimation().pause();
-                        BoxBlur bb = new BoxBlur();
-                        bb.setWidth(5);
-                        bb.setHeight(5);
-                        bb.setIterations(3);
-                        gp1.setEffect(bb);
-                        gp2.setEffect(bb);
-                        scoreDisplay.setEffect(bb);
-                        pauseButton.setEffect(bb);
-                        start_ball_obj.getStart_ball().setEffect(bb);
-                        Text finalScore = new Text("Score - " + Integer.toString(score));
-                        finalScore.setLayoutY(80+25+49+90);
-                        finalScore.setLayoutX(120);
-                        try{
-                            finalScore.setFont(Font.loadFont(new FileInputStream("src/model/Resources/kenvector_future.ttf"), 10));
-                        } catch (FileNotFoundException e) {
-                            finalScore.setFont(Font.font("Verdana",23));
+                        if(!obstacleCollision) {
+                            start_ball_obj.getStart_ball().setOpacity(0);
+                            collisionAnimations.collisionAnimation(gamePane, start_ball_obj);
+                            obstacleCollision = true;
+                            temp = j;
                         }
-                        defeatScreen.subPane.getChildren().add(finalScore);
-                        defeatScreen.moveSubScene(-1*GAME_WIDTH);
-                      //gameStage.close();
-                      //gameTimer.stop();
                     }
                 }
             }
         }
-
+        if(j-temp==20 && obstacleCollision) {
+            isPaused = true;
+            curObstacle.getAnimation().pause();
+            if (prevObstacle != null)
+                prevObstacle.getAnimation().pause();
+            BoxBlur bb = new BoxBlur();
+            bb.setWidth(5);
+            bb.setHeight(5);
+            bb.setIterations(3);
+            gp1.setEffect(bb);
+            gp2.setEffect(bb);
+            scoreDisplay.setEffect(bb);
+            pauseButton.setEffect(bb);
+            start_ball_obj.getStart_ball().setEffect(bb);
+            Text finalScore = new Text("Score - " + Integer.toString(score));
+            finalScore.setLayoutY(80 + 25 + 49 + 90);
+            finalScore.setLayoutX(120);
+            try {
+                finalScore.setFont(Font.loadFont(new FileInputStream("src/model/Resources/kenvector_future.ttf"), 10));
+            } catch (FileNotFoundException e) {
+                finalScore.setFont(Font.font("Verdana", 23));
+            }
+            defeatScreen.subPane.getChildren().add(finalScore);
+            defeatScreen.moveSubScene(-1 * GAME_WIDTH);
+        }
     }
 
     private void checkCollisionPoints(){

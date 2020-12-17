@@ -31,20 +31,20 @@ public class Obstacle_6 extends GameObstacles{    //2 rings
         Arc arc7 = new Arc(x-80f, y, 75.0f, 75.0f, 180-45, 90);
         Arc arc8 = new Arc(x-80f, y, 75.0f, 75.0f, 270-45, 90);
 
-        arc1.setFill(Color.BLUE);
-        arc1.setStroke(Color.BLUE);
+        arc1.setFill(Color.TURQUOISE);
+        arc1.setStroke(Color.TURQUOISE);
         arc1.setStrokeWidth(15.0f);
         arc1.setStrokeType(StrokeType.INSIDE);
         arc1.setType(ArcType.OPEN);
 
-        arc2.setFill(Color.RED);
-        arc2.setStroke(Color.RED);
+        arc2.setFill(Color.DEEPPINK);
+        arc2.setStroke(Color.DEEPPINK);
         arc2.setStrokeWidth(15.0f);
         arc2.setStrokeType(StrokeType.INSIDE);
         arc2.setType(ArcType.OPEN);
 
-        arc3.setFill(Color.GREEN);
-        arc3.setStroke(Color.GREEN);
+        arc3.setFill(Color.DARKVIOLET);
+        arc3.setStroke(Color.DARKVIOLET);
         arc3.setStrokeWidth(15.0f);
         arc3.setStrokeType(StrokeType.INSIDE);
         arc3.setType(ArcType.OPEN);
@@ -55,20 +55,20 @@ public class Obstacle_6 extends GameObstacles{    //2 rings
         arc4.setStrokeType( StrokeType.INSIDE);
         arc4.setType(ArcType.OPEN);
 
-        arc5.setFill(Color.GREEN);
-        arc5.setStroke(Color.GREEN);
+        arc5.setFill(Color.DARKVIOLET);
+        arc5.setStroke(Color.DARKVIOLET);
         arc5.setStrokeWidth(15.0f);
         arc5.setStrokeType(StrokeType.INSIDE);
         arc5.setType(ArcType.OPEN);
 
-        arc6.setFill(Color.RED);
-        arc6.setStroke(Color.RED);
+        arc6.setFill(Color.DEEPPINK);
+        arc6.setStroke(Color.DEEPPINK);
         arc6.setStrokeWidth(15.0f);
         arc6.setStrokeType(StrokeType.INSIDE);
         arc6.setType(ArcType.OPEN);
 
-        arc7.setFill(Color.BLUE);
-        arc7.setStroke(Color.BLUE);
+        arc7.setFill(Color.TURQUOISE);
+        arc7.setStroke(Color.TURQUOISE);
         arc7.setStrokeWidth(15.0f);
         arc7.setStrokeType(StrokeType.INSIDE);
         arc7.setType(ArcType.OPEN);

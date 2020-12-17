@@ -35,11 +35,11 @@ public class Obstacle_5 extends GameObstacles{   //concentric rings
         Random random = new Random();
 
         int color_id;
-        if (start_ball.getFill() == Color.BLUE)
+        if (start_ball.getFill() == Color.TURQUOISE)
             color_id = 0;
-        else if (start_ball.getFill() == Color.RED)
+        else if (start_ball.getFill() == Color.DEEPPINK)
             color_id = 1;
-        else if (start_ball.getFill() == Color.GREEN)
+        else if (start_ball.getFill() == Color.DARKVIOLET)
             color_id = 2;
         else
             color_id = 3;
@@ -76,22 +76,22 @@ public class Obstacle_5 extends GameObstacles{   //concentric rings
 
         //arc 1 and 7
         if(n1 == 0){
-            arc1.setFill(Color.BLUE);
-            arc1.setStroke(Color.BLUE);
-            arc7.setFill(Color.BLUE);
-            arc7.setStroke(Color.BLUE);
+            arc1.setFill(Color.TURQUOISE);
+            arc1.setStroke(Color.TURQUOISE);
+            arc7.setFill(Color.TURQUOISE);
+            arc7.setStroke(Color.TURQUOISE);
         }
         else if(n1 == 1){
-            arc1.setFill(Color.RED);
-            arc1.setStroke(Color.RED);
-            arc7.setFill(Color.RED);
-            arc7.setStroke(Color.RED);
+            arc1.setFill(Color.DEEPPINK);
+            arc1.setStroke(Color.DEEPPINK);
+            arc7.setFill(Color.DEEPPINK);
+            arc7.setStroke(Color.DEEPPINK);
         }
         else if(n1 == 2){
-            arc1.setFill(Color.GREEN);
-            arc1.setStroke(Color.GREEN);
-            arc7.setFill(Color.GREEN);
-            arc7.setStroke(Color.GREEN);
+            arc1.setFill(Color.DARKVIOLET);
+            arc1.setStroke(Color.DARKVIOLET);
+            arc7.setFill(Color.DARKVIOLET);
+            arc7.setStroke(Color.DARKVIOLET);
         }
         else{
             arc1.setFill(Color.YELLOW);
@@ -103,22 +103,22 @@ public class Obstacle_5 extends GameObstacles{   //concentric rings
 
         //arc 3 and 5
         if(n2 == 0){
-            arc3.setFill(Color.BLUE);
-            arc3.setStroke(Color.BLUE);
-            arc5.setFill(Color.BLUE);
-            arc5.setStroke(Color.BLUE);
+            arc3.setFill(Color.TURQUOISE);
+            arc3.setStroke(Color.TURQUOISE);
+            arc5.setFill(Color.TURQUOISE);
+            arc5.setStroke(Color.TURQUOISE);
         }
         else if(n2 == 1){
-            arc3.setFill(Color.RED);
-            arc3.setStroke(Color.RED);
-            arc5.setFill(Color.RED);
-            arc5.setStroke(Color.RED);
+            arc3.setFill(Color.DEEPPINK);
+            arc3.setStroke(Color.DEEPPINK);
+            arc5.setFill(Color.DEEPPINK);
+            arc5.setStroke(Color.DEEPPINK);
         }
         else if(n2 == 2){
-            arc3.setFill(Color.GREEN);
-            arc3.setStroke(Color.GREEN);
-            arc5.setFill(Color.GREEN);
-            arc5.setStroke(Color.GREEN);
+            arc3.setFill(Color.DARKVIOLET);
+            arc3.setStroke(Color.DARKVIOLET);
+            arc5.setFill(Color.DARKVIOLET);
+            arc5.setStroke(Color.DARKVIOLET);
         }
         else{
             arc3.setFill(Color.YELLOW);
@@ -130,22 +130,22 @@ public class Obstacle_5 extends GameObstacles{   //concentric rings
 
         //arc 4 and 8
         if(n3 == 0){
-            arc4.setFill(Color.BLUE);
-            arc4.setStroke(Color.BLUE);
-            arc8.setFill(Color.BLUE);
-            arc8.setStroke(Color.BLUE);
+            arc4.setFill(Color.TURQUOISE);
+            arc4.setStroke(Color.TURQUOISE);
+            arc8.setFill(Color.TURQUOISE);
+            arc8.setStroke(Color.TURQUOISE);
         }
         else if(n3 == 1){
-            arc4.setFill(Color.RED);
-            arc4.setStroke(Color.RED);
-            arc8.setFill(Color.RED);
-            arc8.setStroke(Color.RED);
+            arc4.setFill(Color.DEEPPINK);
+            arc4.setStroke(Color.DEEPPINK);
+            arc8.setFill(Color.DEEPPINK);
+            arc8.setStroke(Color.DEEPPINK);
         }
         else if(n3 == 2){
-            arc4.setFill(Color.GREEN);
-            arc4.setStroke(Color.GREEN);
-            arc8.setFill(Color.GREEN);
-            arc8.setStroke(Color.GREEN);
+            arc4.setFill(Color.DARKVIOLET);
+            arc4.setStroke(Color.DARKVIOLET);
+            arc8.setFill(Color.DARKVIOLET);
+            arc8.setStroke(Color.DARKVIOLET);
         }
         else{
             arc4.setFill(Color.YELLOW);
