@@ -1,4 +1,4 @@
-# ![color switch](resources/readmelogo.png)
+# ![ColorSwitch](resources/readmelogo.png)
 
 ## Table of Contents
 * [About the Project](#about-the-project)
