@@ -45,7 +45,13 @@ public class Obstacle_9 extends GameObstacles{    //square
 
     }
 
-    public void addAnimation(float x, float y, AnchorPane gp){
+    double time1 = 1;
+    double time2 = 2;
+    double time3 = 3;
+    double time4 = 4;
+
+    @Override
+    public void addAnimation(float x, float y, AnchorPane gp, int scores){
         Rotate rotation1 = (Rotate) line_components.get(0).getTransforms().get(0);
         Rotate rotation2 = (Rotate) line_components.get(1).getTransforms().get(0);
         Rotate rotation3 = (Rotate) line_components.get(2).getTransforms().get(0);
@@ -84,11 +90,18 @@ public class Obstacle_9 extends GameObstacles{    //square
         KeyValue line4_val4 = new KeyValue(rotation4.angleProperty(), 270);
         KeyValue line4_val5 = new KeyValue(rotation4.angleProperty(), 360);
 
+        if(scores/5 == 0){   //increase the speed of the obstacle every 5 points
+            time1 -= 0.05;
+            time2 -= 0.05;
+            time3 -= 0.05;
+            time4 -= 0.05;
+        }
+
         KeyFrame frame1 = new KeyFrame(Duration.ZERO, line1_val1, line2_val1, line3_val1, line4_val1);
-        KeyFrame frame2 = new KeyFrame(Duration.seconds(1), line1_val2, line2_val2, line3_val2, line4_val2);
-        KeyFrame frame3 = new KeyFrame(Duration.seconds(2), line1_val3, line2_val3, line3_val3, line4_val3);
-        KeyFrame frame4 = new KeyFrame(Duration.seconds(3), line1_val4, line2_val4, line3_val4, line4_val4);
-        KeyFrame frame5 = new KeyFrame(Duration.seconds(4), line1_val5, line2_val5, line3_val5, line4_val5);
+        KeyFrame frame2 = new KeyFrame(Duration.seconds(time1), line1_val2, line2_val2, line3_val2, line4_val2);
+        KeyFrame frame3 = new KeyFrame(Duration.seconds(time2), line1_val3, line2_val3, line3_val3, line4_val3);
+        KeyFrame frame4 = new KeyFrame(Duration.seconds(time3), line1_val4, line2_val4, line3_val4, line4_val4);
+        KeyFrame frame5 = new KeyFrame(Duration.seconds(time4), line1_val5, line2_val5, line3_val5, line4_val5);
 
 
         animation = new Timeline();

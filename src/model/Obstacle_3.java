@@ -70,11 +70,14 @@ public class Obstacle_3 extends GameObstacles {   //parallel lines
         ArrayList<Shape> obstacle = new ArrayList<>();
         obstacle.add(line1);
         obstacle.add(line2);
-    };
+    }
+
+    double time1 = 1.9;
+    double time2 = 3.8;
+    double time3 = 5.7;
 
     @Override
-
-    public void addAnimation(float x, float y, AnchorPane gp){
+    public void addAnimation(float x, float y, AnchorPane gp, int scores){
         Rotate rotation1 = (Rotate) line_components.get(0).getTransforms().get(0);
         Rotate rotation2 = (Rotate) line_components.get(1).getTransforms().get(0);
 
@@ -93,10 +96,16 @@ public class Obstacle_3 extends GameObstacles {   //parallel lines
         KeyValue line2_val3 = new KeyValue(rotation2.angleProperty(), 240);
         KeyValue line2_val4 = new KeyValue(rotation2.angleProperty(), 360);
 
+        if(scores/5 == 0){   //increase the speed of the obstacle every 5 points
+            time1 -= 0.05;
+            time2 -= 0.05;
+            time3 -= 0.05;
+        }
+
         KeyFrame frame1 = new KeyFrame(Duration.ZERO, line1_val1, line2_val1);
-        KeyFrame frame2 = new KeyFrame(Duration.seconds(1.9), line1_val2, line2_val2);
-        KeyFrame frame3 = new KeyFrame(Duration.seconds(3.8), line1_val3, line2_val3);
-        KeyFrame frame4 = new KeyFrame(Duration.seconds(5.7), line1_val4, line2_val4);
+        KeyFrame frame2 = new KeyFrame(Duration.seconds(time1), line1_val2, line2_val2);
+        KeyFrame frame3 = new KeyFrame(Duration.seconds(time2), line1_val3, line2_val3);
+        KeyFrame frame4 = new KeyFrame(Duration.seconds(time3), line1_val4, line2_val4);
 
         animation = new Timeline();
         animation.getKeyFrames().addAll(frame1, frame2, frame3, frame4);

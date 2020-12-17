@@ -231,11 +231,14 @@ public class Obstacle_8 extends GameObstacles{    //circle in triangle
                 arc_components.add(arc4);
             }
         }
-
-
     }
 
-    public void addAnimation(float x, float y, AnchorPane gp){
+    double time1 = 1.9;
+    double time2 = 3.8;
+    double time3 = 5.7;
+
+    @Override
+    public void addAnimation(float x, float y, AnchorPane gp, int scores){
         Rotate rotation1 = (Rotate) line_components.get(0).getTransforms().get(0);
         Rotate rotation2 = (Rotate) line_components.get(1).getTransforms().get(0);
         Rotate rotation3 = (Rotate) line_components.get(2).getTransforms().get(0);
@@ -244,8 +247,6 @@ public class Obstacle_8 extends GameObstacles{    //circle in triangle
         Rotate rotation5 = (Rotate) arc_components.get(1).getTransforms().get(0);
         Rotate rotation6 = (Rotate) arc_components.get(2).getTransforms().get(0);
         Rotate rotation7 = (Rotate) arc_components.get(3).getTransforms().get(0);
-
-
 
         rotation1.setPivotX(x);
         rotation1.setPivotY(y);
@@ -273,7 +274,6 @@ public class Obstacle_8 extends GameObstacles{    //circle in triangle
         rotation7.pivotYProperty().bind(arc_components.get(3).centerYProperty());
 
 
-
         KeyValue line1_val1 = new KeyValue(rotation1.angleProperty(), 0);
         KeyValue line1_val2 = new KeyValue(rotation1.angleProperty(), 120);
         KeyValue line1_val3 = new KeyValue(rotation1.angleProperty(), 240);
@@ -288,7 +288,6 @@ public class Obstacle_8 extends GameObstacles{    //circle in triangle
         KeyValue line3_val2 = new KeyValue(rotation3.angleProperty(), 120);
         KeyValue line3_val3 = new KeyValue(rotation3.angleProperty(), 240);
         KeyValue line3_val4 = new KeyValue(rotation3.angleProperty(), 360);
-
 
 
         KeyValue arc1_val1 = new KeyValue(rotation4.angleProperty(), 360);
@@ -311,17 +310,21 @@ public class Obstacle_8 extends GameObstacles{    //circle in triangle
         KeyValue arc4_val4 = new KeyValue(rotation7.angleProperty(), 180);
         KeyValue arc4_val5 = new KeyValue(rotation7.angleProperty(), 0);
 
+        if(scores/5 == 0){   //increase the speed of the obstacle every 5 points
+            time1 -= 0.05;
+            time2 -= 0.05;
+            time3 -= 0.05;
+        }
 
         KeyFrame frame1 = new KeyFrame(Duration.ZERO, line1_val1, line2_val1, line3_val1);
-        KeyFrame frame2 = new KeyFrame(Duration.seconds(1.9), line1_val2, line2_val2, line3_val2);
-        KeyFrame frame3 = new KeyFrame(Duration.seconds(3.8), line1_val3, line2_val3, line3_val3);
-        KeyFrame frame4 = new KeyFrame(Duration.seconds(5.7), line1_val4, line2_val4, line3_val4);
+        KeyFrame frame2 = new KeyFrame(Duration.seconds(time1), line1_val2, line2_val2, line3_val2);
+        KeyFrame frame3 = new KeyFrame(Duration.seconds(time2), line1_val3, line2_val3, line3_val3);
+        KeyFrame frame4 = new KeyFrame(Duration.seconds(time3), line1_val4, line2_val4, line3_val4);
 
         KeyFrame frame5 = new KeyFrame(Duration.ZERO, arc1_val1, arc2_val1, arc3_val1, arc4_val1);
-        KeyFrame frame6 = new KeyFrame(Duration.seconds(1.9), arc1_val2, arc2_val2, arc3_val2, arc4_val2);
-        KeyFrame frame8 = new KeyFrame(Duration.seconds(3.8), arc1_val4, arc2_val4, arc3_val4, arc4_val4);
-        KeyFrame frame9 = new KeyFrame(Duration.seconds(5.7), arc1_val5, arc2_val5, arc3_val5, arc4_val5);
-
+        KeyFrame frame6 = new KeyFrame(Duration.seconds(time1), arc1_val2, arc2_val2, arc3_val2, arc4_val2);
+        KeyFrame frame8 = new KeyFrame(Duration.seconds(time2), arc1_val4, arc2_val4, arc3_val4, arc4_val4);
+        KeyFrame frame9 = new KeyFrame(Duration.seconds(time3), arc1_val5, arc2_val5, arc3_val5, arc4_val5);
 
 
         animation = new Timeline();

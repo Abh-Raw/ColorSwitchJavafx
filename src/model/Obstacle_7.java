@@ -31,10 +31,6 @@ public class Obstacle_7 extends GameObstacles{     //8-figure
         Arc arc7 = new Arc(x, y-80f, 75.0f, 75.0f, 180-45, 90);
         Arc arc8 = new Arc(x, y-80f, 75.0f, 75.0f, 270-45, 90);
 
-        //Arc arc9 = new Arc(x, y-160, 75.0f, 75.0f, 0-45, 90);  //arc(center_x, center_y, radius_x, radius_y, start_angle, set_length)
-        //Arc arc10 = new Arc(x, y-160, 75.0f, 75.0f, 90-45, 90);
-        //Arc arc11 = new Arc(x, y-160, 75.0f, 75.0f, 180-45, 90);
-        //Arc arc12 = new Arc(x, y-160, 75.0f, 75.0f, 270-45, 90);
 
         arc1.setFill(Color.TURQUOISE);
         arc1.setStroke(Color.TURQUOISE);
@@ -84,31 +80,6 @@ public class Obstacle_7 extends GameObstacles{     //8-figure
         arc8.setStrokeType( StrokeType.INSIDE);
         arc8.setType(ArcType.OPEN);
 
-/*        arc9.setFill(Color.TURQUOISE);
-        arc9.setStroke(Color.TURQUOISE);
-        arc9.setStrokeWidth(15.0f);
-        arc9.setStrokeType(StrokeType.INSIDE);
-        arc9.setType(ArcType.OPEN);
-
-        arc10.setFill(Color.DEEPPINK);
-        arc10.setStroke(Color.DEEPPINK);
-        arc10.setStrokeWidth(15.0f);
-        arc10.setStrokeType(StrokeType.INSIDE);
-        arc10.setType(ArcType.OPEN);
-
-        arc11.setFill(Color.DARKVIOLET);
-        arc11.setStroke(Color.DARKVIOLET);
-        arc11.setStrokeWidth(15.0f);
-        arc11.setStrokeType(StrokeType.INSIDE);
-        arc11.setType(ArcType.OPEN);
-
-        arc12.setFill(Color.YELLOW);
-        arc12.setStroke(Color.YELLOW);
-        arc12.setStrokeWidth(15.0f);
-        arc12.setStrokeType( StrokeType.INSIDE);
-        arc12.setType(ArcType.OPEN);
-
- */
 
         arc_components.add(arc1);
         arc_components.add(arc2);
@@ -118,14 +89,15 @@ public class Obstacle_7 extends GameObstacles{     //8-figure
         arc_components.add(arc6);
         arc_components.add(arc7);
         arc_components.add(arc8);
-       // arc_components.add(arc9);
-       // arc_components.add(arc10);
-       // arc_components.add(arc11);
-       // arc_components.add(arc12);
     }
 
+    double time1 = 1;
+    double time2 = 2;
+    double time3 = 3;
+    double time4 = 4;
+
     @Override
-    public void addAnimation(float x, float y, AnchorPane gp){
+    public void addAnimation(float x, float y, AnchorPane gp, int scores){
         Rotate rotation1 = (Rotate) arc_components.get(0).getTransforms().get(0);
         Rotate rotation2 = (Rotate) arc_components.get(1).getTransforms().get(0);
         Rotate rotation3 = (Rotate) arc_components.get(2).getTransforms().get(0);
@@ -135,13 +107,6 @@ public class Obstacle_7 extends GameObstacles{     //8-figure
         Rotate rotation6 = (Rotate) arc_components.get(5).getTransforms().get(0);
         Rotate rotation7 = (Rotate) arc_components.get(6).getTransforms().get(0);
         Rotate rotation8 = (Rotate) arc_components.get(7).getTransforms().get(0);
-/*
-        Rotate rotation9 = (Rotate) arc_components.get(8).getTransforms().get(0);
-        Rotate rotation10 = (Rotate) arc_components.get(9).getTransforms().get(0);
-        Rotate rotation11 = (Rotate) arc_components.get(10).getTransforms().get(0);
-        Rotate rotation12 = (Rotate) arc_components.get(11).getTransforms().get(0);
-
- */
 
         rotation1.setPivotX(x);
         rotation1.setPivotY(y);
@@ -160,17 +125,6 @@ public class Obstacle_7 extends GameObstacles{     //8-figure
         rotation7.setPivotY(y);
         rotation8.setPivotX(x);
         rotation8.setPivotY(y);
-/*
-        rotation9.setPivotX(x);
-        rotation9.setPivotY(y);
-        rotation10.setPivotX(x);
-        rotation10.setPivotY(y);
-        rotation11.setPivotX(x);
-        rotation11.setPivotY(y);
-        rotation12.setPivotX(x);
-        rotation12.setPivotY(y);
-
- */
 
         rotation1.pivotXProperty().bind(arc_components.get(0).centerXProperty());
         rotation1.pivotYProperty().bind(arc_components.get(0).centerYProperty());
@@ -189,18 +143,7 @@ public class Obstacle_7 extends GameObstacles{     //8-figure
         rotation7.pivotYProperty().bind(arc_components.get(6).centerYProperty());
         rotation8.pivotXProperty().bind(arc_components.get(7).centerXProperty());
         rotation8.pivotYProperty().bind(arc_components.get(7).centerYProperty());
-/*
-        rotation9.pivotXProperty().bind(arc_components.get(8).centerXProperty());
-        rotation9.pivotYProperty().bind(arc_components.get(8).centerYProperty());
-        rotation10.pivotXProperty().bind(arc_components.get(9).centerXProperty());
-        rotation10.pivotYProperty().bind(arc_components.get(9).centerYProperty());
-        rotation11.pivotXProperty().bind(arc_components.get(10).centerXProperty());
-        rotation11.pivotYProperty().bind(arc_components.get(10).centerYProperty());
-        rotation12.pivotXProperty().bind(arc_components.get(11).centerXProperty());
-        rotation12.pivotYProperty().bind(arc_components.get(11).centerYProperty());
 
-
- */
         KeyValue arc1_val1 = new KeyValue(rotation1.angleProperty(), 0);
         KeyValue arc1_val2 = new KeyValue(rotation1.angleProperty(), 90);
         KeyValue arc1_val3 = new KeyValue(rotation1.angleProperty(), 180);
@@ -248,46 +191,19 @@ public class Obstacle_7 extends GameObstacles{     //8-figure
         KeyValue arc8_val3 = new KeyValue(rotation8.angleProperty(), 180);
         KeyValue arc8_val4 = new KeyValue(rotation8.angleProperty(), 90);
         KeyValue arc8_val5 = new KeyValue(rotation8.angleProperty(), 0);
-/*
-        KeyValue arc9_val1 = new KeyValue(rotation1.angleProperty(), 0);
-        KeyValue arc9_val2 = new KeyValue(rotation1.angleProperty(), 90);
-        KeyValue arc9_val3 = new KeyValue(rotation1.angleProperty(), 180);
-        KeyValue arc9_val4 = new KeyValue(rotation1.angleProperty(), 270);
-        KeyValue arc9_val5 = new KeyValue(rotation1.angleProperty(), 360);
 
-        KeyValue arc10_val1 = new KeyValue(rotation2.angleProperty(), 0);
-        KeyValue arc10_val2 = new KeyValue(rotation2.angleProperty(), 90);
-        KeyValue arc10_val3 = new KeyValue(rotation2.angleProperty(), 180);
-        KeyValue arc10_val4 = new KeyValue(rotation2.angleProperty(), 270);
-        KeyValue arc10_val5 = new KeyValue(rotation2.angleProperty(), 360);
-
-        KeyValue arc11_val1 = new KeyValue(rotation3.angleProperty(), 0);
-        KeyValue arc11_val2 = new KeyValue(rotation3.angleProperty(), 90);
-        KeyValue arc11_val3 = new KeyValue(rotation3.angleProperty(), 180);
-        KeyValue arc11_val4 = new KeyValue(rotation3.angleProperty(), 270);
-        KeyValue arc11_val5 = new KeyValue(rotation3.angleProperty(), 360);
-
-        KeyValue arc12_val1 = new KeyValue(rotation4.angleProperty(), 0);
-        KeyValue arc12_val2 = new KeyValue(rotation4.angleProperty(), 90);
-        KeyValue arc12_val3 = new KeyValue(rotation4.angleProperty(), 180);
-        KeyValue arc12_val4 = new KeyValue(rotation4.angleProperty(), 270);
-        KeyValue arc12_val5 = new KeyValue(rotation4.angleProperty(), 360);
-
-
-
-        KeyFrame frame1 = new KeyFrame(Duration.ZERO, arc1_val1, arc2_val1, arc3_val1, arc4_val1, arc5_val1, arc6_val1, arc7_val1, arc8_val1, arc9_val1, arc10_val1, arc11_val1, arc12_val1);
-        KeyFrame frame2 = new KeyFrame(Duration.seconds(1), arc1_val2, arc2_val2, arc3_val2, arc4_val2, arc5_val2, arc6_val2, arc7_val2, arc8_val2, arc9_val2, arc10_val2, arc11_val2, arc12_val2);
-        KeyFrame frame3 = new KeyFrame(Duration.seconds(2), arc1_val3, arc2_val3, arc3_val3, arc4_val3, arc5_val3, arc6_val3, arc7_val3, arc8_val3, arc9_val3, arc10_val3, arc11_val3, arc12_val3);
-        KeyFrame frame4 = new KeyFrame(Duration.seconds(3), arc1_val4, arc2_val4, arc3_val4, arc4_val4, arc5_val4, arc6_val4, arc7_val4, arc8_val4, arc9_val4, arc10_val4, arc11_val4, arc12_val4);
-        KeyFrame frame5 = new KeyFrame(Duration.seconds(4), arc1_val5, arc2_val5, arc3_val5, arc4_val5, arc5_val5, arc6_val5, arc7_val5, arc8_val5, arc9_val5, arc10_val5, arc11_val5, arc12_val5);
-
- */
+        if(scores/5 == 0){   //increase the speed of the obstacle every 5 points
+            time1 -= 0.05;
+            time2 -= 0.05;
+            time3 -= 0.05;
+            time4 -= 0.05;
+        }
 
         KeyFrame frame1 = new KeyFrame(Duration.ZERO, arc1_val1, arc2_val1, arc3_val1, arc4_val1, arc5_val1, arc6_val1, arc7_val1, arc8_val1);
-        KeyFrame frame2 = new KeyFrame(Duration.seconds(1), arc1_val2, arc2_val2, arc3_val2, arc4_val2, arc5_val2, arc6_val2, arc7_val2, arc8_val2);
-        KeyFrame frame3 = new KeyFrame(Duration.seconds(2), arc1_val3, arc2_val3, arc3_val3, arc4_val3, arc5_val3, arc6_val3, arc7_val3, arc8_val3);
-        KeyFrame frame4 = new KeyFrame(Duration.seconds(3), arc1_val4, arc2_val4, arc3_val4, arc4_val4, arc5_val4, arc6_val4, arc7_val4, arc8_val4);
-        KeyFrame frame5 = new KeyFrame(Duration.seconds(4), arc1_val5, arc2_val5, arc3_val5, arc4_val5, arc5_val5, arc6_val5, arc7_val5, arc8_val5);
+        KeyFrame frame2 = new KeyFrame(Duration.seconds(time1), arc1_val2, arc2_val2, arc3_val2, arc4_val2, arc5_val2, arc6_val2, arc7_val2, arc8_val2);
+        KeyFrame frame3 = new KeyFrame(Duration.seconds(time2), arc1_val3, arc2_val3, arc3_val3, arc4_val3, arc5_val3, arc6_val3, arc7_val3, arc8_val3);
+        KeyFrame frame4 = new KeyFrame(Duration.seconds(time3), arc1_val4, arc2_val4, arc3_val4, arc4_val4, arc5_val4, arc6_val4, arc7_val4, arc8_val4);
+        KeyFrame frame5 = new KeyFrame(Duration.seconds(time4), arc1_val5, arc2_val5, arc3_val5, arc4_val5, arc5_val5, arc6_val5, arc7_val5, arc8_val5);
 
         animation = new Timeline();
         animation.getKeyFrames().addAll(frame1, frame2, frame3, frame4, frame5);

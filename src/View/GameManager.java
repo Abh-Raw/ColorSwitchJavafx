@@ -344,7 +344,7 @@ public class GameManager {
                 start_ball_obj.setYellow_flag(true);
         }
 
-        obstacles.addAnimation(x, y, gp);
+        obstacles.addAnimation(x, y, gp,score);
         return obstacles;
     }
 
@@ -376,7 +376,7 @@ public class GameManager {
                 start_ball_obj.setYellow_flag(true);
         }
 
-        obstacles.addAnimation(x, y, gp);
+        obstacles.addAnimation(x, y, gp,score);
         return  obstacles;
     }
 
@@ -405,7 +405,7 @@ public class GameManager {
                 start_ball_obj.setYellow_flag(true);
         }
 
-        obstacles.addAnimation(x, y, gp);
+        obstacles.addAnimation(x, y, gp, score);
         return obstacles;
     }
 
@@ -441,7 +441,7 @@ public class GameManager {
                 start_ball_obj.setYellow_flag(true);
         }
 
-        obstacles.addAnimation(x, y, gp);
+        obstacles.addAnimation(x, y, gp, score);
         return obstacles;
     }
 
@@ -457,10 +457,7 @@ public class GameManager {
         Rotate rotation7 = new Rotate();
         Rotate rotation8 = new Rotate();
 
-        //if(anglesList == null)
         obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());  //create obj
-        //else
-        //  obstacles.reconstructObstacle(x, y, anglesList, colorList);
 
         obstacles.getArc_components().get(0).getTransforms().add(rotation1);   //rotation obj added to every component
         obstacles.getArc_components().get(1).getTransforms().add(rotation2);
@@ -498,7 +495,7 @@ public class GameManager {
         else if(obstacles.getArc_components().get(obstacles.getArc_components().size() - 1).getStroke() == Color.YELLOW)
             start_ball_obj.setYellow_flag(true);
 
-        obstacles.addAnimation(x, y, gp);
+        obstacles.addAnimation(x, y, gp, score);
         return obstacles;
     }
 
@@ -543,7 +540,7 @@ public class GameManager {
                 start_ball_obj.setYellow_flag(true);
         }
 
-        obstacles.addAnimation(x, y, gp);
+        obstacles.addAnimation(x, y, gp, score);
 
         return obstacles;
     }
@@ -559,10 +556,7 @@ public class GameManager {
         Rotate rotation6 = new Rotate();
         Rotate rotation7 = new Rotate();
         Rotate rotation8 = new Rotate();
-//        Rotate rotation9 = new Rotate();       //1 rotation obj for every component
-//        Rotate rotation10 = new Rotate();
-//        Rotate rotation11 = new Rotate();
-//        Rotate rotation12 = new Rotate();
+
 
         obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());  //create obj
 
@@ -574,10 +568,7 @@ public class GameManager {
         obstacles.getArc_components().get(5).getTransforms().add(rotation6);
         obstacles.getArc_components().get(6).getTransforms().add(rotation7);
         obstacles.getArc_components().get(7).getTransforms().add(rotation8);
-//        obstacles.getArc_components().get(8).getTransforms().add(rotation9);
-//        obstacles.getArc_components().get(9).getTransforms().add(rotation10);
-//        obstacles.getArc_components().get(10).getTransforms().add(rotation11);
-//        obstacles.getArc_components().get(11).getTransforms().add(rotation12);
+
 
         gp.getChildren().addAll(obstacles.getArc_components());
 
@@ -597,7 +588,7 @@ public class GameManager {
                 start_ball_obj.setYellow_flag(true);
         }
 
-        obstacles.addAnimation(x, y, gp);
+        obstacles.addAnimation(x, y, gp, score);
 
         return obstacles;
     }
@@ -657,7 +648,7 @@ public class GameManager {
                 start_ball_obj.setYellow_flag(true);
         }
 
-        obstacles.addAnimation(x, y, gp);
+        obstacles.addAnimation(x, y, gp, score);
         return  obstacles;
 
     }
@@ -696,7 +687,7 @@ public class GameManager {
                 start_ball_obj.setYellow_flag(true);
         }
 
-        obstacles.addAnimation(x, y, gp);
+        obstacles.addAnimation(x, y, gp, score);
         return  obstacles;
     }
 
@@ -760,7 +751,7 @@ public class GameManager {
                 start_ball_obj.setYellow_flag(true);
         }
 
-        obstacles.addAnimation(x, y, gp);
+        obstacles.addAnimation(x, y, gp, score);
         return  obstacles;
     }
 
@@ -1105,49 +1096,46 @@ public class GameManager {
     }
 
     private GameObstacles chooseObstacleRandom(AnchorPane gp, float x, float y){     //creates random obstacles
-
-        Random chooseObstacle = new Random();
-        int obstacle_id = chooseObstacle.nextInt(10)+1;
-        if(obstacle_id==1){
-            return animateObstacle1(gp, x, y, null, null);
+        if(score>5) {
+            Random chooseObstacle = new Random();
+            int obstacle_id = chooseObstacle.nextInt(10) + 1;
+            if (obstacle_id == 1) {
+                return animateObstacle1(gp, x, y, null, null);
+            } else if (obstacle_id == 2) {
+                return animateObstacle2(gp, x, y);
+            } else if (obstacle_id == 3) {
+                return animateObstacle3(gp, x, y);
+            } else if (obstacle_id == 4) {
+                return animateObstacle4(gp, x + 32.5f, y + 32.5f);
+            } else if (obstacle_id == 5) {
+                return animateObstacle5(gp, x, y);
+            } else if (obstacle_id == 6) {
+                return animateObstacle6(gp, x, y);
+            } else if (obstacle_id == 7) {
+                return animateObstacle7(gp, x, y);
+            } else if (obstacle_id == 8) {
+                return animateObstacle8(gp, x, y);
+            } else if (obstacle_id == 9) {
+                return animateObstacle9(gp, x, y);
+            } else if (obstacle_id == 10) {
+                return animateObstacle10(gp, x, y);
+            }
         }
-
-        else if(obstacle_id==2) {
-           return animateObstacle2(gp, x, y);
+        else{
+            Random chooseObstacle = new Random();
+            int obstacle_id = chooseObstacle.nextInt(5) + 1;
+            if (obstacle_id == 1) {
+                return animateObstacle1(gp, x, y, null, null);
+            } else if (obstacle_id == 2) {
+                return animateObstacle2(gp, x, y);
+            } else if (obstacle_id == 3) {
+                return animateObstacle3(gp, x, y);
+            } else if (obstacle_id == 4) {
+                return animateObstacle4(gp, x + 32.5f, y + 32.5f);
+            } else if (obstacle_id == 5) {
+                return animateObstacle5(gp, x, y);
+            }
         }
-
-        else if(obstacle_id==3){
-            return animateObstacle3(gp, x, y);
-        }
-
-        else if(obstacle_id==4){
-            return animateObstacle4(gp, x+32.5f, y+32.5f);
-        }
-
-        else if(obstacle_id == 5){
-            return animateObstacle5(gp, x, y);
-        }
-
-        else if(obstacle_id == 6){
-            return animateObstacle6(gp, x, y);
-        }
-
-        else if(obstacle_id == 7){
-            return animateObstacle7(gp, x, y);
-        }
-
-        else if(obstacle_id == 8){
-            return animateObstacle8(gp, x, y);
-        }
-
-        else if(obstacle_id == 9){
-            return animateObstacle9(gp, x, y);
-        }
-
-        else if(obstacle_id == 10){
-            return animateObstacle10(gp, x, y);
-        }
-
          return null;
     }
 
