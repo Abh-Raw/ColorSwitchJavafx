@@ -16,6 +16,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.GameAnimations;
 import model.GameButtons;
+import model.Logo_Obstacle;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -39,25 +40,22 @@ public class IntroViewManager {
     }
 
     private void runIntroAnimation() throws FileNotFoundException {
-        GameAnimations introAnimation = new GameAnimations();               //Making Class GameAnimation object
-        Text text = new Text("R");
-        text.setFont(Font.loadFont(new FileInputStream("src/model/Resources/AlexBrush-Regular.ttf"), 100));
+        Logo_Obstacle intro_obj_1 = new Logo_Obstacle();
+        Logo_Obstacle intro_obj_2 = new Logo_Obstacle();
+        Logo_Obstacle intro_obj_3 = new Logo_Obstacle();
 
-        text.setLayoutX(INTRO_WIDTH/2);
-        text.setLayoutY(INTRO_HEIGHT/2);
-        Stop[] stop = {new Stop(0, Color.RED),
-                new Stop(0.33, Color.GREEN),
-                new Stop(0.66, Color.BLUE),
-                new Stop(1, Color.YELLOW)};
+        GameAnimations introAnimation = new GameAnimations();
+        intro_obj_1.createLogoObstacle(INTRO_WIDTH/2, INTRO_HEIGHT/2, 60, 60);
+        intro_obj_2.createLogoObstacle(INTRO_WIDTH/2, INTRO_HEIGHT/2, 120, 120);
+        intro_obj_3.createLogoObstacle(INTRO_WIDTH/2, INTRO_HEIGHT/2, 180, 180);
 
-        LinearGradient linearGradient = new LinearGradient(0, 0, 1, 0, true, CycleMethod.REFLECT, stop);
-        text.setFill(linearGradient);
-        text.setStroke(Color.BLACK);
-        text.setStrokeType(StrokeType.OUTSIDE);
-        text.setStrokeWidth(2);
-        IntromainPane.getChildren().add(text);
+        IntromainPane.getChildren().addAll(intro_obj_1.getArc_components());
+        IntromainPane.getChildren().addAll(intro_obj_2.getArc_components());
+        IntromainPane.getChildren().addAll(intro_obj_3.getArc_components());
+
+
         ViewManager viewManager = new ViewManager();           //ViewManager contructor called
-        introAnimation.IntroAnimation(text, viewManager, IntromainStage);
+        introAnimation.IntroAnimation(intro_obj_1, intro_obj_2, intro_obj_3, viewManager, IntromainStage);
     }
 
     private void makeBackground(){
