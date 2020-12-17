@@ -36,14 +36,14 @@ public class SaveFile {
         thread.start();
     }
 
-    public void saveGameData(final GameData gameData){
+    public void saveGameData(final GameData gameData, final String file_path){
         Task<Void> task = new Task<Void>() {
             @Override
             public Void call() throws Exception {
 
                 try {
 
-                    FileOutputStream fileOut = new FileOutputStream("test.ser");
+                    FileOutputStream fileOut = new FileOutputStream(file_path);
                     BufferedOutputStream bufferedStream = new BufferedOutputStream(fileOut);
                     ObjectOutputStream outputStream = new ObjectOutputStream(bufferedStream);
 

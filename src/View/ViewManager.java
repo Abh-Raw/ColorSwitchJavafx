@@ -8,16 +8,22 @@ import data.PlayerData;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import model.GameButtons;
 import model.GameSubScenes;
+import model.Logo_Obstacle;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.Reader;
 import java.io.Serializable;
@@ -49,7 +55,7 @@ public class ViewManager {
     private LeaderBoard leaderBoard;
     private Stage stage;
     private GameManager obstacleImg;
-    public ViewManager(){
+    public ViewManager() throws FileNotFoundException {
         obstacleImg = new GameManager();
         mainPane = new AnchorPane();
         button_list = new ArrayList<>();
@@ -75,10 +81,10 @@ public class ViewManager {
         return mainStage;
     }
 
-    private void setCurrentLeaderboard(){
+    private void setCurrentLeaderboard() throws FileNotFoundException {
         ArrayList<Text> highScoreAchievers = new ArrayList<>();
         int scoreIndex = 1;
-        int scoreLayout = 60;
+        int scoreLayout = 90;
         List<PlayerData> tempList = new ArrayList<PlayerData>(leaderBoard.getLeaderboard());
         Collections.sort(tempList, new ScoreComparator());
         Collections.reverse(tempList);
@@ -89,6 +95,7 @@ public class ViewManager {
             highScoreAchievers.add(addScore);
             addScore.setLayoutX(60);
             addScore.setLayoutY(scoreLayout);
+            addScore.setFont(Font.loadFont(new FileInputStream("src/model/Resources/kenvector_future.ttf"), 10));
             scoreLayout += 20;
             scoreIndex++;
             ScoresubScene.subPane.getChildren().add(addScore);
@@ -107,7 +114,7 @@ public class ViewManager {
             public void handle(ActionEvent actionEvent) {
                 GameManager manager = new GameManager();            //GameManager constructor called
                 try {
-                    manager.createNewGame(mainStage, leaderBoard);                   //creates game with components
+                    manager.createNewGame(mainStage, leaderBoard, 0);                   //creates game with components
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -174,44 +181,111 @@ public class ViewManager {
     }
 
     private void makeLogo(){
-        final ImageView logo = new ImageView("View/Resources/logo.png");
-        logo.setLayoutX(205);
-        logo.setLayoutY(60);
+        final Text logo_p1 = new Text("C");
+        Text logo_p2 = new Text("L");
+        Text logo_p3 = new Text("R SWITCH");
+        logo_p1.setLayoutX(110 - 70);
+        logo_p1.setLayoutY(90);
+        logo_p1.setFont(new Font(100));
+        logo_p1.setFill(Color.WHITE);
+        logo_p2.setLayoutX(250 - 70);
+        logo_p2.setLayoutY(90);
+        logo_p2.setFont(new Font(100));
+        logo_p2.setFill(Color.WHITE);
+        logo_p3.setLayoutX(390 - 70);
+        logo_p3.setLayoutY(90);
+        logo_p3.setFont(new Font(100));
+        logo_p3.setFill(Color.WHITE);
+        Logo_Obstacle o1 = new Logo_Obstacle();
+        o1.createLogoObstacle(210 - 70, 55, 35, 35);
+        Logo_Obstacle o2 = new Logo_Obstacle();
+        o2.createLogoObstacle(340 - 70, 55, 35, 35);
 
-        logo.setOnMouseEntered(new EventHandler<MouseEvent>() {
+        Rotate rotation1 = new Rotate();       //1 rotation obj for every component
+        Rotate rotation2 = new Rotate();
+        Rotate rotation3 = new Rotate();
+        Rotate rotation4 = new Rotate();
+        o1.getArc_components().get(0).getTransforms().add(rotation1);   //rotation obj added to every component
+        o1.getArc_components().get(1).getTransforms().add(rotation2);
+        o1.getArc_components().get(2).getTransforms().add(rotation3);
+        o1.getArc_components().get(3).getTransforms().add(rotation4);
+
+        Rotate rotation5 = new Rotate();       //1 rotation obj for every component
+        Rotate rotation6 = new Rotate();
+        Rotate rotation7 = new Rotate();
+        Rotate rotation8 = new Rotate();
+        o2.getArc_components().get(0).getTransforms().add(rotation5);   //rotation obj added to every component
+        o2.getArc_components().get(1).getTransforms().add(rotation6);
+        o2.getArc_components().get(2).getTransforms().add(rotation7);
+        o2.getArc_components().get(3).getTransforms().add(rotation8);
+
+        logo_p1.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                logo.setEffect(new DropShadow());
+                logo_p1.setEffect(new DropShadow());
             }
         });
 
-        logo.setOnMouseExited(new EventHandler<MouseEvent>() {
+        logo_p1.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                logo.setEffect(null);
+                logo_p1.setEffect(null);
             }
         });
-        mainPane.getChildren().add(logo);
+        o1.addAnimation(210 - 70, 55, mainPane);
+        o2.addAnimation(340 - 70, 55, mainPane);
+        mainPane.getChildren().add(logo_p1);
+        mainPane.getChildren().add(logo_p2);
+        mainPane.getChildren().addAll(o1.getArc_components());
+        mainPane.getChildren().addAll(o2.getArc_components());
+        mainPane.getChildren().add(logo_p3);
     }
 
-    private void createSubscene(){
+    private void createSubscene() throws FileNotFoundException {
         ScoresubScene = new GameSubScenes(950, 180, 600, 400);
         mainPane.getChildren().add(ScoresubScene);                  //creating subscenes;
+
+        Text heading1 = new Text("High Scores");
+        heading1.setLayoutX(70);
+        heading1.setLayoutY(50);
+        heading1.setFont(Font.loadFont(new FileInputStream("src/model/Resources/AlexBrush-Regular.ttf"), 30));
+        ScoresubScene.subPane.getChildren().add(heading1);
 
         ResumesubScene = new GameSubScenes(950, 180, 600, 400);
         mainPane.getChildren().add(ResumesubScene);
 
-        GameButtons test = new GameButtons("LOAD TEST");
-        test.setLayoutX(50);
-        test.setLayoutY(150);
-        ResumesubScene.subPane.getChildren().add(test);
+        Text heading = new Text("Saved Games");
+        heading.setLayoutX(70);
+        heading.setLayoutY(50);
+        heading.setFont(Font.loadFont(new FileInputStream("src/model/Resources/AlexBrush-Regular.ttf"), 30));
+        ResumesubScene.subPane.getChildren().add(heading);
 
-        test.setOnAction(new EventHandler<ActionEvent>() {
+        GameButtons saveSlot1 = new GameButtons("SLOT 1");
+        saveSlot1.setLayoutX(50);
+        saveSlot1.setLayoutY(80);
+        ResumesubScene.subPane.getChildren().add(saveSlot1);
+
+        GameButtons saveSlot2 = new GameButtons("SLOT 2");
+        saveSlot2.setLayoutX(50);
+        saveSlot2.setLayoutY(80 + 80);
+        ResumesubScene.subPane.getChildren().add(saveSlot2);
+
+        GameButtons saveSlot3 = new GameButtons("SLOT 3");
+        saveSlot3.setLayoutX(50);
+        saveSlot3.setLayoutY(80 + 160);
+        ResumesubScene.subPane.getChildren().add(saveSlot3);
+
+        GameButtons saveSlot4 = new GameButtons("SLOT 4");
+        saveSlot4.setLayoutX(50);
+        saveSlot4.setLayoutY(80 + 240);
+        ResumesubScene.subPane.getChildren().add(saveSlot4);
+
+        saveSlot1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 GameManager manager = new GameManager();
                 LoadFile loadFile = new LoadFile();
-                GameData loadGameData = loadFile.loadGameData();
+                GameData loadGameData = loadFile.loadGameData("file1.ser");
                 try {
                     manager.resumeGame(mainStage, loadGameData);
                 } catch (FileNotFoundException e) {
@@ -219,6 +293,50 @@ public class ViewManager {
                 }
             }
         });
+
+        saveSlot2.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                GameManager manager = new GameManager();
+                LoadFile loadFile = new LoadFile();
+                GameData loadGameData = loadFile.loadGameData("file2.ser");
+                try {
+                    manager.resumeGame(mainStage, loadGameData);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        saveSlot3.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                GameManager manager = new GameManager();
+                LoadFile loadFile = new LoadFile();
+                GameData loadGameData = loadFile.loadGameData("file3.ser");
+                try {
+                    manager.resumeGame(mainStage, loadGameData);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        saveSlot4.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                GameManager manager = new GameManager();
+                LoadFile loadFile = new LoadFile();
+                GameData loadGameData = loadFile.loadGameData("file4.ser");
+                try {
+                    manager.resumeGame(mainStage, loadGameData);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
     }
 
     public void showMainMenu(Stage stage){
