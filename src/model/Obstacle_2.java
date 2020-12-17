@@ -23,9 +23,9 @@ public class Obstacle_2 extends GameObstacles {   //triangle
     @Override
 
     public void createObstacle(float x, float y, Circle start_ball){
-        Line line1 = new Line(x - 65.0f, y - (130 * Math.sqrt(3)) / 6, x + 65, y - (130 * Math.sqrt(3)) / 6);
-        Line line2 = new Line(x + 65, y - (130 * Math.sqrt(3)) / 6, x, y + (130 * Math.sqrt(3)) / 3);
-        Line line3 = new Line(x, y + (130 * Math.sqrt(3)) / 3, x - 65.0f, y - (130 * Math.sqrt(3)) / 6);
+        Line line1 = new Line(x - 85.0f, y - (170 * Math.sqrt(3)) / 6, x + 85, y - (170 * Math.sqrt(3)) / 6);
+        Line line2 = new Line(x + 85.0f, y - (170 * Math.sqrt(3)) / 6, x, y + (170 * Math.sqrt(3)) / 3);
+        Line line3 = new Line(x, y + (170 * Math.sqrt(3)) / 3, x - 85.0f, y - (170 * Math.sqrt(3)) / 6);
 
         Random random = new Random();
 
