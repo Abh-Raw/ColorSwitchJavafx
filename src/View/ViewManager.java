@@ -59,6 +59,8 @@ public class ViewManager {
         makeLogo();
         mainStage.setScene(mainScene);
         obstacleImg.animateManager_Obstacle(mainPane, WIDTH/2, (HEIGHT/2)+30);
+        //obstacleImg.animateLogo(mainPane, 0,0);
+        //obstacleImg.animateLogo(mainPane, 5, 5);
         createButton();
         createSubscene();
         LoadFile loadFile = new LoadFile();

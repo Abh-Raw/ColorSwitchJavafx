@@ -798,6 +798,24 @@ public class GameManager {
         obstacles.addAnimation(x, y, gp);
     }
 
+    public void animateLogo(AnchorPane gp, float x, float y){
+        Logo_Obstacle obstacles = new Logo_Obstacle();
+        Rotate rotation1 = new Rotate();       //1 rotation obj for every component
+        Rotate rotation2 = new Rotate();
+        Rotate rotation3 = new Rotate();
+        Rotate rotation4 = new Rotate();
+
+        obstacles.createLogoObstacle(x, y);  //create obj
+
+        obstacles.getArc_components().get(0).getTransforms().add(rotation1);   //rotation obj added to every component
+        obstacles.getArc_components().get(1).getTransforms().add(rotation2);
+        obstacles.getArc_components().get(2).getTransforms().add(rotation3);
+        obstacles.getArc_components().get(3).getTransforms().add(rotation4);
+
+        gp.getChildren().addAll(obstacles.getArc_components());
+        obstacles.addAnimation(x, y, gp);
+    }
+
 
         private void createSpaceListener(){
         gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
