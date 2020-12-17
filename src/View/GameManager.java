@@ -137,6 +137,9 @@ public class GameManager {
         SaveAndExitButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                Text error = new Text("Choose save slot - ");
+                error.setLayoutY(80+25+49+110 );
+                error.setLayoutX(52);
                 SaveFile saveFile = new SaveFile();
                 GameData saveSlot = new GameData(start_ball_obj, obstacleColorList(curObstacle), obstacleAnglesList(curObstacle), curObstacle.getObstacle_id(), obstacleColorList(prevObstacle), obstacleAnglesList(prevObstacle), prevObstacle.getObstacle_id(),  curPoints.getFlag(), nextPoints.getFlag(), gp1.getLayoutY(), gp2.getLayoutY(), cur_colorSwitch_obj.getCs_flag(), score);
                 //System.out.println(saveSlot.getScore());
@@ -344,18 +347,20 @@ public class GameManager {
                 start_ball_obj.setYellow_flag(true);
         }
 
-        obstacles.addAnimation(x, y, gp,score);
+        obstacles.addAnimation(x, y, gp, score);
         return obstacles;
     }
 
-    private GameObstacles animateObstacle2(AnchorPane gp, float x, float y){
+    private GameObstacles animateObstacle2(AnchorPane gp, float x, float y, ArrayList<Double> anglesList, ArrayList<Integer> colorList){
         GameObstacles obstacles = new Obstacle_2();                  //calls game Obstacles
         Rotate rotation1 = new Rotate();
         Rotate rotation2 = new Rotate();
         Rotate rotation3 = new Rotate();
         //System.out.println(start_ball_obj.getStart_ball());
-        obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());
-        obstacles.getLine_components().get(0).getTransforms().add(rotation1);
+        if(anglesList == null)
+            obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());  //create obj
+        else
+            obstacles.reconstructObstacle(x, y, anglesList, colorList);        obstacles.getLine_components().get(0).getTransforms().add(rotation1);
         obstacles.getLine_components().get(1).getTransforms().add(rotation2);
         obstacles.getLine_components().get(2).getTransforms().add(rotation3);
         gp.getChildren().addAll(obstacles.getLine_components());
@@ -858,7 +863,7 @@ public class GameManager {
                     checkCollisionObstacles();
                     checkCollisionPoints();
                     checkCollisionColorSwitch();
-                    System.out.println(j + " " + temp);
+
                     //System.out.println(start_ball_obj.getStart_ball_pos_Y() + " " + start_ball_obj.getStart_ball_vel_Y() + " " + time_per);
                 }
             }
@@ -1092,6 +1097,10 @@ public class GameManager {
         if(obstacle_id == 1){
             return animateObstacle1(gp, x, y, anglesList, colorList);
         }
+
+        else if(obstacle_id == 2){
+            return animateObstacle2(gp, x, y, anglesList, colorList);
+        }
         return null;
     }
 
@@ -1102,7 +1111,7 @@ public class GameManager {
             if (obstacle_id == 1) {
                 return animateObstacle1(gp, x, y, null, null);
             } else if (obstacle_id == 2) {
-                return animateObstacle2(gp, x, y);
+                return animateObstacle2(gp, x, y, null, null);
             } else if (obstacle_id == 3) {
                 return animateObstacle3(gp, x, y);
             } else if (obstacle_id == 4) {
@@ -1127,7 +1136,7 @@ public class GameManager {
             if (obstacle_id == 1) {
                 return animateObstacle1(gp, x, y, null, null);
             } else if (obstacle_id == 2) {
-                return animateObstacle2(gp, x, y);
+                return animateObstacle2(gp, x, y, null, null);
             } else if (obstacle_id == 3) {
                 return animateObstacle3(gp, x, y);
             } else if (obstacle_id == 4) {
