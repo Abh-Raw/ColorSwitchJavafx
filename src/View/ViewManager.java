@@ -48,7 +48,9 @@ public class ViewManager {
     private GameSubScenes hiddenSubScene;
     private LeaderBoard leaderBoard;
     private Stage stage;
+    private GameManager obstacleImg;
     public ViewManager(){
+        obstacleImg = new GameManager();
         mainPane = new AnchorPane();
         button_list = new ArrayList<>();
         mainScene = new Scene(mainPane, WIDTH, HEIGHT);
@@ -56,6 +58,7 @@ public class ViewManager {
         makeBackground();
         makeLogo();
         mainStage.setScene(mainScene);
+        obstacleImg.animateManager_Obstacle(mainPane, WIDTH/2, (HEIGHT/2)+30);
         createButton();
         createSubscene();
         LoadFile loadFile = new LoadFile();
