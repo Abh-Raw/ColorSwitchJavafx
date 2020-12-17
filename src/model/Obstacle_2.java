@@ -4,6 +4,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.scene.Group;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -90,6 +91,58 @@ public class Obstacle_2 extends GameObstacles {   //triangle
     double time1 = 1.9;
     double time2 = 3.8;
     double time3 = 5.7;
+
+    @Override
+    public void reconstructObstacle(float x, float y, ArrayList<Double> anglesList, ArrayList<Integer> colorList) {
+
+        Line line1 = new Line(x - 95.0f, y - (190 * Math.sqrt(3)) / 6, x + 95, y - (190 * Math.sqrt(3)) / 6);
+        Line line2 = new Line(x + 95.0f, y - (190 * Math.sqrt(3)) / 6, x, y + (190 * Math.sqrt(3)) / 3);
+        Line line3 = new Line(x, y + (190 * Math.sqrt(3)) / 3, x - 95.0f, y - (190 * Math.sqrt(3)) / 6);
+
+        Group shape_grp = new Group();
+        shape_grp.getChildren().addAll(line1, line2, line3);
+        shape_grp.setRotate(shape_grp.getRotate() + anglesList.get(0));
+
+        line1.setStrokeWidth(12.0f);
+        line2.setStrokeWidth(12.0f);
+        line3.setStrokeWidth(12.0f);
+
+        if(colorList.get(0) == 0)
+            line1.setStroke(Color.TURQUOISE);
+        else if(colorList.get(0) == 1)
+            line1.setStroke(Color.DEEPPINK);
+        else if(colorList.get(0) == 2)
+            line1.setStroke(Color.DARKVIOLET);
+        else
+            line1.setStroke(Color.YELLOW);
+
+        if(colorList.get(1) == 0)
+            line2.setStroke(Color.TURQUOISE);
+        else if(colorList.get(1) == 1)
+            line2.setStroke(Color.DEEPPINK);
+        else if(colorList.get(1) == 2)
+            line2.setStroke(Color.DARKVIOLET);
+        else
+            line2.setStroke(Color.YELLOW);
+
+        if(colorList.get(2) == 0)
+            line3.setStroke(Color.TURQUOISE);
+        else if(colorList.get(2) == 1)
+            line3.setStroke(Color.DEEPPINK);
+        else if(colorList.get(2) == 2)
+            line3.setStroke(Color.DARKVIOLET);
+        else
+            line3.setStroke(Color.YELLOW);
+
+//        line1.setStroke(Color.TURQUOISE);
+//        line2.setStroke(Color.TURQUOISE);
+//        line3.setStroke(Color.TURQUOISE);
+
+
+        line_components.add(line1);
+        line_components.add(line2);
+        line_components.add(line3);
+    }
 
     @Override
     public void addAnimation(float x, float y, AnchorPane gp, int scores){

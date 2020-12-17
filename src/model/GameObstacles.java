@@ -39,4 +39,5 @@ public abstract class GameObstacles extends Shape {
     }
 
     public Timeline getAnimation() { return animation;}
+
 }
