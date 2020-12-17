@@ -1,7 +1,11 @@
 # ![ColorSwitch](src/View/Resources/readmelogo.png)
 
 ## Table of Contents
-* [About the Project](#about-the-project)
+* [About The Project](#about-the-project)
+* [How to Play](#how-to-play)
+* [Features of the Game](#features-of-the-game)
+* [Tech Stack](#tech-stack)
+* [Project Developers](#project-developers)
 
 ## About The Project
 CSE 201 - Advanced Programming Course Final Project at IIIT Delhi, Semester 3, Monsoon 2020
@@ -33,6 +37,6 @@ Color Switch is a single-player game where you just have to tap and pass through
 - Java 15.0.1
 - JavaFx 11.0.2  --> for graphics
 
-## Project Contributors and owners
+## Project Developers
 - [Abhinav Rawat - 2019132](https://github.com/Abh-Raw)
 - [Rupanshoo Saxena - 2019096](https://github.com/rupanshoo)
