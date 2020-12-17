@@ -4,6 +4,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.scene.Group;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
@@ -27,6 +28,34 @@ public class Obstacle_9 extends GameObstacles{    //square
         Line line4 = new Line(x-65.0f, y+65.0f, x-65.0f, y-65.0f);
 
         Random random = new Random();
+
+        line1.setStrokeWidth(12.0f);
+        line2.setStrokeWidth(12.0f);
+        line3.setStrokeWidth(12.0f);
+        line4.setStrokeWidth(12.0f);
+
+        line1.setStroke(Color.TURQUOISE);
+        line2.setStroke(Color.DEEPPINK);
+        line3.setStroke(Color.DARKVIOLET);
+        line4.setStroke(Color.YELLOW);
+
+        line_components.add(line1);
+        line_components.add(line2);
+        line_components.add(line3);
+        line_components.add(line4);
+
+    }
+
+    @Override
+    public void reconstructObstacle(float x, float y, ArrayList<Double> anglesList, ArrayList<Integer> colorList) {
+        Line line1 = new Line(x - 65.0f, y - 65.0f, x + 65.0f, y - 65.0f);
+        Line line2 = new Line(x + 65.0f, y - 65.0f, x + 65.0f, y + 65.0f);
+        Line line3 = new Line(x - 65.0f, y + 65.0f, x + 65.0f, y + 65.0f);
+        Line line4 = new Line(x-65.0f, y+65.0f, x-65.0f, y-65.0f);
+
+        Group shape_grp = new Group();
+        shape_grp.getChildren().addAll(line1, line2, line3, line4);
+        shape_grp.setRotate(shape_grp.getRotate() + anglesList.get(0));
 
         line1.setStrokeWidth(12.0f);
         line2.setStrokeWidth(12.0f);
