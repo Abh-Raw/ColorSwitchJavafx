@@ -4,9 +4,7 @@ import data.*;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -137,14 +135,66 @@ public class GameManager {
         SaveAndExitButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                for(int i=0; i<pauseScreen.subPane.getChildren().size(); ++i){
+                    pauseScreen.subPane.getChildren().remove(i);
+                }
+                pauseScreen.subPane.getChildren().remove(resumeButton);
+                pauseScreen.subPane.getChildren().remove(exitToMainMenuButtonPause);
                 Text error = new Text("Choose save slot - ");
-                error.setLayoutY(80+25+49+110 );
+                try{
+                    error.setFont(Font.loadFont(new FileInputStream("src/model/Resources/kenvector_future.ttf"),10));
+                } catch (FileNotFoundException e) {
+                    error.setFont(Font.font("Verdana",10));
+                }
+                error.setLayoutY(25+49);
                 error.setLayoutX(52);
-                SaveFile saveFile = new SaveFile();
-                GameData saveSlot = new GameData(start_ball_obj, obstacleColorList(curObstacle), obstacleAnglesList(curObstacle), curObstacle.getObstacle_id(), obstacleColorList(prevObstacle), obstacleAnglesList(prevObstacle), prevObstacle.getObstacle_id(),  curPoints.getFlag(), nextPoints.getFlag(), gp1.getLayoutY(), gp2.getLayoutY(), cur_colorSwitch_obj.getCs_flag(), score);
-                //System.out.println(saveSlot.getScore());
-                saveFile.saveGameData(saveSlot);
-                new ViewManager().showMainMenu(gameStage);
+                Button saveButton = new Button("SAVE");
+                saveButton.setLayoutY(40 + 49 + 150);
+                saveButton.setLayoutX(52);
+                final RadioButton r1 = new RadioButton("Slot 1");
+                r1.setLayoutY(40 + 49 + 20);
+                r1.setLayoutX(52);
+                final RadioButton r2 = new RadioButton("Slot 2");
+                r2.setLayoutY(40 + 49 + 50);
+                r2.setLayoutX(52);
+                final RadioButton r3 = new RadioButton("Slot 3");
+                r3.setLayoutY(40 + 49 + 80);
+                r3.setLayoutX(52);
+                final RadioButton r4 = new RadioButton("Slot 4");
+                r4.setLayoutY(40 + 49 + 130);
+                r4.setLayoutX(52);
+
+                ToggleGroup tg = new ToggleGroup();
+                r1.setToggleGroup(tg);
+                r2.setToggleGroup(tg);
+                r3.setToggleGroup(tg);
+                r4.setToggleGroup(tg);
+
+                pauseScreen.subPane.getChildren().addAll(error, saveButton, r1, r2, r3, r4);
+                saveButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
+                        SaveFile saveFile = new SaveFile();
+                        GameData saveSlot = new GameData(start_ball_obj, obstacleColorList(curObstacle), obstacleAnglesList(curObstacle), curObstacle.getObstacle_id(), obstacleColorList(prevObstacle), obstacleAnglesList(prevObstacle), prevObstacle.getObstacle_id(),  curPoints.getFlag(), nextPoints.getFlag(), gp1.getLayoutY(), gp2.getLayoutY(), cur_colorSwitch_obj.getCs_flag(), score);
+                        if(r1.isSelected()){
+                            saveFile.saveGameData(saveSlot, "file1.ser");
+                        }
+                        else if(r2.isSelected()){
+                            saveFile.saveGameData(saveSlot, "file2.ser");
+                        }
+                        else if(r3.isSelected()){
+                            saveFile.saveGameData(saveSlot, "file3.ser");
+                        }
+                        else if(r4.isSelected()){
+                            saveFile.saveGameData(saveSlot, "file4.ser");
+                        }
+                        try {
+                            new ViewManager().showMainMenu(gameStage);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
         });
 
@@ -152,7 +202,11 @@ public class GameManager {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 button_aud_player.play();
-                new ViewManager().showMainMenu(gameStage);
+                try {
+                    new ViewManager().showMainMenu(gameStage);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -180,20 +234,15 @@ public class GameManager {
             public void handle(MouseEvent mouseEvent) {
                 button_aud_player.play();
                 if(score >= requiredRevivingScore){
-                    isPaused = false;
                     score -= requiredRevivingScore;
                     requiredRevivingScore += 5;
-                    scoreDisplay.setText(Integer.toString(score));
-                    start_ball_obj.getStart_ball().setEffect(null);
-                    gp1.setEffect(null);
-                    gp2.setEffect(null);
-                    scoreDisplay.setEffect(null);
-                    pauseButton.setEffect(null );
-                    curObstacle.getAnimation().play();
-                    if(prevObstacle != null)
-                        prevObstacle.getAnimation().play();
-                    gamePane.requestFocus();
-                    defeatScreen.moveSubScene(GAME_WIDTH);
+                    GameManager manager = new GameManager();
+                    try {
+                        gameStage.close();
+                        manager.createNewGame(menuStage, highScoresdata, score);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
                 else {
                     Text error = new Text("Required points to revive - " + Integer.toString(requiredRevivingScore));
@@ -221,7 +270,11 @@ public class GameManager {
                 highScoresdata.setLeaderboard(updatedLeaderboard);
                 SaveFile saveFile = new SaveFile();
                 saveFile.savePlayerData(highScoresdata);
-                new ViewManager().showMainMenu(gameStage);
+                try {
+                    new ViewManager().showMainMenu(gameStage);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -244,7 +297,11 @@ public class GameManager {
                     defeatScreen.subPane.getChildren().add(submitNameForHighScore);
                 }
                 else if(score < updatedLeaderboard.peek().getScore() && updatedLeaderboard.peek()!=null){
-                    new ViewManager().showMainMenu(gameStage);
+                    try {
+                        new ViewManager().showMainMenu(gameStage);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -255,12 +312,16 @@ public class GameManager {
                 button_aud_player.play();
                 try {
                     GameManager manager = new GameManager();
-                    manager.createNewGame(gameStage, highScoresdata);
+                    manager.createNewGame(gameStage, highScoresdata, 0);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+    private void setScore(int score) {
+        this.score = score;
     }
 
     private ArrayList<Double> obstacleAnglesList(GameObstacles obstacle){
@@ -872,7 +933,7 @@ public class GameManager {
     }
 
 
-    public void createNewGame(Stage menuStage, LeaderBoard leaderBoard) throws FileNotFoundException {
+    public void createNewGame(Stage menuStage, LeaderBoard leaderBoard, int score) throws FileNotFoundException {
         highScoresdata = leaderBoard;
         updatedLeaderboard = highScoresdata.getLeaderboard();
         leaderBoardScores = new HashSet<>();
@@ -883,6 +944,7 @@ public class GameManager {
         }
         this.menuStage = menuStage;
         this.menuStage.close();
+        this.score = score;
         createStartBall();
         createBackGround();
         createScoreDisplay();
@@ -1097,7 +1159,6 @@ public class GameManager {
         if(obstacle_id == 1){
             return animateObstacle1(gp, x, y, anglesList, colorList);
         }
-
         else if(obstacle_id == 2){
             return animateObstacle2(gp, x, y, anglesList, colorList);
         }
@@ -1273,8 +1334,6 @@ public class GameManager {
             }
         }
     }
-
-
 
     private ColorSwitch createColorSwitch(AnchorPane gp){
         ColorSwitch colorSwitch_obj = new ColorSwitch();

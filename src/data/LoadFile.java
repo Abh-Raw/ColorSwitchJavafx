@@ -7,12 +7,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 public class LoadFile {
-    public GameData loadGameData(){
+    public GameData loadGameData(String file_path){
         GameData loadedData;
 
                 try {
-
-                    FileInputStream fileIn = new FileInputStream("test.ser");
+                    FileInputStream fileIn = new FileInputStream(file_path);
                     ObjectInputStream inputStream = new ObjectInputStream(fileIn);
 
                     loadedData = (GameData) inputStream.readObject();
