@@ -446,11 +446,14 @@ public class GameManager {
         return  obstacles;
     }
 
-    private GameObstacles animateObstacle3(AnchorPane gp, float x, float y){
+    private GameObstacles animateObstacle3(AnchorPane gp, float x, float y, ArrayList<Double> anglesList, ArrayList<Integer> colorList){
         GameObstacles obstacles = new Obstacle_3();                  //calls game Obstacles
         Rotate rotation1 = new Rotate();
         Rotate rotation2 = new Rotate();
-        obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());
+        if(anglesList == null)
+            obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());  //create obj
+        else
+            obstacles.reconstructObstacle(x, y, anglesList, colorList);
         obstacles.getLine_components().get(0).getTransforms().add(rotation1);
         obstacles.getLine_components().get(1).getTransforms().add(rotation2);
         gp.getChildren().addAll(obstacles.getLine_components());
@@ -475,7 +478,7 @@ public class GameManager {
         return obstacles;
     }
 
-    private GameObstacles animateObstacle4(AnchorPane gp, float x, float y){
+    private GameObstacles animateObstacle4(AnchorPane gp, float x, float y, ArrayList<Double> anglesList, ArrayList<Integer> colorList){
         GameObstacles obstacles = new Obstacle_4();
 
         Rotate rotation1 = new Rotate();    //1 rotation obj for every component
@@ -483,8 +486,10 @@ public class GameManager {
         Rotate rotation3 = new Rotate();
         Rotate rotation4 = new Rotate();
 
-        obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());
-        obstacles.getLine_components().get(0).getTransforms().add(rotation1);
+        if(anglesList == null)
+            obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());  //create obj
+        else
+            obstacles.reconstructObstacle(x, y, anglesList, colorList);        obstacles.getLine_components().get(0).getTransforms().add(rotation1);
         obstacles.getLine_components().get(1).getTransforms().add(rotation2);
         obstacles.getLine_components().get(2).getTransforms().add(rotation3);
         obstacles.getLine_components().get(3).getTransforms().add(rotation4);
@@ -511,7 +516,7 @@ public class GameManager {
         return obstacles;
     }
 
-    private GameObstacles animateObstacle5(AnchorPane gp, float x, float y){
+    private GameObstacles animateObstacle5(AnchorPane gp, float x, float y, ArrayList<Double> anglesList, ArrayList<Integer> colorList){
         GameObstacles obstacles = new Obstacle_5();
 
         Rotate rotation1 = new Rotate();       //1 rotation obj for every component
@@ -523,7 +528,10 @@ public class GameManager {
         Rotate rotation7 = new Rotate();
         Rotate rotation8 = new Rotate();
 
-        obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());  //create obj
+        if(anglesList == null)
+            obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());  //create obj
+        else
+            obstacles.reconstructObstacle(x, y, anglesList, colorList);
 
         obstacles.getArc_components().get(0).getTransforms().add(rotation1);   //rotation obj added to every component
         obstacles.getArc_components().get(1).getTransforms().add(rotation2);
@@ -565,7 +573,7 @@ public class GameManager {
         return obstacles;
     }
 
-    private GameObstacles animateObstacle6(AnchorPane gp, float x, float y) {
+    private GameObstacles animateObstacle6(AnchorPane gp, float x, float y, ArrayList<Double> anglesList, ArrayList<Integer> colorList) {
         GameObstacles obstacles = new Obstacle_6();
 
         Rotate rotation1 = new Rotate();       //1 rotation obj for every component
@@ -574,10 +582,14 @@ public class GameManager {
         Rotate rotation4 = new Rotate();
         Rotate rotation5 = new Rotate();       //1 rotation obj for every component
         Rotate rotation6 = new Rotate();
-        Rotate rotation7 = new Rotate();
+        Rotate rotation7 = new Rotate();        obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());  //create obj
+
         Rotate rotation8 = new Rotate();
 
-        obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());  //create obj
+        if(anglesList == null)
+            obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());  //create obj
+        else
+            obstacles.reconstructObstacle(x, y, anglesList, colorList);
 
         obstacles.getArc_components().get(0).getTransforms().add(rotation1);   //rotation obj added to every component
         obstacles.getArc_components().get(1).getTransforms().add(rotation2);
@@ -611,7 +623,7 @@ public class GameManager {
         return obstacles;
     }
 
-    private GameObstacles animateObstacle7(AnchorPane gp, float x, float y) {
+    private GameObstacles animateObstacle7(AnchorPane gp, float x, float y, ArrayList<Double> anglesList, ArrayList<Integer> colorList) {
         GameObstacles obstacles = new Obstacle_7();
 
         Rotate rotation1 = new Rotate();       //1 rotation obj for every component
@@ -624,7 +636,10 @@ public class GameManager {
         Rotate rotation8 = new Rotate();
 
 
-        obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());  //create obj
+        if(anglesList == null)
+            obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());  //create obj
+        else
+            obstacles.reconstructObstacle(x, y, anglesList, colorList);
 
         obstacles.getArc_components().get(0).getTransforms().add(rotation1);   //rotation obj added to every component
         obstacles.getArc_components().get(1).getTransforms().add(rotation2);
@@ -659,7 +674,7 @@ public class GameManager {
         return obstacles;
     }
 
-    private GameObstacles animateObstacle8(AnchorPane gp, float x, float y) {
+    private GameObstacles animateObstacle8(AnchorPane gp, float x, float y, ArrayList<Double> anglesList, ArrayList<Integer> colorList) {
         GameObstacles obstacles = new Obstacle_8();                  //calls game Obstacles
         Rotate rotation1 = new Rotate();
         Rotate rotation2 = new Rotate();
@@ -671,8 +686,10 @@ public class GameManager {
         Rotate rotation7 = new Rotate();
 
 
-        //System.out.println(start_ball_obj.getStart_ball());
-        obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());
+        if(anglesList == null)
+            obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());  //create obj
+        else
+            obstacles.reconstructObstacle(x, y, anglesList, colorList);
 
         obstacles.getLine_components().get(0).getTransforms().add(rotation1);
         obstacles.getLine_components().get(1).getTransforms().add(rotation2);
@@ -719,7 +736,7 @@ public class GameManager {
 
     }
 
-    private GameObstacles animateObstacle9(AnchorPane gp, float x, float y) {
+    private GameObstacles animateObstacle9(AnchorPane gp, float x, float y, ArrayList<Double> anglesList, ArrayList<Integer> colorList) {
         GameObstacles obstacles = new Obstacle_9();             //calls game Obstacles
 
         Rotate rotation1 = new Rotate();       //1 rotation obj for every component
@@ -728,7 +745,10 @@ public class GameManager {
         Rotate rotation4 = new Rotate();
 
 
-        obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());
+        if(anglesList == null)
+            obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());  //create obj
+        else
+            obstacles.reconstructObstacle(x, y, anglesList, colorList);
 
         obstacles.getLine_components().get(0).getTransforms().add(rotation1);
         obstacles.getLine_components().get(1).getTransforms().add(rotation2);
@@ -757,7 +777,7 @@ public class GameManager {
         return  obstacles;
     }
 
-    private GameObstacles animateObstacle10(AnchorPane gp, float x, float y) {
+    private GameObstacles animateObstacle10(AnchorPane gp, float x, float y, ArrayList<Double> anglesList, ArrayList<Integer> colorList) {
         GameObstacles obstacles = new Obstacle_10();             //calls game Obstacles
 
         Rotate rotation1 = new Rotate();       //1 rotation obj for every component
@@ -770,9 +790,10 @@ public class GameManager {
         Rotate rotation7 = new Rotate();
         Rotate rotation8 = new Rotate();
 
-
-
-        obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());
+        if(anglesList == null)
+            obstacles.createObstacle(x, y, start_ball_obj.getStart_ball());  //create obj
+        else
+            obstacles.reconstructObstacle(x, y, anglesList, colorList);
 
         obstacles.getLine_components().get(0).getTransforms().add(rotation1);
         obstacles.getLine_components().get(1).getTransforms().add(rotation2);
@@ -1159,8 +1180,41 @@ public class GameManager {
         if(obstacle_id == 1){
             return animateObstacle1(gp, x, y, anglesList, colorList);
         }
+
         else if(obstacle_id == 2){
             return animateObstacle2(gp, x, y, anglesList, colorList);
+        }
+
+        else if(obstacle_id == 3){
+            return animateObstacle3(gp, x, y, anglesList, colorList);
+        }
+
+        else if(obstacle_id == 4){
+            return animateObstacle4(gp, x, y, anglesList, colorList);
+        }
+
+        else if(obstacle_id == 5){
+            return animateObstacle5(gp, x, y, anglesList, colorList);
+        }
+
+        else if(obstacle_id == 6){
+            return animateObstacle6(gp, x, y, anglesList, colorList);
+        }
+
+        else if(obstacle_id == 7){
+            return animateObstacle7(gp, x, y, anglesList, colorList);
+        }
+
+        else if(obstacle_id == 8){
+            return animateObstacle8(gp, x, y, anglesList, colorList);
+        }
+
+        else if(obstacle_id == 9){
+            return animateObstacle9(gp, x, y, anglesList, colorList);
+        }
+
+        else if(obstacle_id == 10){
+            return animateObstacle10(gp, x, y, anglesList, colorList);
         }
         return null;
     }
@@ -1174,21 +1228,21 @@ public class GameManager {
             } else if (obstacle_id == 2) {
                 return animateObstacle2(gp, x, y, null, null);
             } else if (obstacle_id == 3) {
-                return animateObstacle3(gp, x, y);
+                return animateObstacle3(gp, x, y, null, null);
             } else if (obstacle_id == 4) {
-                return animateObstacle4(gp, x + 32.5f, y + 32.5f);
+                return animateObstacle4(gp, x + 32.5f, y + 32.5f, null, null);
             } else if (obstacle_id == 5) {
-                return animateObstacle5(gp, x, y);
+                return animateObstacle5(gp, x, y, null, null);
             } else if (obstacle_id == 6) {
-                return animateObstacle6(gp, x, y);
+                return animateObstacle6(gp, x, y, null, null);
             } else if (obstacle_id == 7) {
-                return animateObstacle7(gp, x, y);
+                return animateObstacle7(gp, x, y, null, null);
             } else if (obstacle_id == 8) {
-                return animateObstacle8(gp, x, y);
+                return animateObstacle9(gp, x, y, null, null);
             } else if (obstacle_id == 9) {
-                return animateObstacle9(gp, x, y);
+                return animateObstacle9(gp, x, y, null, null);
             } else if (obstacle_id == 10) {
-                return animateObstacle10(gp, x, y);
+                return animateObstacle10(gp, x, y, null, null);
             }
         }
         else{
@@ -1199,15 +1253,16 @@ public class GameManager {
             } else if (obstacle_id == 2) {
                 return animateObstacle2(gp, x, y, null, null);
             } else if (obstacle_id == 3) {
-                return animateObstacle3(gp, x, y);
+                return animateObstacle3(gp, x, y, null, null);
             } else if (obstacle_id == 4) {
-                return animateObstacle4(gp, x + 32.5f, y + 32.5f);
+                return animateObstacle4(gp, x + 32.5f, y + 32.5f, null, null);
             } else if (obstacle_id == 5) {
-                return animateObstacle5(gp, x, y);
+                return animateObstacle9(gp, x, y, null, null);
             }
         }
-         return null;
+        return null;
     }
+
 
     private void checkCollisionObstacles() {
         Shape intersect;
