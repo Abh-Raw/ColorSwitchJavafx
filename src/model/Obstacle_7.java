@@ -36,20 +36,20 @@ public class Obstacle_7 extends GameObstacles{     //8-figure
         //Arc arc11 = new Arc(x, y-160, 75.0f, 75.0f, 180-45, 90);
         //Arc arc12 = new Arc(x, y-160, 75.0f, 75.0f, 270-45, 90);
 
-        arc1.setFill(Color.BLUE);
-        arc1.setStroke(Color.BLUE);
+        arc1.setFill(Color.TURQUOISE);
+        arc1.setStroke(Color.TURQUOISE);
         arc1.setStrokeWidth(15.0f);
         arc1.setStrokeType(StrokeType.INSIDE);
         arc1.setType(ArcType.OPEN);
 
-        arc2.setFill(Color.RED);
-        arc2.setStroke(Color.RED);
+        arc2.setFill(Color.DEEPPINK);
+        arc2.setStroke(Color.DEEPPINK);
         arc2.setStrokeWidth(15.0f);
         arc2.setStrokeType(StrokeType.INSIDE);
         arc2.setType(ArcType.OPEN);
 
-        arc3.setFill(Color.GREEN);
-        arc3.setStroke(Color.GREEN);
+        arc3.setFill(Color.DARKVIOLET);
+        arc3.setStroke(Color.DARKVIOLET);
         arc3.setStrokeWidth(15.0f);
         arc3.setStrokeType(StrokeType.INSIDE);
         arc3.setType(ArcType.OPEN);
@@ -60,8 +60,8 @@ public class Obstacle_7 extends GameObstacles{     //8-figure
         arc4.setStrokeType( StrokeType.INSIDE);
         arc4.setType(ArcType.OPEN);
 
-        arc5.setFill(Color.BLUE);
-        arc5.setStroke(Color.BLUE);
+        arc5.setFill(Color.TURQUOISE);
+        arc5.setStroke(Color.TURQUOISE);
         arc5.setStrokeWidth(15.0f);
         arc5.setStrokeType(StrokeType.INSIDE);
         arc5.setType(ArcType.OPEN);
@@ -72,32 +72,32 @@ public class Obstacle_7 extends GameObstacles{     //8-figure
         arc6.setStrokeType(StrokeType.INSIDE);
         arc6.setType(ArcType.OPEN);
 
-        arc7.setFill(Color.GREEN);
-        arc7.setStroke(Color.GREEN);
+        arc7.setFill(Color.DARKVIOLET);
+        arc7.setStroke(Color.DARKVIOLET);
         arc7.setStrokeWidth(15.0f);
         arc7.setStrokeType(StrokeType.INSIDE);
         arc7.setType(ArcType.OPEN);
 
-        arc8.setFill(Color.RED);
-        arc8.setStroke(Color.RED);
+        arc8.setFill(Color.DEEPPINK);
+        arc8.setStroke(Color.DEEPPINK);
         arc8.setStrokeWidth(15.0f);
         arc8.setStrokeType( StrokeType.INSIDE);
         arc8.setType(ArcType.OPEN);
 
-/*        arc9.setFill(Color.BLUE);
-        arc9.setStroke(Color.BLUE);
+/*        arc9.setFill(Color.TURQUOISE);
+        arc9.setStroke(Color.TURQUOISE);
         arc9.setStrokeWidth(15.0f);
         arc9.setStrokeType(StrokeType.INSIDE);
         arc9.setType(ArcType.OPEN);
 
-        arc10.setFill(Color.RED);
-        arc10.setStroke(Color.RED);
+        arc10.setFill(Color.DEEPPINK);
+        arc10.setStroke(Color.DEEPPINK);
         arc10.setStrokeWidth(15.0f);
         arc10.setStrokeType(StrokeType.INSIDE);
         arc10.setType(ArcType.OPEN);
 
-        arc11.setFill(Color.GREEN);
-        arc11.setStroke(Color.GREEN);
+        arc11.setFill(Color.DARKVIOLET);
+        arc11.setStroke(Color.DARKVIOLET);
         arc11.setStrokeWidth(15.0f);
         arc11.setStrokeType(StrokeType.INSIDE);
         arc11.setType(ArcType.OPEN);

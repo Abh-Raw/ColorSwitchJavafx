@@ -32,20 +32,20 @@ public class Obstacle_1 extends GameObstacles {   //single ring
         Arc arc4 = new Arc(x, y, 75.0f, 75.0f, 270, 90);
 
 
-        arc1.setFill(Color.BLUE);
-        arc1.setStroke(Color.BLUE);
+        arc1.setFill(Color.TURQUOISE);
+        arc1.setStroke(Color.TURQUOISE);
         arc1.setStrokeWidth(15.0f);
         arc1.setStrokeType(StrokeType.INSIDE);
         arc1.setType(ArcType.OPEN);
 
-        arc2.setFill(Color.RED);
-        arc2.setStroke(Color.RED);
+        arc2.setFill(Color.DEEPPINK);
+        arc2.setStroke(Color.DEEPPINK);
         arc2.setStrokeWidth(15.0f);
         arc2.setStrokeType(StrokeType.INSIDE);
         arc2.setType(ArcType.OPEN);
 
-        arc3.setFill(Color.GREEN);
-        arc3.setStroke(Color.GREEN);
+        arc3.setFill(Color.DARKVIOLET);
+        arc3.setStroke(Color.DARKVIOLET);
         arc3.setStrokeWidth(15.0f);
         arc3.setStrokeType(StrokeType.INSIDE);
         arc3.setType(ArcType.OPEN);
@@ -70,20 +70,20 @@ public class Obstacle_1 extends GameObstacles {   //single ring
         Arc arc3 = new Arc(x, y, 75.0f, 75.0f, 180 + anglesList.get(2), 90);
         Arc arc4 = new Arc(x, y, 75.0f, 75.0f, 270 + anglesList.get(3), 90);
 
-        arc1.setFill(Color.BLUE);
-        arc1.setStroke(Color.BLUE);
+        arc1.setFill(Color.TURQUOISE);
+        arc1.setStroke(Color.TURQUOISE);
         arc1.setStrokeWidth(15.0f);
         arc1.setStrokeType(StrokeType.INSIDE);
         arc1.setType(ArcType.OPEN);
 
-        arc2.setFill(Color.RED);
-        arc2.setStroke(Color.RED);
+        arc2.setFill(Color.DEEPPINK);
+        arc2.setStroke(Color.DEEPPINK);
         arc2.setStrokeWidth(15.0f);
         arc2.setStrokeType(StrokeType.INSIDE);
         arc2.setType(ArcType.OPEN);
 
-        arc3.setFill(Color.GREEN);
-        arc3.setStroke(Color.GREEN);
+        arc3.setFill(Color.DARKVIOLET);
+        arc3.setStroke(Color.DARKVIOLET);
         arc3.setStrokeWidth(15.0f);
         arc3.setStrokeType(StrokeType.INSIDE);
         arc3.setType(ArcType.OPEN);

@@ -1,6 +1,7 @@
 package model;
 
 import View.ViewManager;
+//import java.time.Duration;
 import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -50,22 +51,61 @@ public class GameAnimations{
 
     }
 
+    public void collisionAnimation(final AnchorPane gp, Ball start_ball_obj){
+        final Ball[] collisionBalls = new Ball[9];
+        Random random = new Random();
+        for(int i=0; i<9; ++i){
+            collisionBalls[i] = new Ball(start_ball_obj.getStart_ball_pos_X(), start_ball_obj.getStart_ball_pos_Y());
+            collisionBalls[i].makeStartBall(start_ball_obj.getStart_ball_pos_X(), start_ball_obj.getStart_ball_pos_Y(), 5);
+            int x_vel = random.nextInt(600) - 300;
+            int y_vel = random.nextInt(100) - 100;
+            collisionBalls[i].setStart_ball_vel_X(x_vel);
+            collisionBalls[i].setStart_ball_vel_Y(y_vel);
+            gp.getChildren().add(collisionBalls[i].getStart_ball());
+        }
+
+        AnimationTimer gameTimer = new AnimationTimer() {                  //Create Animation Timer object
+            long prev_time = -1;
+            //@Override
+            public void   handle(long curTime) {
+
+                if (prev_time == -1) {
+                    prev_time = curTime;
+                    return;
+                }
+
+                double time_per = (curTime - prev_time) / 1000000.0;
+                prev_time = curTime;
+                time_per /= 300.0;
+
+                for (int i = 0; i < 9; ++i) {
+                    collisionBalls[i].getStart_ball().relocate( collisionBalls[i].getStart_ball_pos_X() - 10,  collisionBalls[i].getStart_ball_pos_Y());
+                    collisionBalls[i].jump(time_per);
+                    collisionBalls[i].getStart_ball().relocate( collisionBalls[i].getStart_ball_pos_X() - 10,  collisionBalls[i].getStart_ball_pos_Y());
+                    collisionBalls[i].getStart_ball().setOpacity(collisionBalls[i].getStart_ball().getOpacity() - 0.06);
+                }
+                //System.out.println(curTime%1000000000);
+            }
+        };
+        gameTimer.start();
+    }
+
     public void changeColor(Ball start_ball_obj){
         Random random = new Random();
         int n;
         do {
             n = random.nextInt(4);
-        }while (!((n==0 && start_ball_obj.isBlue_flag() && start_ball_obj.getStart_ball().getFill() != Color.BLUE) || (n==1 && start_ball_obj.isRed_flag() && start_ball_obj.getStart_ball().getFill() != Color.RED) || (n==2 && start_ball_obj.isGreen_flag() && start_ball_obj.getStart_ball().getFill() != Color.GREEN) || (n==3 && start_ball_obj.isYellow_flag() && start_ball_obj.getStart_ball().getFill() != Color.YELLOW)));
+        }while (!((n==0 && start_ball_obj.isBlue_flag() && start_ball_obj.getStart_ball().getFill() != Color.TURQUOISE) || (n==1 && start_ball_obj.isRed_flag() && start_ball_obj.getStart_ball().getFill() != Color.DEEPPINK) || (n==2 && start_ball_obj.isGreen_flag() && start_ball_obj.getStart_ball().getFill() != Color.DARKVIOLET) || (n==3 && start_ball_obj.isYellow_flag() && start_ball_obj.getStart_ball().getFill() != Color.YELLOW)));
           if(n==0) {
-              start_ball_obj.getStart_ball().setFill(Color.BLUE);
+              start_ball_obj.getStart_ball().setFill(Color.TURQUOISE);
               start_ball_obj.setCur_color_ID(0);
           }
         else if(n==1) {
-              start_ball_obj.getStart_ball().setFill(Color.RED);
+              start_ball_obj.getStart_ball().setFill(Color.DEEPPINK);
               start_ball_obj.setCur_color_ID(1);
           }
         else if(n==2) {
-              start_ball_obj.getStart_ball().setFill(Color.GREEN);
+              start_ball_obj.getStart_ball().setFill(Color.DARKVIOLET);
               start_ball_obj.setCur_color_ID(2);
           }
         else if(n==3) {

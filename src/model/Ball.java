@@ -12,6 +12,7 @@ public class Ball implements Serializable {
     private double start_ball_pos_Y;
     private double start_ball_pos_X;
     private double start_ball_vel_Y = 0;
+    private double start_ball_vel_X = 0;
     private float gravity = 100;
     private transient Circle start_ball;
     private boolean blue_flag;
@@ -66,6 +67,18 @@ public class Ball implements Serializable {
         return start_ball_pos_X;
     }
 
+    public void setStart_ball_pos_X(double start_ball_pos_X) {
+        this.start_ball_pos_X = start_ball_pos_X;
+    }
+
+    public double getStart_ball_vel_X() {
+        return start_ball_vel_X;
+    }
+
+    public void setStart_ball_vel_X(double start_ball_vel_X) {
+        this.start_ball_vel_X = start_ball_vel_X;
+    }
+
     public double getStart_ball_pos_Y(){
         return start_ball_pos_Y;
     }
@@ -74,19 +87,23 @@ public class Ball implements Serializable {
 
     public void setCur_color_ID(int cur_color_ID) {this.cur_color_ID = cur_color_ID; }
 
-    public Ball(float x, float y){
+    public Ball(double x, double y){
         start_ball_pos_X = x;
         start_ball_pos_Y = y;
+    }
+
+    public void setStart_ball_pos_Y(double start_ball_pos_Y) {
+        this.start_ball_pos_Y = start_ball_pos_Y;
     }
 
     public void reconstructStartBall(GameData gameData){
         Circle circle;
         if(gameData.getStartBall().getCur_color_ID() == 0)
-            circle = new Circle(200.0f, 390.0f, 10.0f, Color.BLUE);
+            circle = new Circle(200.0f, 390.0f, 10.0f, Color.TURQUOISE);
         else if(gameData.getStartBall().getCur_color_ID() == 1)
-            circle = new Circle(200.0f, 390.0f, 10.0f, Color.RED);
+            circle = new Circle(200.0f, 390.0f, 10.0f, Color.DEEPPINK);
         else if(gameData.getStartBall().getCur_color_ID() == 2)
-            circle = new Circle(200.0f, 390.0f, 10.0f, Color.GREEN);
+            circle = new Circle(200.0f, 390.0f, 10.0f, Color.DARKVIOLET);
         else
             circle = new Circle(200.0f, 390.0f, 10.0f, Color.YELLOW);
 
@@ -94,25 +111,25 @@ public class Ball implements Serializable {
         start_ball = circle;
     }
 
-    public void makeStartBall(){
+    public void makeStartBall(double x, double y, float radius){
 
         Random random = new Random();
         int n = random.nextInt(4);
         Circle circle;
         if(n==0) {
-            circle = new Circle(200.0f, 390.0f, 10.0f, Color.BLUE);
+            circle = new Circle(x, y, radius, Color.TURQUOISE);
             cur_color_ID = 0;
         }
         else if(n==1) {
-            circle = new Circle(200.0f, 390.0f, 10.0f, Color.RED);
+            circle = new Circle(x, y, radius, Color.DEEPPINK);
             cur_color_ID = 1;
         }
         else if(n==2) {
-            circle = new Circle(200.0f, 390.0f, 10.0f, Color.GREEN);
+            circle = new Circle(x, y, radius, Color.DARKVIOLET);
             cur_color_ID = 2;
         }
         else {
-            circle = new Circle(200.0f, 390.0f, 10.0f, Color.YELLOW);
+            circle = new Circle(x, y, radius, Color.YELLOW);
             cur_color_ID = 3;
         }
 
@@ -122,12 +139,19 @@ public class Ball implements Serializable {
     }
 
     public void jump(double time_per){
-        double dist = start_ball_vel_Y*time_per + 0.5 * gravity * Math.pow(time_per, 2);        //ball falling due to gravity
+        double dist1 = start_ball_vel_Y*time_per + 0.5 * gravity * Math.pow(time_per, 2);        //ball falling due to gravity
         start_ball_vel_Y += gravity * time_per;
-        start_ball_pos_Y += dist;
+        start_ball_pos_Y += dist1;
 
-        if (start_ball_pos_Y > 450 - 10){
-            start_ball_pos_Y = 450 - 10;
+        double dist2 = start_ball_vel_X*time_per;
+        start_ball_pos_X += dist2;
+
+        if(start_ball_pos_X > 400 - 10 || start_ball_pos_X < 10){
+            start_ball_vel_X = -1*start_ball_vel_X;
+        }
+
+        if (start_ball_pos_Y > 450 - 20){
+            start_ball_pos_Y = 450 - 20;
             start_ball_vel_Y = 0;
         }
     }

@@ -34,11 +34,11 @@ public class Obstacle_10 extends GameObstacles{
         Random random = new Random();
 
         int color_id;
-        if (start_ball.getFill() == Color.BLUE)
+        if (start_ball.getFill() == Color.TURQUOISE)
             color_id = 0;
-        else if (start_ball.getFill() == Color.RED)
+        else if (start_ball.getFill() == Color.DEEPPINK)
             color_id = 1;
-        else if (start_ball.getFill() == Color.GREEN)
+        else if (start_ball.getFill() == Color.DARKVIOLET)
             color_id = 2;
         else
             color_id = 3;
@@ -68,19 +68,19 @@ public class Obstacle_10 extends GameObstacles{
 
         //n1
         if(n1 == 0){
-            arc1.setFill(Color.BLUE);
-            arc1.setStroke(Color.BLUE);
-            line2.setStroke(Color.BLUE);
+            arc1.setFill(Color.TURQUOISE);
+            arc1.setStroke(Color.TURQUOISE);
+            line2.setStroke(Color.TURQUOISE);
         }
         else if(n1 == 1){
-            arc1.setFill(Color.RED);
-            arc1.setStroke(Color.RED);
-            line2.setStroke(Color.RED);
+            arc1.setFill(Color.DEEPPINK);
+            arc1.setStroke(Color.DEEPPINK);
+            line2.setStroke(Color.DEEPPINK);
         }
         else if(n1 == 2){
-            arc1.setFill(Color.GREEN);
-            arc1.setStroke(Color.GREEN);
-            line2.setStroke(Color.GREEN);
+            arc1.setFill(Color.DARKVIOLET);
+            arc1.setStroke(Color.DARKVIOLET);
+            line2.setStroke(Color.DARKVIOLET);
         }
         else{
             arc1.setFill(Color.YELLOW);
@@ -91,19 +91,19 @@ public class Obstacle_10 extends GameObstacles{
 
         //n2
         if(n2 == 0){
-            arc3.setFill(Color.BLUE);
-            arc3.setStroke(Color.BLUE);
-            line4.setStroke(Color.BLUE);
+            arc3.setFill(Color.TURQUOISE);
+            arc3.setStroke(Color.TURQUOISE);
+            line4.setStroke(Color.TURQUOISE);
         }
         else if(n2 == 1){
-            arc3.setFill(Color.RED);
-            arc3.setStroke(Color.RED);
-            line4.setStroke(Color.RED);
+            arc3.setFill(Color.DEEPPINK);
+            arc3.setStroke(Color.DEEPPINK);
+            line4.setStroke(Color.DEEPPINK);
         }
         else if(n2 == 2){
-            arc3.setFill(Color.GREEN);
-            arc3.setStroke(Color.GREEN);
-            line4.setStroke(Color.GREEN);
+            arc3.setFill(Color.DARKVIOLET);
+            arc3.setStroke(Color.DARKVIOLET);
+            line4.setStroke(Color.DARKVIOLET);
         }
         else{
             arc3.setFill(Color.YELLOW);
@@ -113,19 +113,19 @@ public class Obstacle_10 extends GameObstacles{
 
         //n3
         if(n3 == 0){
-            arc2.setFill(Color.BLUE);
-            arc2.setStroke(Color.BLUE);
-            line1.setStroke(Color.BLUE);
+            arc2.setFill(Color.TURQUOISE);
+            arc2.setStroke(Color.TURQUOISE);
+            line1.setStroke(Color.TURQUOISE);
         }
         else if(n3 == 1){
-            arc2.setFill(Color.RED);
-            arc2.setStroke(Color.RED);
-            line1.setStroke(Color.RED);
+            arc2.setFill(Color.DEEPPINK);
+            arc2.setStroke(Color.DEEPPINK);
+            line1.setStroke(Color.DEEPPINK);
         }
         else if(n3 == 2){
-            arc2.setFill(Color.GREEN);
-            arc2.setStroke(Color.GREEN);
-            line1.setStroke(Color.GREEN);
+            arc2.setFill(Color.DARKVIOLET);
+            arc2.setStroke(Color.DARKVIOLET);
+            line1.setStroke(Color.DARKVIOLET);
         }
         else{
             arc2.setFill(Color.YELLOW);
