@@ -789,14 +789,14 @@ public class GameManager {
         obstacles.addAnimation(x, y, gp);
     }
 
-    public void animateLogo(AnchorPane gp, float x, float y){
+    public void animateLogo(AnchorPane gp, float x, float y, float rad_X, float rad_Y){
         Logo_Obstacle obstacles = new Logo_Obstacle();
         Rotate rotation1 = new Rotate();       //1 rotation obj for every component
         Rotate rotation2 = new Rotate();
         Rotate rotation3 = new Rotate();
         Rotate rotation4 = new Rotate();
 
-        obstacles.createLogoObstacle(x, y);  //create obj
+        obstacles.createLogoObstacle(x, y, rad_X, rad_Y);  //create obj
 
         obstacles.getArc_components().get(0).getTransforms().add(rotation1);   //rotation obj added to every component
         obstacles.getArc_components().get(1).getTransforms().add(rotation2);
